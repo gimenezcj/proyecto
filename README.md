@@ -7,9 +7,16 @@ El sistema cuenta con dos aplicativos client y server en sus correspondientes ca
 
 Comandos para su instalacion:
 
-> npm/install
-> cliente/npm install
-> server/npm install
+> npm install
+> npm --prefix server install
+> npm --prefix client install
+
+Dentro de la carpeta del servidor (server/)se debe crear un archivo: .env con la informacion del acceso a la base de datos:
+
+> DB_HOST="127.0.0.1"
+> DB_DABASE=gama_database_development
+> DB_USERNAME="su usuario"
+> DB_PASSWORD="su contraseña"
 
 Ejecucion 
 
@@ -20,4 +27,5 @@ o
 
 Ejecutar por separado en dos terminales
 > npm --prefix server run start
-> npm --prefix server run start
+> npm --prefix client run start
+
