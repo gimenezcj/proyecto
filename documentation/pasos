@@ -1,0 +1,46 @@
+Pasos para creacion del proyecto
+  npx create-react-app proyecto
+
+Instalacion de dependencias de la app con npm i
+  react-bootstrap@2.5.0
+  react-icons@4.4.0  
+  react-router-dom@6.3.0
+  expo-gl@11.4.0
+  three@0.143.0
+
+Instalacion de dependencias de el servidor api con npm i
+  cors@2.8.5  
+  dotenv@16.0.2
+  express@4.18.1
+  morgan@1.10.0
+  mysql2@2.3.3
+  sequelize@6.21.4
+  sequelize-cli@6.4.1
+  underscore@1.13.4
+  nodemon@2.0.19 
+  concurrently@6.4.0
+
+Crear modelos
+  link: https://runebook.dev/es/docs/sequelize/manual/migrations
+
+  npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
+  npx sequelize-cli db:migrate
+  
+  Dehacer migraciones
+    a) npx sequelize-cli db:migrate:undo
+    b) npx sequelize-cli db:migrate:undo:all 
+    c) npx sequelize-cli db:migrate:undo:all --to XXXXXXXXXXXXXX-create-posts.js
+
+Crear Semillas (seed)
+  npx sequelize-cli seed:generate --name demo-user
+  npx sequelize-cli db:seed:all
+
+  Dehacer semillas
+    a) npx sequelize-cli db:seed:undo
+    b) npx sequelize-cli db:seed:undo:all
+    c) npx sequelize-cli db:seed:undo --seed name-of-seed-as-in-data
+
+
+
+
+

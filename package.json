@@ -1,0 +1,14 @@
+{
+  "name": "proyectogama",
+  "version": "0.1.0",
+  "description": "Proyecto 2022 GAMA",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm --prefix server run start\" \"npm --prefix client run start\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Javier Gimenez, Silvia Uzagasti, Vanesa Gonzalez",
+  "dependencies": {
+    "concurrently": "^7.4.0"
+  }
+}
