@@ -45,3 +45,4 @@ Crear Semillas (seed)
 git config -l
 git config remote.origin.url git@github.com:your_username/your_project.git
 
+git branch --set-upstream-to=origin/<rama> master
