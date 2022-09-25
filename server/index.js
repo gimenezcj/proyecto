@@ -16,8 +16,8 @@ app.use(cors());
 
 // routes
 app.use('/api',require('./routes/'));
-app.use('/api/user',require('./routes/users'));
 app.use('/api/ingresos',require('./routes/ingresos'));
+app.use('/api/pacientes',require('./routes/pacientes'));
 
 app.use((req, res) => {
 	res.status(404).json({ errors: { global: "Seguimos trabajando en eso. Vuelva a intentarlo más tarde cuando lo implementemos." } });

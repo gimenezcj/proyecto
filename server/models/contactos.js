@@ -1,15 +1,15 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
-var TipoFamiliar=require'(./TipoFamiliar');
+var TipoFamiliar=require('./tipofamiliar');
 
-var Contactos=database.define('Contactos',{
+var Contactos=database.define('contactos',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  celular: DataTypes.STRING,
-  fijo: DataTypes.STRING
+  celular: Sequelize.STRING,
+  fijo: Sequelize.STRING
 });
 
 Contactos.hasOne(TipoFamiliar, {

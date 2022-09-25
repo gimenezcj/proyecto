@@ -1,7 +1,3 @@
-const controller={};
-
-const Ingresos=require('../models/ingresos');
-
 generaRta=async(req,res,comando)=>{
   try {
     const response=await comando
@@ -17,8 +13,5 @@ generaRta=async(req,res,comando)=>{
     console.log(e);
   }
 }
-controller.listAll=(req,res)=>{
-  return generaRta(req,res,Ingresos.findAll());
-}
 
-module.exports=controller;
+module.exports=generaRta;

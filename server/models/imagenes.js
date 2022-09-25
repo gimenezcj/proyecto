@@ -1,7 +1,7 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
 
-var Imagenes=database.define('Imagenes',{
+var Imagenes=database.define('imagenes',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,

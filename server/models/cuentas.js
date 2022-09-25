@@ -3,7 +3,7 @@ var database=require('./database');
 var Ingresos=require('./ingresos');
 var Imagenes=require('./imagenes');
 
-var Cuentas=database.define('Cuentas',{
+var Cuentas=database.define('cuentas',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -14,13 +14,13 @@ var Cuentas=database.define('Cuentas',{
   usuario: Sequelize.STRING,
   activo: Sequelize.BOOLEAN
 });
-
+ 
 Cuentas.hasMany(Ingresos, {
-  foreignKey: 'ingresoId',
+  foreignKey: 'cuentaId',
   as: 'ingresos'
 });
 
-Cuantas.hasOne(Imagenes,{
+Cuentas.hasOne(Imagenes,{
   foreignKey: 'imagenId',
   as: 'imagen'  
 })

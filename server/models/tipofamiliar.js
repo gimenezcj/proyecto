@@ -1,7 +1,7 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
 
-var TipoFamiliar=database.define('TipoFamiliar',{
+var TipoFamiliar=database.define('tipofamiliar',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
