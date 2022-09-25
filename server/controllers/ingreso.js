@@ -1,7 +1,6 @@
-
 const controller={};
 
-const Users=require('../model/Users');
+const Ingresos=require('../models/ingresos');
 
 generaRta=async(req,res,comando)=>{
   try {
@@ -19,7 +18,7 @@ generaRta=async(req,res,comando)=>{
   }
 }
 controller.listAll=(req,res)=>{
-  return generaRta(req,res,Users.findAll());
+  return generaRta(req,res,Ingresos.findAll());
 }
 
 module.exports=controller;

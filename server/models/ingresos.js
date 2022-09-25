@@ -1,15 +1,13 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
 
-var Users=database.define('User',{
+var Ingresos=database.define('Ingresos',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  firstName: Sequelize.STRING,
-  lastName: Sequelize.STRING,
-  email: Sequelize.STRING
+  fechaHora: Sequelize.DATE
 });
 
-module.exports=Users;
+module.exports=Ingresos;
