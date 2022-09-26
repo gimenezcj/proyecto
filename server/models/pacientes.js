@@ -11,28 +11,11 @@ var Pacientes=database.define('pacientes',{
   },
   nroAfiliado: Sequelize.STRING
 });
-//Personas.hasMany(Fonoaudiologos, {
-//  foreignKey: 'fonoaudiologoId',
-//  as: 'Fonoaudiologos'
-//});
-//Personas.hasOne(Pacientes,{
-//  foreignKey: 'personaId',
-//  as: 'persona' 
-//})
 
-///Personas.hasOne(Pacientes,{
-///  foreignKey: 'personaId',
-///  as: 'personas'
-///});
+Pacientes.belongsTo(Personas,{foreignKey: 'personaId', as: 'persona'});
+Pacientes.belongsTo(Fonoaudiologos,{foreignKey:'fonoaudiologoId', as: 'fono'});
 
-Pacientes.persona=Pacientes.belongsTo(Personas,{
-  foreignKey: 'personaId',
-  as: 'persona'
-});
-Pacientes.fonoaudiologo=Pacientes.belongsTo(Fonoaudiologos,{
-  foreignKey:'fonoaudiologoId',
-  as: 'fono'
-});
+Fonoaudiologos.hasMany(Pacientes, {foreignKey: 'fonoaudiologoId', as: 'pacientes'});
 
 Pacientes.sync();
 

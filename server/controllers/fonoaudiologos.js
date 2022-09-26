@@ -10,14 +10,14 @@ controller.listAll=(req,res)=>{
     include: [
       {
         model: Personas, as: 'persona',
-        attributes:{exclude: ['createdAt','updatedAt']}
+        attributes:{exclude: ['createdAt','updatedAt','cuentaId']}
       },
-//      {
-//        model: Pacientes, as: 'fono'
-//      }
+      {
+        model: Pacientes, as: 'pacientes',
+        attributes:{exclude: ['createdAt','updatedAt','fonoaudiologoId']}
+      }
     ],
     attributes:{exclude: ['createdAt','updatedAt','personaId']},
-
   }));
 }
 

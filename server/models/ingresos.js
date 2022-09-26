@@ -11,12 +11,7 @@ var Ingresos=database.define('ingresos',{
   fechaHora: Sequelize.DATE
 });
 
-Ingresos.cuenta=Cuentas.hasMany(Ingresos,{
-  foreignKey: 'cuentaId'
-})
-//Ingresos.cuenta=Ingresos.hasOne(Cuentas,{
-//  foreignKey: 'cuentaId'
-//});
+Cuentas.hasMany(Ingresos,{foreignKey: 'cuentaId', as: 'ingresos'});
 
 Ingresos.sync();
 

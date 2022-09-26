@@ -14,9 +14,7 @@ var Cuentas=database.define('cuentas',{
   activo: Sequelize.BOOLEAN
 });
  
-Cuentas.imagen=Cuentas.hasOne(Imagenes,{
-  foreignKey: 'imagenId'
-});
+Cuentas.belongsTo(Imagenes,{foreignKey: 'imagenId', as: 'imagen'});
 
 Cuentas.sync();
 

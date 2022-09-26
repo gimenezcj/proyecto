@@ -11,27 +11,8 @@ var Fonoaudiologos=database.define('fonoaudiologos',{
   },
   matricula: Sequelize.STRING,
 });
-//Fonoaudiologos.hasOne(Personas,{
-//  foreignKey: 'personaId',
-//  as: 'persona' 
-//})
-//Fonoaudiologos.hasMany(Pacientes,{
-//  foreignKey: 'fonoaudiologoId',
-//  as: 'pacientes' 
-//}) 
 
-Fonoaudiologos.persona=Fonoaudiologos.belongsTo(Personas,{
-  foreignKey: 'personaId',
-  as: 'persona'
-});
-//Fonoaudiologos.pacientes=Fonoaudiologos.hasMany(Pacientes,{
-//  foreignKey: 'fonoaudiologoId',
-//  as: 'pacientes'
-//})
-
-//Fonoaudiologos.pacientes=Fonoaudiologos.hasMany(Pacientes,{
-//  foreignKey: 'fonoaudiologoId'
-//});
+Fonoaudiologos.belongsTo(Personas,{foreignKey: 'personaId', as: 'persona'});
 
 Fonoaudiologos.sync();
 

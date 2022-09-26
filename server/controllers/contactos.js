@@ -9,7 +9,7 @@ controller.listAll=(req,res)=>{
   return generaRta(req,res,Contactos.findAll({
     include: [
       {
-        model: TipoFamiliar,
+        model: TipoFamiliar, as: 'tipofamiliar',
         attributes:{exclude: ['createdAt','updatedAt']}
       },
       {

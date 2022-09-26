@@ -13,19 +13,11 @@ var Contactos=database.define('contactos',{
   fijo: Sequelize.STRING
 });
 
-Contactos.familiar=Contactos.belongsTo(Personas,{
-  foreignKey: 'familiarId',
-  as: 'familiar'
-});
-////
-Contactos.tipoFamiliar=Contactos.belongsTo(TipoFamiliar,{
-  foreignKey: 'tipofamiliarId'
-});
+Contactos.belongsTo(TipoFamiliar,{foreignKey: 'tipofamiliarId', as:'tipofamiliar'});
+Contactos.belongsTo(Personas    ,{foreignKey: 'personaId',      as:'persona'});
+Contactos.belongsTo(Personas    ,{foreignKey: 'familiarId',     as:'familiar'});
 
-Contactos.persona=Contactos.belongsTo(Personas,{
-  foreignKey: 'personaId',
-  as: 'persona'
-});
+Personas.hasMany(Contactos,{foreignKey: 'personaId', as: 'contactos'});
 
 Contactos.sync();
 
