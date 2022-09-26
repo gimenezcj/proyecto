@@ -1,7 +1,7 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
 
-var TipoFamiliar=database.define('tipofamiliar',{
+var TipoFamiliar=database.define('tipofamiliars',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -9,5 +9,7 @@ var TipoFamiliar=database.define('tipofamiliar',{
   },
   descripcion: Sequelize.STRING,
 });
+
+TipoFamiliar.sync();
 
 module.exports=TipoFamiliar;

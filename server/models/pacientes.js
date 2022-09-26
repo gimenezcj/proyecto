@@ -24,8 +24,15 @@ var Pacientes=database.define('pacientes',{
 ///  foreignKey: 'personaId',
 ///  as: 'personas'
 ///});
-Pacientes.persona=Pacientes.belongsTo(Personas);
-Pacientes.fonoaudiologo=Pacientes.belongsTo(Fonoaudiologos);
+
+Pacientes.persona=Pacientes.belongsTo(Personas,{
+  foreignKey: 'personaId',
+  as: 'persona'
+});
+Pacientes.fonoaudiologo=Pacientes.belongsTo(Fonoaudiologos,{
+  foreignKey:'fonoaudiologoId',
+  as: 'fono'
+});
 
 Pacientes.sync();
 

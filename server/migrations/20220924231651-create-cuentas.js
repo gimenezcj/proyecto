@@ -22,29 +22,23 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')        
       },
-      ingresoId:{
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Ingresos',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'     
-      }, 
       imagenId:{
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Imagenes',
+          model: 'imagenes',
           key: 'id'
         },
         onUpdate: 'cascade',
-        onDelete: 'cascade'     
+        onDelete: 'cascade'      
       } 
     });
   },

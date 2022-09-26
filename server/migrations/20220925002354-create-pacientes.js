@@ -9,34 +9,39 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nroAfiliado: {
+        allowNull: true,
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       },
       personaId:{
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Personas',
+          model: 'personas',
           key: 'id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
       },
       fonoaudiologoId:{
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Fonoaudiologos',
+          model: 'fonoaudiologos',
           key: 'id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
-      } 
+      }
     });
   },
   async down(queryInterface, Sequelize) {

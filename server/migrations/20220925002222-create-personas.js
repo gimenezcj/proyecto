@@ -19,31 +19,24 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      },
-      contactoId:{
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Contactos',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'      
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
       },
       cuentaId:{
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Cuentas',
+          model: 'cuentas',
           key: 'id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
       } 
-
     });
   },
   async down(queryInterface, Sequelize) {

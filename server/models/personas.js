@@ -1,8 +1,7 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
-var Contactos=require('./contactos');
 var Cuentas=require('./cuentas');
-var Pacientes = require('./pacientes');
+
 
 var Personas=database.define('personas',{
   id:{
@@ -25,10 +24,16 @@ var Personas=database.define('personas',{
 //Personas.hasOne(Pacientes,{
 //  foreignKey: 'personaId',
 //  as: 'persona' 
-//})
+//}) 
 
-Personas.cuenta=Personas.belongsTo(Cuentas);
-//Personas.contactos=Personas.belongsToMany(Contactos);
+Personas.cuenta=Personas.belongsTo(Cuentas,{
+  foreignKey: 'cuentaId'
+});
+
+
+//Personas.contactos=Personas.belongsToMany(Contactos,{
+//  foreignKey: 'personaId'
+//});
 
 Personas.sync();
 

@@ -1,6 +1,5 @@
 var Sequelize=require('sequelize');
 var database=require('./database');
-var Ingresos=require('./ingresos');
 var Imagenes=require('./imagenes');
 
 var Cuentas=database.define('cuentas',{
@@ -15,14 +14,10 @@ var Cuentas=database.define('cuentas',{
   activo: Sequelize.BOOLEAN
 });
  
-Cuentas.hasMany(Ingresos, {
-  foreignKey: 'cuentaId',
-  as: 'ingresos'
+Cuentas.imagen=Cuentas.hasOne(Imagenes,{
+  foreignKey: 'imagenId'
 });
 
-Cuentas.hasOne(Imagenes,{
-  foreignKey: 'imagenId',
-  as: 'imagen'  
-})
+Cuentas.sync();
 
 module.exports=Cuentas;

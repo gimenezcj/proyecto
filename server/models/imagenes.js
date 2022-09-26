@@ -10,4 +10,6 @@ var Imagenes=database.define('imagenes',{
   nombreArchivo: Sequelize.STRING
 });
 
+Imagenes.sync();
+
 module.exports=Imagenes;
