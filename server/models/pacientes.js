@@ -2,6 +2,7 @@ var Sequelize=require('sequelize');
 var database=require('./database');
 var Personas=require('./personas');
 var Fonoaudiologos=require('./fonoaudiologos');
+var ObrasSociales=require('./obrassociales');
 
 var Pacientes=database.define('pacientes',{
   id:{
@@ -14,9 +15,11 @@ var Pacientes=database.define('pacientes',{
 
 Pacientes.belongsTo(Personas,{foreignKey: 'personaId', as: 'persona'});
 Pacientes.belongsTo(Fonoaudiologos,{foreignKey:'fonoaudiologoId', as: 'fono'});
+Pacientes.belongsTo(ObrasSociales,{foreignKey: 'obraSocialId', as: 'obraSocial'});
 
 Fonoaudiologos.hasMany(Pacientes, {foreignKey: 'fonoaudiologoId', as: 'pacientes'});
 
 Pacientes.sync();
+Fonoaudiologos.sync();
 
 module.exports=Pacientes;

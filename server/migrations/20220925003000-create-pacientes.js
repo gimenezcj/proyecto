@@ -1,18 +1,14 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('contactos', {
+    await queryInterface.createTable('pacientes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      celular: {
-        allowNull: true,
-        type: Sequelize.STRING
-      },
-      fijo: {
+      nroAfiliado: {
         allowNull: true,
         type: Sequelize.STRING
       },
@@ -25,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
-      },     
+      },
       personaId:{
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -35,30 +31,31 @@ module.exports = {
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
-      },
-      familiarId:{
+      },      
+      obraSocialId:{
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'personas',
+          model: 'obrasSociales',
+          key: 'id'
+        },
+        defaultValue: 1,
+        onUpdate: 'cascade',
+        onDelete: 'cascade'      
+      },
+      fonoaudiologoId:{
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'fonoaudiologos',
           key: 'id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
-      },
-      tipofamiliarId:{
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'tipofamiliars',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'      
-      } 
+      }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('contactos');
+    await queryInterface.dropTable('pacientes');
   }
 };
