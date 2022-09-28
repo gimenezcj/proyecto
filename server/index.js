@@ -25,6 +25,8 @@ app.use('/api/contactos',require('./routes/contactos'));
 app.use('/api/fonos',require('./routes/fonoaudiologos'));
 app.use('/api/pacientes',require('./routes/pacientes'));
 
+app.use('/api/personajes',require('./routes/personajes'));
+
 app.use((req, res) => {
 	res.status(404).json({ errors: { global: "Seguimos trabajando en eso. Vuelva a intentarlo más tarde cuando lo implementemos." } });
 });

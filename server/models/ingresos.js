@@ -13,6 +13,7 @@ var Ingresos=database.define('ingresos',{
 
 Cuentas.hasMany(Ingresos,{foreignKey: 'cuentaId', as: 'ingresos'});
 
+Cuentas.sync();
 Ingresos.sync();
 
 module.exports=Ingresos;

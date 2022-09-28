@@ -1,20 +1,21 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('contactos', {
+    await queryInterface.createTable('evaluacionesPresenciales', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      celular: {
-        allowNull: true,
+      fecha: {
+        type: Sequelize.DATE
+      },
+      observacion: {
         type: Sequelize.STRING
       },
-      fijo: {
-        allowNull: true,
-        type: Sequelize.STRING
+      dificultad: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -25,40 +26,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
-      },     
-      personaId:{
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'personas',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'      
       },
-      familiarId:{
+      pacienteId:{
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'personas',
+          model: 'pacientes',
           key: 'id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'      
-      },
-      tipofamiliarId:{
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'tipofamiliars',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'      
-      } 
+      }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('contactos');
+    await queryInterface.dropTable('evaluacionesPresenciales');
   }
 };

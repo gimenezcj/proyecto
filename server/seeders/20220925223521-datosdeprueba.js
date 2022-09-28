@@ -9,6 +9,12 @@ module.exports = {
       {id:4, descripcion: 'Primo'},
       {id:5, descripcion: 'Hijo'},
     ], {});
+    await queryInterface.bulkInsert('obrasSociales', [
+      {id: 1, nombre: 'Sin obra social'},
+      {id: 2, nombre: 'IOMA'},
+      {id: 3, nombre: 'Petroleros'},
+      {id: 4, nombre: 'Galeno'},
+    ], {});    
     await queryInterface.bulkInsert('imagenes', [
       {id: 1, nombreArchivo: 'archivo1.png'},
       {id: 2, nombreArchivo: 'archivo2.png'},
@@ -43,9 +49,9 @@ module.exports = {
       {id: 1, matricula: '3333', personaId: 5}
     ], {});
     await queryInterface.bulkInsert('pacientes', [
-      {id: 1, nroAfiliado: '1235699249', personaId: 1, fonoaudiologoId: 1},
-      {id: 2, personaId: 2, fonoaudiologoId: 1},
-      {id: 3, personaId: 3, fonoaudiologoId: 1}
+      {id: 1, nroAfiliado: '1235699249', personaId: 1, obraSocialId:2, fonoaudiologoId: 1},
+      {id: 2, personaId: 2, obraSocialId:1, fonoaudiologoId: 1},
+      {id: 3, personaId: 3, obraSocialId:1, fonoaudiologoId: 1}
     ], {});
 
   },
