@@ -2,18 +2,13 @@ const controller={};
 
 const generaRta=require('../modules/dbfunctions');
 const Contactos=require('../models/contactos');
-const TipoFamiliar = require('../models/tipofamiliar');
 const Personas = require('../models/personas');
 
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Contactos.findAll({
     include: [
       {
-        model: TipoFamiliar, as: 'tipofamiliar',
-        attributes:{exclude: ['createdAt','updatedAt']}
-      },
-      {
-        model: Personas, as: 'familiar',
+        model: Personas, as: 'familiares',
         attributes:{exclude: ['createdAt','updatedAt','cuentaId']}
       },
       {

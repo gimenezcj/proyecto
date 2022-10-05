@@ -16,7 +16,6 @@ app.use(cors());
 
 // routes
 app.use('/api',require('./routes/'));
-app.use('/api/tipofamiliar',require('./routes/tipofamiliar'));
 app.use('/api/imagenes',require('./routes/imagenes'));
 app.use('/api/cuentas',require('./routes/cuentas'));
 app.use('/api/ingresos',require('./routes/ingresos'));

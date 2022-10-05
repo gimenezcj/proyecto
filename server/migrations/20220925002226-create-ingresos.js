@@ -11,6 +11,10 @@ module.exports = {
       fechaHora: {
         type: Sequelize.DATE
       },
+      cuentaId:{
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -20,17 +24,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
-      },
-      cuentaId:{
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'cuentas',
-          key: 'id'
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'      
-      } 
+      }
     });
   },
   async down(queryInterface, Sequelize) {

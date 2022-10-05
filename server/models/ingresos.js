@@ -1,8 +1,8 @@
-var Sequelize=require('sequelize');
-var database=require('./database');
-var Cuentas=require('./cuentas');
+const Sequelize=require('sequelize');
+const database=require('./database');
+const Cuentas=require('./cuentas');
 
-var Ingresos=database.define('ingresos',{
+const Ingresos=database.define('ingresos',{
   id:{
     type: Sequelize.INTEGER,
     primaryKey: true,
