@@ -25,6 +25,9 @@ app.use('/api/contactos',require('./routes/contactos'));
 app.use('/api/fonos',require('./routes/fonoaudiologos'));
 app.use('/api/pacientes',require('./routes/pacientes'));
 
+app.use('/api/escenarios',require('./routes/escenarios'));
+app.use('/api/rehabilitaciones',require('./routes/rehabilitaciones'));
+
 app.use('/api/personajes',require('./routes/personajes'));
 
 app.use((req, res) => {
