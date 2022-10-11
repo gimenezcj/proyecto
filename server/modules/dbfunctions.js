@@ -14,4 +14,6 @@ generaRta=async(req,res,comando)=>{
   }
 }
 
+
+
 module.exports=generaRta;

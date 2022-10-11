@@ -19,7 +19,13 @@ Personajes.belongsToMany(DecorativosAvatar, { through: 'personajesDecorativos', 
 
 Personajes.belongsTo(Pacientes, {foreignKey:'pacienteId', as: 'paciente'});
 Personajes.belongsTo(Imagenes, {foreignKey: 'imagenId', as: 'imagen'});
+Personajes.belongsTo(Imagenes, {foreignKey: 'volanteId', as: 'volante'});
+Personajes.belongsTo(Imagenes, {foreignKey: 'tableroId', as: 'tablero'});
+Personajes.belongsTo(Imagenes, {foreignKey: 'valijaId', as: 'valija'});
 
+Pacientes.hasOne(Personajes, {foreignKey: 'pacienteId', as: 'personaje'});
+
+Pacientes.sync();
 Personajes.sync();
 DecorativosAvatar.sync();
 

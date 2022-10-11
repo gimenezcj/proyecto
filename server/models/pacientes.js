@@ -19,6 +19,9 @@ Pacientes.belongsTo(ObrasSociales,{foreignKey: 'obraSocialId', as: 'obraSocial'}
 
 Fonoaudiologos.hasMany(Pacientes, {foreignKey: 'fonoaudiologoId', as: 'pacientes'});
 
+Personas.hasOne(Pacientes,{foreignKey:'personaId', as: 'paciente'});
+
+Pacientes.sync();
 Pacientes.sync();
 Fonoaudiologos.sync();
 

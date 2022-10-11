@@ -12,6 +12,8 @@ const Rehabilitaciones=database.define('rehabilitaciones',{
   },
   fechaCreacion: Sequelize.DATE,
   fechaRealizacion: Sequelize.DATE,
+  fechaHabilitadaDesde: Sequelize.DATE,
+  fechaHabilitadaHasta: Sequelize.DATE,
   realizada: Sequelize.BOOLEAN,
   dificultad: Sequelize.ENUM('bajo','medio','alto')
 });
