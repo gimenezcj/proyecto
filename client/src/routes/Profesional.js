@@ -3,13 +3,10 @@ import { useState,useEffect} from "react";
 import { Routes, Route} from "react-router-dom";
 
 //Paginas
-import Principal from "../pages/paciente/Principal";
-import Personajes from "../pages/paciente/Personajes";
+import Principal2 from "../pages/profesional/Principal2";
 
-function PacienteRoutes  ({token, setToken})  {
-
+function ProfesionalRoutes  ({token, setToken})  {
   const [persona, setPersona] = useState(false);
-
   const [load,setLoad]=useState(false);
   const [paciente,setPaciente]=useState(false);
 
@@ -27,18 +24,15 @@ function PacienteRoutes  ({token, setToken})  {
     }
   },[token])
 
-
   return (
     <>
     <Routes>
-     {(load && paciente) && <>
-      <Route path='/' element={<Principal persona={persona} setPersona={setPersona} setToken={setToken}/>}/>
-      <Route path='/personajes' element={<Personajes persona={persona} setPersona={setPersona}/>}/>
+    {(load && !paciente) && <>
+      <Route path='/' element={<Principal2 persona={persona} setToken={setToken}/>}/>
       </>}
     </Routes>
     </>
   );
 }
 
-export default PacienteRoutes;
-
+export default ProfesionalRoutes;
