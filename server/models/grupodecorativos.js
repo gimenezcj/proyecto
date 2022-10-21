@@ -11,10 +11,10 @@ const GrupoDecorativos=database.define('grupoDecorativos',{
   descripcion: Sequelize.STRING
 });
 
-Personajes.belongsToMany(GrupoDecorativos, {through: 'adquiridos', foreignKey: 'personajeId'});
-GrupoDecorativos.belongsToMany(Personajes, {through: 'adquiridos', foreignKey: 'grupoDecorativoId'});
+//Personajes.belongsToMany(GrupoDecorativos, {through: 'adquiridos', foreignKey: 'personajeId'});
+//GrupoDecorativos.belongsToMany(Personajes, {through: 'adquiridos', foreignKey: 'grupoDecorativoId'});
 
-Personajes.sync();
+//Personajes.sync();
 GrupoDecorativos.sync();
 
 module.exports=GrupoDecorativos;

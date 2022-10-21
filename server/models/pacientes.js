@@ -22,7 +22,7 @@ Fonoaudiologos.hasMany(Pacientes, {foreignKey: 'fonoaudiologoId', as: 'pacientes
 Personas.hasOne(Pacientes,{foreignKey:'personaId', as: 'paciente'});
 
 Pacientes.sync();
-Pacientes.sync();
+Personas.sync();
 Fonoaudiologos.sync();
 
 module.exports=Pacientes;

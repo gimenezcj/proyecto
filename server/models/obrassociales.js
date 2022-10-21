@@ -7,7 +7,7 @@ var ObrasSociales=database.define('obrasSociales',{
     primaryKey: true,
     autoIncrement: true,
   },
-  descripcion: Sequelize.STRING
+  nombre: Sequelize.STRING
 });
 
 ObrasSociales.sync();

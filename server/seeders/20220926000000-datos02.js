@@ -16,10 +16,10 @@ module.exports = {
       {id: 5, nombre: 'camisa',x:4,y:1,tipo:'vestimenta', imagenId:2}
     ], {});    
 
-    await queryInterface.bulkInsert('personajes', [
-      {id: 1, nombre: 'cacho', puntajeAcumulado: 0, pacienteId: 1, imagenId:1},
-      {id: 2, nombre: 'rosalia', puntajeAcumulado: 0, pacienteId: 2, imagenId:2}
-    ], {}); 
+//    await queryInterface.bulkInsert('personajes', [
+//      {id: 1, nombre: 'cacho', puntajeAcumulado: 0, pacienteId: 1, imagenId:1},
+//      {id: 2, nombre: 'rosalia', puntajeAcumulado: 0, pacienteId: 2, imagenId:2}
+//    ], {}); 
 
     await queryInterface.bulkInsert('personajesDecorativos', [
       {id: 1, personajeId: 1, decoId: 3},

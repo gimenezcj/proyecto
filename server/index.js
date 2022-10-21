@@ -27,7 +27,9 @@ app.use('/api/pacientes',require('./routes/pacientes'));
 app.use('/api/escenarios',require('./routes/escenarios'));
 app.use('/api/rehabilitaciones',require('./routes/rehabilitaciones'));
 
-app.use('/api/personajes',require('./routes/personajes'));
+app.use('/api/personajes', require('./routes/personajes'));
+
+app.use('/api/decorativos', require('./routes/decorativos'));
 
 app.use((req, res) => {
 	res.status(404).json({ errors: { global: "Seguimos trabajando en eso. Vuelva a intentarlo más tarde cuando lo implementemos." } });

@@ -9,28 +9,50 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       x: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       y: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       grupoDecorativoId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'grupoDecorativos',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade' 
       },
       nroPieza: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       valor: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       baseId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'imagenes',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade' 
       },
       auxiliarId: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'imagenes',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade' 
       },
       createdAt: {
         allowNull: false,

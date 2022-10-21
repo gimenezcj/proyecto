@@ -19,4 +19,15 @@ controller.listAll=(req,res)=>{
   }));
 }
 
+controller.adquirir=(req,res)=>{
+  const {personajeId,personajeSeleccionadoId, nuevoPuntajeAcumulado}=req.body;
+
+  console.log(personajeId,personajeSeleccionadoId, nuevoPuntajeAcumulado);
+
+  return generaRta(req,res,Personajes.update({
+    imagenId: personajeSeleccionadoId,
+    puntajeAcumulado: nuevoPuntajeAcumulado
+  },{where:{id:personajeId}}))
+}
+
 module.exports=controller;

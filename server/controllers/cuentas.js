@@ -13,6 +13,9 @@ const Pacientes = require('../models/pacientes');
 const Rehabilitaciones = require('../models/rehabilitaciones');
 const Personajes = require('../models/personajes');
 const GrupoDecorativos = require('../models/grupodecorativos');
+const Decorativos = require('../models/decorativos');
+const Fonoaudiologos = require('../models/fonoaudiologos');
+const ObrasSociales = require('../models/obrassociales');
 
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Cuentas.findAll({
@@ -35,16 +38,20 @@ const generaToken = function() {
 
 controller.login=async (req, res)=>{
   const {usuario,clave}=req.body;
+  res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", 0);
+
     try {
         const response=await Cuentas.findAll({
         where: {usuario:usuario,clave:clave},
         include:[
-          {model: Imagenes, as: 'imagen' , attributes: {  exclude:['id','createdAt','updatedAt']}},
-          {model: Personas, as: 'persona', attributes: {  exclude:['id','createdAt','updatedAt','dni']},
+          {model: Imagenes, as: 'imagen' , attributes: {  exclude:['createdAt','updatedAt']}},
+          {model: Personas, as: 'persona', attributes: {  exclude:['createdAt','updatedAt','dni']},
             include:[
               {
                 model: Pacientes, as: 'paciente', 
-                attributes: {  exclude:['id','createdAt','updatedAt','personaId','obraSocialId','fonoaudiologoId','']},
+                attributes: {  exclude:['createdAt','updatedAt','personaId','obraSocialId','fonoaudiologoId','']},
                 include: [
                   {
                     model: Rehabilitaciones, as: 'rehabilitaciones',
@@ -53,17 +60,47 @@ controller.login=async (req, res)=>{
                   },
                   {
                     model: Personajes, as: 'personaje',
-                    attributes: {  exclude:['id','createdAt','updatedAt','pacienteId','imagenId','valijaId','volanteId','tableroId']},
+                    attributes: {  exclude:['createdAt','updatedAt','pacienteId','imagenId','valijaId','volanteId','tableroId']},
                     include: [ 
-                      {model: Imagenes, as: 'tablero', attributes: {  exclude:['id','createdAt','updatedAt']}},
-                      {model: Imagenes, as: 'volante', attributes: {  exclude:['id','createdAt','updatedAt']}},
-                      {model: Imagenes, as: 'valija' , attributes: {  exclude:['id','createdAt','updatedAt']}},
-                      {model: Imagenes, as: 'imagen',attributes: {  exclude:['id','createdAt','updatedAt']}},
-                      {model: GrupoDecorativos, attributes: {  exclude:['id','createdAt','updatedAt']}, through: { attributes: [] }}
+                      {
+                        model: Decorativos, as: 'tablero', attributes: {  
+                          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+                        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+                      },
+                      {
+                        model: Decorativos, as: 'volante', attributes: {  
+                          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+                        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+                      },
+                      {
+                        model: Decorativos, as: 'valija' , attributes: { 
+                          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+                        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+                      },
+                      {
+                        model: Decorativos, as: 'imagen',attributes: {  
+                          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+                        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+                      }  /*,
+                      {model: GrupoDecorativos, attributes: {  exclude:['id','createdAt','updatedAt']}, through: { attributes: [] }} */
                     ]
                   }
                 ]
-              }]
+            },
+            {
+              model: Fonoaudiologos, as: 'fonoaudiologo', 
+              attributes: {  exclude:['createdAt','updatedAt','personaId']},
+              include: [
+                {
+                  model: Pacientes, as: 'pacientes',
+                  attributes: { exclude:['createdAt','updatedAt','personaId','fonoaudiologoId','obraSocialId']},
+                  include: [
+                    {model: ObrasSociales, as: 'obraSocial', attributes: { exclude:['createdAt','updatedAt']}},
+                    {model: Personas, as: 'persona', attributes: { exclude:['createdAt','updatedAt']}}
+                  ]
+                }
+              ]
+            }]
           },
         ],
         attributes: {  exclude:['id','imagenId','personaId','usuario', 'clave','createdAt','updatedAt'],
@@ -85,6 +122,15 @@ controller.login=async (req, res)=>{
       console.log('Error controller login');
       console.log(e);
     }
+};
+
+controller.logout=async (req, res)=>{
+  //const {usuario,clave}=req.body;
+  res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", 0);
+
+  return res.json({success:true,mensaje: 'logout', token:undefined});
 }
 
 module.exports=controller;

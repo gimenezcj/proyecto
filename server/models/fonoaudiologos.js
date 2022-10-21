@@ -13,7 +13,10 @@ var Fonoaudiologos=database.define('fonoaudiologos',{
 });
 
 Fonoaudiologos.belongsTo(Personas,{foreignKey: 'personaId', as: 'persona'});
+Personas.hasOne(Fonoaudiologos,{foreignKey:'personaId', as: 'fonoaudiologo'});
+
 
 Fonoaudiologos.sync();
+Personas.sync();
 
 module.exports=Fonoaudiologos;

@@ -30,6 +30,12 @@ module.exports = {
       imagenId:{
         allowNull: true,
         type: Sequelize.INTEGER,
+        references: {
+          model: 'decorativos',
+          key: 'id'
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade'      
       },
       pacienteId:{
         allowNull: true,

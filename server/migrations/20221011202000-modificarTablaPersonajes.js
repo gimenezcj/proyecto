@@ -3,10 +3,36 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     return Promise.all([
-      queryInterface.addColumn('personajes','volanteId',{type: Sequelize.INTEGER}),
-      queryInterface.addColumn('personajes','tableroId',{type: Sequelize.INTEGER}),
-      queryInterface.addColumn('personajes','valijaId',{type: Sequelize.INTEGER})
+      queryInterface.addColumn('personajes','volanteId',{
+        type: Sequelize.INTEGER,        
+        references: {
+          model: 'decorativos',
+          key: 'id'},
+        onUpdate: 'cascade',
+        onDelete: 'cascade' }),
+      queryInterface.addColumn('personajes','tableroId',{
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'decorativos',
+          key: 'id'},
+      onUpdate: 'cascade',
+      onDelete: 'cascade' }),
+      queryInterface.addColumn('personajes','valijaId',{
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'decorativos',
+          key: 'id'},
+        onUpdate: 'cascade',
+        onDelete: 'cascade' }),
+        queryInterface.changeColumn('personajes','imagenId',{
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'decorativos',
+            key: 'id'},
+          onUpdate: 'cascade',
+          onDelete: 'cascade' })
     ]);
+
   },
 
   async down (queryInterface, Sequelize) {
