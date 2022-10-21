@@ -4,7 +4,7 @@ import {Image} from 'react-bootstrap';
 function Personaje ({personaje}) {
   return (
     <>
-      <h2><Image src={"/imagenes/avatares/personajes/" + personaje.imagen.nombreArchivo} style={{width:'10vw'}}/></h2>
+      <h2><Image src={"/imagenes/avatares/personajes/" + personaje.imagenBase.nombreArchivo} style={{width:'15vw'}}/></h2>
     </>
   );
 }

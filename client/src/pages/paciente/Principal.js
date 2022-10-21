@@ -1,5 +1,6 @@
 import React from "react";
-import {Container, Row, Col,Image, Navbar, NavbarBrand, Button} from 'react-bootstrap';
+import { useState } from "react";
+import {Container, Row, Col, Navbar, NavbarBrand, Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
 
@@ -8,14 +9,26 @@ import config from '../../config/config.json';
 import DesafiosPropuestos from './../../components/paciente/DesafiosPropuestos';
 import LateralPersonaje from "../../components/paciente/LateralPersonaje";
 import LateralValija from "../../components/paciente/LateralValija";
+import Encabezado from "../../components/paciente/Encabezado";
 
-function Principal ({persona, setToken}) {
+function Principal ({persona, setPersona, setToken}) {
+
+  const pacienteId=persona.paciente.id;
+  const [personaje,setPersonaje] = useState(persona.paciente.personaje);
+
+
+
+
+
+  const imagen = persona.paciente.personaje.imagen;
+  const [miPersonaje, setMiPersonaje] = useState(imagen);
+  
 
   const navigate = useNavigate();
 
   async function logout() {
-    return fetch(config.SERVER_API_URL + 'usuario/logout', {
-      method: 'GET',
+    return fetch(config.SERVER_API_URL + 'cuentas/logout', {
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
     }).then(data => data.json())
    }
@@ -28,17 +41,13 @@ function Principal ({persona, setToken}) {
   
   return (
     <Container fluid>
-      <Row>
-        <Col><Image src={"/imagenes/base/logo.png"} style={{height:'6vw'}}/></Col>
-        <Col xs={6}><h2 style={{textAlign: "center",fontSize: '2.7vw', paddingTop: '2.7vw'}}>Hola, bienvenido {persona.nombre} {persona.apellido}</h2></Col>
-        <Col style={{display:'flex', justifyContent:'right'}}><Image  src={"/imagenes/base/logoCodapli.png"} style={{height:'6vw'}}/> <Image  src={"/imagenes/base/logoUtn.png"} style={{height:'6vw'}}/></Col>
-      </Row>
+      <Encabezado persona={persona}/>
       <Row  style={{ paddingTop: '1.5vw'}}>
         <Col style={{paddingRight:'0'}}>
-          <LateralPersonaje personaje={persona.paciente.personaje}/>
+          <LateralPersonaje personaje={personaje} cambio={true} pi={personaje.imagen}/>
         </Col>
         <Col xs={5}><DesafiosPropuestos rehabilitaciones={persona.paciente.rehabilitaciones}/></Col>
-        <Col xs={4} style={{paddingLeft:'0'}}><LateralValija valija={persona.paciente.personaje.valija}/></Col>
+        <Col xs={4} style={{paddingLeft:'0'}}><LateralValija valija={personaje.valija}/></Col>
       </Row>
       <div className="fixed-bottom">  
             <Navbar color="dark" dark>
