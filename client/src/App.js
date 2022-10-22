@@ -11,6 +11,8 @@ import Ejemplo02 from "./pages/Ejemplo02";
 import PacienteRoutes from './routes/Paciente';
 import ProfesionalRoutes from "./routes/Profesional";
 
+import Tabla from './pages/Tabla';
+
 const App = (props) => {
   const { token, setToken } = useToken();
   const [load,setLoad]=useState(false);
@@ -30,6 +32,7 @@ const App = (props) => {
           <Route path='/' element={<Inicio setToken={setToken}  token={token}/>} />
           <Route path='/home' element={<Ejemplo02/>} />         
         </>}
+        <Route path='/tabla' element={<Tabla/>} />
         <Route render={() => <h1>Not found!</h1>} />
       </Routes>
     </BrowserRouter>
