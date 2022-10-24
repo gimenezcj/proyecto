@@ -33,7 +33,7 @@ const App = (props) => {
           <Route path='/' element={<Inicio setToken={setToken}  token={token}/>} />
           <Route path='/home' element={<Ejemplo02/>} />         
         </>}
-        <Route path='/tabla' element={<Tabla/>} />
+        <Route path='/tabla' element={<Tabla/>} /> 
         <Route path='/logout' element= {<Logout/>} />
         <Route render={() => <h1>Not found!</h1>} />
       </Routes>
