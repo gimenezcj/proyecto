@@ -4,11 +4,15 @@ import { Routes, Route} from "react-router-dom";
 
 //Paginas
 import Principal2 from "../pages/profesional/Principal2";
+import RegistrarEstudios from "../pages/profesional/RegistrarEstudios";
 
 function ProfesionalRoutes  ({token, setToken})  {
+
   const [persona, setPersona] = useState(false);
   const [load,setLoad]=useState(false);
   const [paciente,setPaciente]=useState(false);
+
+
 
   useEffect(()=>{
 
@@ -29,6 +33,7 @@ function ProfesionalRoutes  ({token, setToken})  {
     <Routes>
     {(load && !paciente) && <>
       <Route path='/' element={<Principal2 persona={persona} setToken={setToken}/>}/>
+      <Route path='/registrarestudios/:rowIndex' element={<RegistrarEstudios/>} />
       </>}
     </Routes>
     </>
