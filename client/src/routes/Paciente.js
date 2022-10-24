@@ -5,6 +5,7 @@ import { Routes, Route} from "react-router-dom";
 //Paginas
 import Principal from "../pages/paciente/Principal";
 import Personajes from "../pages/paciente/Personajes";
+import Valijas from "../pages/paciente/Valijas";
 
 function PacienteRoutes  ({token, setToken})  {
 
@@ -34,6 +35,7 @@ function PacienteRoutes  ({token, setToken})  {
      {(load && paciente) && <>
       <Route path='/' element={<Principal persona={persona} setPersona={setPersona} setToken={setToken}/>}/>
       <Route path='/personajes' element={<Personajes persona={persona} setPersona={setPersona}/>}/>
+      <Route path='/valijas' element={<Valijas persona={persona} setPersona={setPersona}/>}/>
       </>}
     </Routes>
     </>

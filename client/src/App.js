@@ -12,6 +12,7 @@ import PacienteRoutes from './routes/Paciente';
 import ProfesionalRoutes from "./routes/Profesional";
 
 import Tabla from './pages/Tabla';
+import Logout from "./pages/Logout";
 
 const App = (props) => {
   const { token, setToken } = useToken();
@@ -33,6 +34,7 @@ const App = (props) => {
           <Route path='/home' element={<Ejemplo02/>} />         
         </>}
         <Route path='/tabla' element={<Tabla/>} />
+        <Route path='/logout' element= {<Logout/>} />
         <Route render={() => <h1>Not found!</h1>} />
       </Routes>
     </BrowserRouter>

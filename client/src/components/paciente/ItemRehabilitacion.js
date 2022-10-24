@@ -1,16 +1,20 @@
 import React from "react";
 import {Button, Card} from 'react-bootstrap';
 
+import '../../pages/estilos/estilos.css';
+
 function ItemRehabilitacion ({rehabilitacion}) {
   const redireccionar=()=>{
     window.location.href  ='http://localhost/auto2/ejemplo2.html';
   }
 
-  return (
-    <>
-      <Card style={{ width: '25rem' }}>
-        <Card.Img variant="top" src={"/imagenes/ciudadesprevios/" + 'buenosaires.png' }/>
-        <Card.Body>
+
+  const a1=(rehabilitacion)=>{
+    return (
+      <>
+      <Card ><Card.Body>
+        <Card.Img variant="top" src={"/imagenes/ciudadesprevios/" + 'buenosaires.png' } style={{width:'10vw'}}/>
+        
           <Card.Title>Buenos Aires</Card.Title>
           <Card.Text>
             <p>Recorremos las calles de Buenos Aires y completamos el desafio.</p>
@@ -22,7 +26,29 @@ function ItemRehabilitacion ({rehabilitacion}) {
         </Card.Body>
       </Card>    
     </>
-  );
+
+    );
+  }
+
+  const a2 = (rehabilitacion)=>{
+    return (
+      <>
+        <div className="card" onClick={redireccionar}>
+          <div className="cardImage" style={{backgroundImage: 'url("/imagenes/ciudadesprevios/buenosaires2.png")'}}></div>
+          <div className="cardBody"> 
+            <div className="cardTextTitle">Buenos Aires</div>
+            <div className="cardTextBody">Recorremos las calles de Buenos Aires y completamos el desafio.</div>
+          </div>
+          <div className="cardFootBody">
+            <div className="cardFoot"> 01/11/2022 - 10/11/2022
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return a2(rehabilitacion);
 }
 
 export default ItemRehabilitacion;

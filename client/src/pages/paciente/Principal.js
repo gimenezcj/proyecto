@@ -11,6 +11,7 @@ import LateralPersonaje from "../../components/paciente/LateralPersonaje";
 import LateralValija from "../../components/paciente/LateralValija";
 import Encabezado from "../../components/paciente/Encabezado";
 
+
 function Principal ({persona, setPersona, setToken}) {
 
   const pacienteId=persona.paciente.id;
@@ -46,11 +47,11 @@ function Principal ({persona, setPersona, setToken}) {
         <Col style={{paddingRight:'0'}}>
           <LateralPersonaje personaje={personaje} cambio={true} pi={personaje.imagen}/>
         </Col>
-        <Col xs={5}><DesafiosPropuestos rehabilitaciones={persona.paciente.rehabilitaciones}/></Col>
-        <Col xs={4} style={{paddingLeft:'0'}}><LateralValija valija={personaje.valija}/></Col>
+        <Col xs={6}><DesafiosPropuestos rehabilitaciones={persona.paciente.rehabilitaciones}/></Col>
+        <Col xs={3} style={{paddingLeft:'0'}}><LateralValija personaje={personaje} cambio={true} pi={personaje.valija}/></Col>
       </Row>
       <div className="fixed-bottom">  
-            <Navbar color="dark" dark>
+            <Navbar color="dark" dark='true'>
                 <Container>
                     <NavbarBrand><Button variant="primary" size="lg" onClick={salir}>SALIR</Button></NavbarBrand>
                 </Container>
