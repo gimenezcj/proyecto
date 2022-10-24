@@ -4,6 +4,7 @@ import { Routes, Route} from "react-router-dom";
 
 //Paginas
 import Principal2 from "../pages/profesional/Principal2";
+import RegistrarEstudios from "../pages/profesional/RegistrarEstudios";
 
 function ProfesionalRoutes  ({token, setToken})  {
   const [persona, setPersona] = useState(false);
@@ -14,8 +15,11 @@ function ProfesionalRoutes  ({token, setToken})  {
 
     if(token!==undefined && token!==null) {
       setLoad(true);
-      setPaciente(token?token.info.persona.paciente:false);
-      setPersona(token.info.persona);
+     // setPaciente(token?token.info.persona.paciente:false);
+     // setPersona(token.info.persona);
+     
+     setPaciente(false);
+     setPersona(token.info.persona);
     }
     else {
       setLoad(false);
@@ -29,6 +33,7 @@ function ProfesionalRoutes  ({token, setToken})  {
     <Routes>
     {(load && !paciente) && <>
       <Route path='/' element={<Principal2 persona={persona} setToken={setToken}/>}/>
+      <Route path='/registrarestudios/:rowIndex' element={<RegistrarEstudios/>} />
       </>}
     </Routes>
     </>
