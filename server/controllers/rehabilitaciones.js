@@ -15,13 +15,26 @@ controller.listAll=(req,res)=>{
   return generaRta(req,res,Rehabilitaciones.findAll({
     include: [
       {
-        model: Pacientes, as: 'paciente'
+        model: Pacientes, as: 'paciente',attributes:{exclude: ['createdAt','updatedAt']}
       },
       {
-        model: Escenarios, as: 'escenario'
+        model: Escenarios, as: 'escenario',attributes:{exclude: ['createdAt','updatedAt']}
       }
     ]
   }));
+}
+
+controller.porPaciente=(req,res)=>{
+  const {pacienteId}=req.params;
+  return generaRta(req,res,Rehabilitaciones.findAll({
+    where: {pacienteId:pacienteId},
+    include: [
+      {
+        model: Escenarios, as: 'escenario',attributes:{exclude: ['createdAt','updatedAt']}
+      }
+    ],
+    attributes:{exclude: ['createdAt','updatedAt']}
+  }))
 }
 
 controller.list=(req,res)=>{
@@ -35,8 +48,8 @@ controller.list=(req,res)=>{
 }
 
 controller.getRoadFromActivity=(req,res)=>{
-  const {id}=req.params; 
-  return generaRta(req,res,ActividadesDisponibles.findByPk(id,{
+  const {rehabilitacionId}=req.params; 
+  return generaRta(req,res,ActividadesDisponibles.findByPk(rehabilitacionId,{
     include:[
       {
         model: Recorridos, as: 'recorrido',
@@ -51,6 +64,19 @@ controller.getRoadFromActivity=(req,res)=>{
     ],
     attributes: { exclude:['createdAt','updatedAt','recorridoId']} 
   }));
+}
+
+controller.eliminar=(req,res)=> {
+  const {id}=req.params;
+
+  Rehabilitaciones.findByPk(id)
+  .then(habilitacion=>{
+    habilitacion.destroy()
+    .then(cantidad=>{
+      return  res.json({cantidad: cantidad, deleted: true, operation:'deleted'});
+    })
+  })
+
 }
 
 module.exports=controller;

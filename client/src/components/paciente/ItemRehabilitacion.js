@@ -1,13 +1,23 @@
 import React from "react";
 import {Button, Card} from 'react-bootstrap';
 
-import '../../pages/estilos/estilos.css';
+import '../../pages/estilos/estilos_paciente.css';
 
 function ItemRehabilitacion ({rehabilitacion}) {
   const redireccionar=()=>{
     window.location.href  ='http://localhost/auto2/ejemplo2.html';
   }
+  const fechaFormato = (aDate) => {
+    if(!aDate) return null
+    else {
+      const completo=new Date(aDate);
+      const dia = `${(completo.getDate())}`.padStart(2,'0');
+      const mes = `${(completo.getMonth()+1)}`.padStart(2,'0');
+      const ano = completo.getFullYear();
 
+      return dia+'-'+mes+'-'+ano;
+    }
+  }
 
   const a1=(rehabilitacion)=>{
     return (
@@ -29,7 +39,7 @@ function ItemRehabilitacion ({rehabilitacion}) {
 
     );
   }
-
+console.log(rehabilitacion);
   const a2 = (rehabilitacion)=>{
     return (
       <>
@@ -40,7 +50,7 @@ function ItemRehabilitacion ({rehabilitacion}) {
             <div className="cardTextBody">Recorremos las calles de Buenos Aires y completamos el desafio.</div>
           </div>
           <div className="cardFootBody">
-            <div className="cardFoot"> 01/11/2022 - 10/11/2022
+            <div className="cardFoot"> {fechaFormato(rehabilitacion.fechaHabilitadaDesde)} al {fechaFormato(rehabilitacion.fechaHabilitadaDesde)}
             </div>
           </div>
         </div>

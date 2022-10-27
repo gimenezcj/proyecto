@@ -133,4 +133,22 @@ controller.logout=async (req, res)=>{
   return res.json({success:true,mensaje: 'logout', token:undefined});
 }
 
+controller.verificar=async(req,res)=>{
+  const {nombreUsuario}= req.params;
+
+  Cuentas.findAll({where:{usuario:nombreUsuario}})
+  .then(encontrados=>{
+    if(!encontrados.length)
+      return res.json({success:true,mensaje: 'no encontrado', encontrado:false, nombreUsuario: nombreUsuario})
+    else
+    return res.json({success:true,mensaje: 'encontrado', encontrado:true, cantidad: encontrados.length, nombreUsuario: nombreUsuario});
+  })
+
+  res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+  res.set("Pragma", "no-cache");
+  res.set("Expires", 0);
+  
+
+}
+
 module.exports=controller;

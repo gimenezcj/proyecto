@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import ItemRehabilitacion from "./ItemRehabilitacion";
 
-import '../../pages/estilos/estilos.css'
+import '../../pages/estilos/estilos_paciente.css'
 
 function DesafiosPropuestos ({rehabilitaciones}) {
   return (
@@ -11,11 +11,8 @@ function DesafiosPropuestos ({rehabilitaciones}) {
         <Row style={{background: '#4176FF', textAlign: 'center'}}>
           <h4>Desafios propuestos</h4>
         </Row>
-        <div className="cardContainer" style={{height: '78vh'}}>
-           <ItemRehabilitacion rehabilitacion={rehabilitaciones[0]}/>
-           <ItemRehabilitacion rehabilitacion={rehabilitaciones[0]}/>
-           <ItemRehabilitacion rehabilitacion={rehabilitaciones[0]}/>
-           <ItemRehabilitacion rehabilitacion={rehabilitaciones[0]}/>
+        <div className="cardContainer" style={{height: rehabilitaciones.length>1?'78vh':'none'}}>
+          {rehabilitaciones.map(x=><ItemRehabilitacion rehabilitacion={x}/>)}
         </div>
       </Col>
       

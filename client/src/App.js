@@ -35,7 +35,7 @@ const App = (props) => {
         </>}
         <Route path='/tabla' element={<Tabla/>} /> 
         <Route path='/logout' element= {<Logout/>} />
-        <Route render={() => <h1>Not found!</h1>} />
+        <Route path='*' render={() => <h1>Not found!</h1>} />
       </Routes>
     </BrowserRouter>
     </>

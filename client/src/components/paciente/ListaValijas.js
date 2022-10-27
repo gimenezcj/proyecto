@@ -27,10 +27,10 @@ function ListaPersonajes ({setMiValija, miValija, puntajeAcumulado}) {
             setError(null);
             setIsLoading(false);
           } else {
-            setError("Hubo un error al obtener el perrito");setIsLoading(false);
+            setError("Hubo un error al obtener las imagenes");setIsLoading(false);
           }
         } catch (error) {
-          setError("No pudimos hacer la solicitud para obtener el perrito");setIsLoading(false);
+          setError("No pudimos hacer la solicitud para obtener las imagenes");setIsLoading(false);
         }
       }
       fetchData();

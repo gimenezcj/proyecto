@@ -71,8 +71,8 @@ function Principal2 ({persona, setToken}) {
 
  
   const products = [ { fecha: '2022/10/10' , nombre_apellido: 'a m', observaciones: 'observaciones', lugar: 'Lugar 1', "_id": 1 },
-  { fecha:'2022/10/10' , nombre_apellido: 'v g', observaciones: 'observaciones...', lugar: 'Lugar 2', "_id": 2 },
-  { fecha: '2022/10/10' , nombre_apellido: 't h', observaciones: 'observaciones.....', lugar: 'Lugar 3', "_id": 3 } ];
+  { fecha:'2022/10/10' , nombre_apellido: 'v g', observaciones: 'observaciones...2', lugar: 'Lugar 2', "_id": 2 },
+  { fecha: '2022/10/10' , nombre_apellido: 't h', observaciones: 'observaciones.....3', lugar: 'Lugar 3', "_id": 3 } ];
 
 
   const defaultSorted = [
@@ -113,10 +113,10 @@ function Principal2 ({persona, setToken}) {
                 
         
         <div className="container">  
-                        <div class="row" className="hdr">    <div className="py-3">          
+                        <div className="row" className="hdr">    <div className="py-3">          
           <Link to="./registrarestudios/nuevo" className="btn btn-cian text-black">Alta de paciente</Link>   
         </div>
-                        <div class="col-sm-12 btn btn-info">    
+                        <div className="col-sm-12 btn btn-info">    
                          Pacientes 
                          </div>    
                           </div>    
