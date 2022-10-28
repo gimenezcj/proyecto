@@ -121,9 +121,9 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
 
   return (
     <>
-    <Container style={{fontSize:'1vw'}}>
-      <Row>
-        <Col style={{display: 'block ruby', marginTop:'2vh'}}><h3>Paciente: </h3><h2>{paciente.persona.nombre} {paciente.persona.apellido}</h2></Col>
+          <Container style={{ fontSize: '1vw', maxWidth: '95%'}}>
+              <Row>
+                  <Col style={{ marginTop: '2vh', display: 'flex', alignItems: 'baseline' }}><h3>Paciente:_</h3><h2>{paciente.persona.nombre} {paciente.persona.apellido}</h2></Col>
       </Row>
       <ToolkitProvider  locale={es} style={{marginLeft:'12vw'}} id='table'
         keyField="id"

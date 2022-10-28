@@ -5,8 +5,8 @@ import Ingreso from './../components/Ingreso';
 import Banner from './../components/Banner';
 
 function Inicio({ setToken,token }) {
-  return (
-    <Container style={{background: "#8dadc8",color:"#073763"}}>
+    return (
+        <Container style={{ background: "#8dadc8", color: "#073763" }}>
       <Row style={{"margin-bottom":"3vh"}}>
         <Col >
           <Encabezado setToken={setToken}  token={token}/>
@@ -14,14 +14,17 @@ function Inicio({ setToken,token }) {
       </Row>
       <Row>
         <Col>
-          <p>Te damos la bienvenida a GAMA</p>
-          <h3>Sistema Gamificado para...</h3>
+          <h2>Te damos la bienvenida a GAMA</h2>
+                  <h4>Una plataforma que permite a los pacientes interactuar de manera dinamica e intuitiva sobre los distintos ejercicios de rehabilitacion cognitiva.</h4>
         </Col>
         <Col>
           <Ingreso setToken={setToken}  token={token}/>
         </Col>
-      </Row>
-      <Row style={{"margin-top":"5vh"}}>
+            </Row>
+            <Row style={{
+                "margin-top": "5vh"
+
+            }}>
         <Banner/>
       </Row>
     </Container>

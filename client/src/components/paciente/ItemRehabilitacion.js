@@ -5,7 +5,7 @@ import '../../pages/estilos/estilos_paciente.css';
 
 function ItemRehabilitacion ({rehabilitacion}) {
   const redireccionar=()=>{
-    window.location.href  ='http://localhost/auto2/ejemplo2.html';
+      window.location.href ='http://www.pixpaper.com.ar/auto/ejemplo2.html';
   }
   const fechaFormato = (aDate) => {
     if(!aDate) return null

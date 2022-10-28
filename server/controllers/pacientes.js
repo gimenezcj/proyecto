@@ -111,7 +111,7 @@ controller.guardar=(req,res) => {
               contactos: paciente.persona.contactos
             }
           }
-          Personajes.create({nombre:'sin nombre', puntajeAcumulado:100, pacienteId: nuevoPaciente.id, volanteId: 20, tableroId:24, valijaId: 19, imagenId:100});
+          Personajes.create({nombre:'sin nombre', puntajeAcumulado:100, pacienteId: nuevoPaciente.id, volanteId: 20, tableroId:24, valijaId: 19, imagenId:50});
 
 
 //          console.log(vector);

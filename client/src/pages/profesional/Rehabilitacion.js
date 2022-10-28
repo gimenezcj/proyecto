@@ -21,10 +21,12 @@ export default function Rehabilitacion ({rehabilitacion,profesional,setToken}) {
       <>
         <Encabezado  persona={profesional}/>
         <Menu setToken={setToken}  botones={config.BOTONES.CERRAR+config.BOTONES.VOLVER} iconoVentana='rehabilitaciones.png'
-          titulo={!rehabilitacion?'Nueva rehabilitacion':'Informacion de la rehabilitacion'}/>
-        <Container style={{fontSize:'1vw'}}>
+                titulo={!rehabilitacion ? 'Nueva rehabilitacion' : 'Informacion de la rehabilitacion'} />
+            <Container style={{
+                fontSize: '1vw'
+            }}>
           <Row>
-            <Col style={{display: 'block ruby', marginTop:'2vh'}}><h3>Paciente: </h3><h2>{paciente?paciente.persona.nombre:''} {paciente?paciente.persona.apellido:''}</h2></Col>
+                    <Col style={{ marginTop: '2vh', display: 'flex', alignItems: 'baseline'}}><h3>Paciente:_</h3><h2>{paciente?paciente.persona.nombre:''} {paciente?paciente.persona.apellido:''}</h2></Col>
           </Row>      
           <FormikRehabilitacion rehabilitacion={rehabilitacion} pacienteId={!paciente?null:paciente.id} profesionalId={profesional.id}/>
         </Container>

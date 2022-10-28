@@ -38,8 +38,8 @@ export default function Ingreso ({ setToken,token }) {
       <Button style={{position:'absolute'}} variant="primary" type="submit" className="mb-3" >
         Acceder
       </Button>
-      <div style={{textAlign:'right'}} > <li><a  href="/RecuperoClave" style={{fontSize:'14px'}}>  Olvide mi contraseña </a> </li>
-        <li> <a  href="/NuevaCuenta" style={{fontSize:'14px'}}>   No tenes cuenta de usuario? Solicitala </a></li>
+          <div style={{ textAlign: 'right' }} > <li><a href="/RecuperoClave" style={{ fontSize: '1.5vw', color: 'black'}}>  Olvide mi contraseña </a> </li>
+              <li> <a href="/NuevaCuenta" style={{ fontSize: '1.5vw', color: 'black'}}>   No tenes cuenta de usuario? Solicitala </a></li>
       </div>
     </Form>
   )

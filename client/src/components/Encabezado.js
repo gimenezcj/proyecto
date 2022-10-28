@@ -13,23 +13,14 @@ function Encabezado ({setToken,token}) {
 
   const icon =
     <span>
-      <img src="/imagenes/base/logo.png" alt="logo GAMA" width="120 px"/>
+      <img src="/imagenes/base/logo.png" alt="logo GAMA" width="200vw"/>
     </span>
 
   return (
 
     <Container>
 <Row><Col md={2} style={{"display":"flex","align-items":"center"}}>{icon}</Col><Col md={10}>
-    <Nav className="flex-row justify-content-end" activeKey="/home" >
-
-
-          <Nav.Link href="/">Inicio</Nav.Link>
-          <Nav.Link href="/QES">Que es GAMA</Nav.Link>
-          <Nav.Link href="/Funcionalidades">Funcionalidades</Nav.Link>
-
-          <Nav.Link eventKey="link-2">Contacto</Nav.Link>
-
-    </Nav>
+   
     </Col>
     </Row>
     </Container>

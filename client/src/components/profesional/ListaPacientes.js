@@ -103,7 +103,9 @@ export default function ListaPacientes ({persona})  {
 
   return (
     <>  
-    <Container style={{fontSize:'1vw'}}>
+          <Container style={{
+              fontSize: '1vw', maxWidth:'95%'
+          }}>
       <ToolkitProvider  locale={es} style={{marginLeft:'12vw'}} id='table'
         keyField="id"
         data={lista}
