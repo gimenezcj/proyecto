@@ -9,5 +9,7 @@ router.get('/:id',controller.list);
 router.get('/road/:id',controller.getRoadFromActivity);
 router.get('/paciente/:pacienteId',controller.porPaciente);
 router.delete('/:rehabilitacionId',controller.eliminar);
+router.post('/guardar/nueva/:fonoaudiologoId/:pacienteId',controller.nueva);
+router.post('/guardar/actualizar',controller.actualizar);
 
 module.exports = router;

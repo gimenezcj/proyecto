@@ -1,5 +1,5 @@
 const Sequelize=require('sequelize');
-const {gte, lte} = Sequelize.Op;
+const {gte, lte, between, gt, lt, and,or} = Sequelize.Op;
 
 const controller={};
 
@@ -42,9 +42,11 @@ controller.login=async (req, res)=>{
   res.set("Pragma", "no-cache");
   res.set("Expires", 0);
 
+  console.log((new Date()).toISOString().split('T')[0]);
+
     try {
         const response=await Cuentas.findAll({
-        where: {usuario:usuario,clave:clave},
+        where: {usuario:usuario,clave:clave},    
         include:[
           {model: Imagenes, as: 'imagen' , attributes: {  exclude:['createdAt','updatedAt']}},
           {model: Personas, as: 'persona', attributes: {  exclude:['createdAt','updatedAt','dni']},
@@ -53,11 +55,7 @@ controller.login=async (req, res)=>{
                 model: Pacientes, as: 'paciente', 
                 attributes: {  exclude:['createdAt','updatedAt','personaId','obraSocialId','fonoaudiologoId','']},
                 include: [
-                  {
-                    model: Rehabilitaciones, as: 'rehabilitaciones',
-                    attributes: { 
-                      exclude:['createdAt','updatedAt','fechaCreacion','pacienteId','fonoaudiologoId','escenarioId','fechaRealizacion','realizada']}
-                  },
+
                   {
                     model: Personajes, as: 'personaje',
                     attributes: {  exclude:['createdAt','updatedAt','pacienteId','imagenId','valijaId','volanteId','tableroId']},
@@ -84,6 +82,12 @@ controller.login=async (req, res)=>{
                       }  /*,
                       {model: GrupoDecorativos, attributes: {  exclude:['id','createdAt','updatedAt']}, through: { attributes: [] }} */
                     ]
+                  },                  
+                  {
+                    model: Rehabilitaciones, as: 'rehabilitaciones',
+                    attributes: { exclude:['createdAt','updatedAt','fechaCreacion','pacienteId','fonoaudiologoId','escenarioId','fechaRealizacion','realizada']}                     
+                    , where: { [and]: [{fechaHabilitadaDesde:{ [lt]: new Date().toISOString().split('T')[0] }}, {fechaHabilitadaHasta: {[gt]: new Date().toISOString().split('T')[0]}}]},
+                    required: false
                   }
                 ]
             },
@@ -103,8 +107,8 @@ controller.login=async (req, res)=>{
             }]
           },
         ],
-        attributes: {  exclude:['id','imagenId','personaId','usuario', 'clave','createdAt','updatedAt'],
-        where: { fechaHabilitacionDesde:{ [lte]: new Date() }, fechaHabilitacionHasta: {[gte]: new Date()}}
+        attributes: {  exclude:['id','imagenId','personaId','usuario', 'clave','createdAt','updatedAt']
+        
         }
       })
       .then((data)=>{

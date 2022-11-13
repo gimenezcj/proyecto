@@ -51,7 +51,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   function btnEliminar(id){
 
     const eliminarBase= async(id) => { 
-      fetch( config.SERVER_API_URL+'rehabilitacion/' + id,{
+      fetch( config.SERVER_API_URL+'rehabilitaciones/' + id,{
         method: 'DELETE',
         headers: {
          'Content-Type': 'application/json'
@@ -92,6 +92,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
     if(!cell) return (<>Sin fecha</>)
     else {
       const completo=new Date(cell);
+      completo.setDate(completo.getDate() +1 );
       const dia = `${(completo.getDate())}`.padStart(2,'0');
       const mes = `${(completo.getMonth()+1)}`.padStart(2,'0');
       const ano = completo.getFullYear();
@@ -100,15 +101,15 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
     }
   }
   const realizadaFormato = (cell, row, rowIndex, formatExtraData) => {
-    if(cell) return (<>Lista</>)
+    if(cell) return (<><span style={{color: 'green'}}>Lista</span></>)
     else return (<>Pendiente</>)
   }
 
   const columnas=[
-    { dataField: 'fechaCreacion', text: 'Creada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato },
-    { dataField: 'fechaRealizacion', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
+    { dataField: 'fechaCreacion', text: 'Creada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato },    
     { dataField: 'fechaHabilitadaDesde', text: 'Desde', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
     { dataField: 'fechaHabilitadaHasta', text: 'Hasta', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
+    { dataField: 'fechaRealizacion', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
     { dataField: 'realizada', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: realizadaFormato},
     {
       dataField: "id",
@@ -121,9 +122,9 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
 
   return (
     <>
-          <Container style={{ fontSize: '1vw', maxWidth: '95%'}}>
-              <Row>
-                  <Col style={{ marginTop: '2vh', display: 'flex', alignItems: 'baseline' }}><h3>Paciente:_</h3><h2>{paciente.persona.nombre} {paciente.persona.apellido}</h2></Col>
+    <Container style={{ fontSize: '1vw', maxWidth: '95%'}}>
+      <Row style={{ marginTop: '2vh' }} >
+        <Col ><span style={{fontSize:'2vw'}}>Paciente: </span><span style={{fontSize:'2.5vw'}}>{paciente.persona.nombre} {paciente.persona.apellido}</span></Col>
       </Row>
       <ToolkitProvider  locale={es} style={{marginLeft:'12vw'}} id='table'
         keyField="id"

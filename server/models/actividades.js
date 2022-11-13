@@ -14,8 +14,9 @@ const Actividades=database.define('actividades',{
   orden: Sequelize.INTEGER
 });
 
-Actividades.belongsTo(Rehabilitaciones, {foreingKey: 'rehabilitacionId', as: 'rehabilitacion'});
-Actividades.belongsTo(ActividadesDisponibles, {foreingKey: 'actividadDisponible', as: 'actividadDisponible'});
+//Actividades.belongsTo(Rehabilitaciones, {foreingKey: 'rehabilitacionId', as: 'rehabilitacion'});
+Actividades.belongsTo(ActividadesDisponibles, {foreingKey: 'actividadDisponibleId', as: 'actividadDisponible'});
+Rehabilitaciones.hasMany(Actividades, {foreignKey: 'rehabilitacionId', as: 'actividades2'});
 
 ActividadesDisponibles.belongsToMany(Rehabilitaciones, {through: Actividades, foreignKey: 'actividadDisponibleId'});
 Rehabilitaciones.belongsToMany(ActividadesDisponibles, {through: Actividades, foreignKey: 'rehabilitacionId'});

@@ -8,6 +8,8 @@ const Escenarios=database.define('escenarios',{
     primaryKey: true,
     autoIncrement: true,
   },
+  nombre: Sequelize.STRING,
+  descripcion: Sequelize.STRING
 });
 
 Escenarios.belongsTo(Imagenes,{foreignKey:'sueloPlanoId', as: 'sueloPlano'});

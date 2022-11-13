@@ -3,6 +3,7 @@ const controller={};
 const generaRta=require('../modules/dbfunctions');
 const Escenarios=require('../models/escenarios');
 const Imagenes = require('../models/imagenes');
+const ActividadesDisponibles= require('../models/actividadesDisponibles');
 
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Escenarios.findAll({
@@ -16,6 +17,8 @@ controller.listAll=(req,res)=>{
       }, {
         model: Imagenes, as: 'sueloColision',
         attributes: {exclude: ['createdAt','updatedAt','id']}
+      },{
+        model: ActividadesDisponibles, as: 'actividadesDisponibles',attributes: {exclude: ['createdAt','updatedAt','escenarioId']}
       }],
     attributes: {exclude: ['createdAt','updatedAt','sueloPlanoId','sueloColisionId','fondoId']}
   }));

@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import FormikRehabilitacion from "../../components/profesional/FormikRehabilitacion";
 
-export default function Rehabilitacion ({rehabilitacion,profesional,setToken}) { 
+export default function Rehabilitacion ({rehabilitacion,profesional,setToken,escenarios}) { 
     
   const location=useLocation();
   const pacienteId=(!location.state.pacienteId?0:location.state.pacienteId);
@@ -25,10 +25,10 @@ export default function Rehabilitacion ({rehabilitacion,profesional,setToken}) {
             <Container style={{
                 fontSize: '1vw'
             }}>
-          <Row>
-                    <Col style={{ marginTop: '2vh', display: 'flex', alignItems: 'baseline'}}><h3>Paciente:_</h3><h2>{paciente?paciente.persona.nombre:''} {paciente?paciente.persona.apellido:''}</h2></Col>
-          </Row>      
-          <FormikRehabilitacion rehabilitacion={rehabilitacion} pacienteId={!paciente?null:paciente.id} profesionalId={profesional.id}/>
-        </Container>
+        <Row style={{ marginTop: '2vh' }} >
+        <Col ><span style={{fontSize:'2vw'}}>Paciente: </span><span style={{fontSize:'2.5vw'}}>{paciente?paciente.persona.nombre:''} {paciente?paciente.persona.apellido:''}</span></Col>
+        </Row>
+        <FormikRehabilitacion  rehabilitacion={rehabilitacion} pacienteId={!paciente?null:paciente.id} profesionalId={profesional.fonoaudiologo.id} escenarios={escenarios}/>
+      </Container>
       </>)
 }

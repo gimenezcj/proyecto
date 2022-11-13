@@ -20,6 +20,8 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
+    const Op = Sequelize.Op;
+    
     await queryInterface.bulkDelete('decorativos', {id: {[Op.in]: [30, 31, 32, 33, 34]}}, {});
     await queryInterface.bulkDelete('imagenes', {id: {[Op.in]: [70, 71, 72, 73, 74]}}, {});
   }

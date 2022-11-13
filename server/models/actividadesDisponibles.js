@@ -1,7 +1,8 @@
 const Sequelize=require('sequelize');
 const database=require('./database');
-const Actividades=require('./actividades');
+
 const Recorridos=require('./recorridos');
+const Escenarios = require('./escenarios');
 
 const ActividadesDisponibles=database.define('actividadesDisponibles',{
   id:{
@@ -20,6 +21,9 @@ const ActividadesDisponibles=database.define('actividadesDisponibles',{
 
 ActividadesDisponibles.belongsTo(Recorridos, {foreignKey: 'recorridoId', as: 'recorrido'});
 
+Escenarios.hasMany(ActividadesDisponibles, {foreignKey: 'escenarioId', as: 'actividadesDisponibles'});
+
 ActividadesDisponibles.sync();
+Escenarios.sync();
 
 module.exports=ActividadesDisponibles;

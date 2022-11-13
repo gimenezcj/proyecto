@@ -11,7 +11,7 @@ function DesafiosPropuestos ({rehabilitaciones}) {
         <Row style={{background: '#4176FF', textAlign: 'center'}}>
           <h4>Desafios propuestos</h4>
         </Row>
-        <div className="cardContainer" style={{height: rehabilitaciones.length>1?'78vh':'none'}}>
+        <div className="cardContainer" style={{maxHeight: '78vh'}}>
           {rehabilitaciones.map(x=><ItemRehabilitacion rehabilitacion={x}/>)}
         </div>
       </Col>

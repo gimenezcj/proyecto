@@ -1,22 +1,15 @@
 import React from "react";
 import {Button, Card} from 'react-bootstrap';
 
+
+
 import '../../pages/estilos/estilos_paciente.css';
+
+const time = require( '../../modules/Time');
 
 function ItemRehabilitacion ({rehabilitacion}) {
   const redireccionar=()=>{
       window.location.href ='http://www.pixpaper.com.ar/auto/ejemplo2.html';
-  }
-  const fechaFormato = (aDate) => {
-    if(!aDate) return null
-    else {
-      const completo=new Date(aDate);
-      const dia = `${(completo.getDate())}`.padStart(2,'0');
-      const mes = `${(completo.getMonth()+1)}`.padStart(2,'0');
-      const ano = completo.getFullYear();
-
-      return dia+'-'+mes+'-'+ano;
-    }
   }
 
   const a1=(rehabilitacion)=>{
@@ -50,7 +43,8 @@ console.log(rehabilitacion);
             <div className="cardTextBody">Recorremos las calles de Buenos Aires y completamos el desafio.</div>
           </div>
           <div className="cardFootBody">
-            <div className="cardFoot"> {fechaFormato(rehabilitacion.fechaHabilitadaDesde)} al {fechaFormato(rehabilitacion.fechaHabilitadaDesde)}
+            <div className="cardFoot"> 
+              { time.fechaFormato(rehabilitacion.fechaHabilitadaDesde)+' '}al{' '+time.fechaFormato(rehabilitacion.fechaHabilitadaHasta) }
             </div>
           </div>
         </div>

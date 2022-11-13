@@ -10,12 +10,18 @@ const Rehabilitaciones=database.define('rehabilitaciones',{
     primaryKey: true,
     autoIncrement: true,
   },
-  fechaCreacion: Sequelize.DATE,
+  fechaCreacion: { 
+    type: Sequelize.DATE,
+    allowNull: true
+  },
   fechaRealizacion: Sequelize.DATE,
   fechaHabilitadaDesde: Sequelize.DATE,
   fechaHabilitadaHasta: Sequelize.DATE,
   realizada: Sequelize.BOOLEAN,
-  dificultad: Sequelize.ENUM('bajo','medio','alto')
+  dificultad: {
+    type: Sequelize.ENUM('bajo','medio','alto'),
+    defaultValue: 'bajo'
+  }
 });
 
 Rehabilitaciones.belongsTo(Pacientes, {foreignKey:'pacienteId', as: 'paciente'});
@@ -23,8 +29,9 @@ Rehabilitaciones.belongsTo(Fonoaudiologos, {foreignKey:'fonoaudiologoId', as: 'f
 Rehabilitaciones.belongsTo(Escenarios, {foreignKey:'escenarioId', as: 'escenario'});
 
 Pacientes.hasMany(Rehabilitaciones,{foreignKey: 'pacienteId', as: 'rehabilitaciones'});
-Escenarios.hasMany(Rehabilitaciones,{foreignKey: 'escenarioId',as: 'rehabilitaciones'});
+//Escenarios.hasMany(Rehabilitaciones,{foreignKey: 'escenarioId',as: 'rehabilitaciones'});
 
 Rehabilitaciones.sync();
+Pacientes.sync();
 
 module.exports=Rehabilitaciones;
