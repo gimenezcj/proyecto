@@ -1,0 +1,17 @@
+.volante_base {
+  position: absolute;
+  top: 65vh;
+  width: 400px;
+  height: 240px;
+  left: 40vw;
+  transform-origin: 200px 200px;
+  overflow: hidden;
+}
+
+.volante {
+
+width: 400px;
+height: 400px;
+background-size: cover;
+background: url('../imagenes/volanteBMW-400.png')  no-repeat;
+}

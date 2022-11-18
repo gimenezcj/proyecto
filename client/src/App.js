@@ -6,7 +6,7 @@ import useToken from './components/useToken';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Inicio from "./pages/Inicio";
-import Ejemplo02 from "./pages/Ejemplo02";
+
 
 import PacienteRoutes from './routes/Paciente';
 import ProfesionalRoutes from "./routes/Profesional";
@@ -31,7 +31,7 @@ const App = (props) => {
       <Routes>
         {(!token || token===null) && <>
           <Route path='/' element={<Inicio setToken={setToken}  token={token}/>} />
-          <Route path='/home' element={<Ejemplo02/>} />         
+               
         </>}
         <Route path='/tabla' element={<Tabla/>} /> 
         <Route path='/logout' element= {<Logout/>} />

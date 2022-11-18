@@ -1,0 +1,131 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "BABF3217-F43F-4BC1-878D-364F7C750398",
+			"type": "BoxGeometry",
+			"width": 2,
+			"height": 0.15,
+			"depth": 0.6,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		},
+		{
+			"uuid": "E90A75F5-2C35-4B3C-85EC-E3BD2BC34C17",
+			"type": "BoxGeometry",
+			"width": 0.3,
+			"height": 0.3,
+			"depth": 0.5,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		},
+		{
+			"uuid": "074764C6-5A21-4E85-8DC2-D542AB2EEF8E",
+			"type": "BoxGeometry",
+			"width": 0.3,
+			"height": 0.3,
+			"depth": 0.5,
+			"widthSegments": 1,
+			"heightSegments": 1,
+			"depthSegments": 1
+		}],
+	"materials": [
+		{
+			"uuid": "01441BA6-17C3-490F-8FA2-8D6441DA4D00",
+			"type": "MeshStandardMaterial",
+			"color": 16777215,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 12297123,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "41579555-AED7-4073-BF86-3C7FB69D9933",
+			"type": "MeshStandardMaterial",
+			"color": 16777215,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 12297123,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		},
+		{
+			"uuid": "2B47FD2C-2771-429A-A488-7EBFE640CF90",
+			"type": "MeshStandardMaterial",
+			"color": 16777215,
+			"roughness": 1,
+			"metalness": 0,
+			"emissive": 12297123,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		}],
+	"object": {
+		"uuid": "AC3EC17F-0A61-4B82-8040-2CA624CE56AE",
+		"type": "Group",
+		"name": "banco",
+		"layers": 1,
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0.15,0,1],
+		"children": [
+			{
+				"uuid": "B2B19955-24F7-4B8A-BF77-575813F4496B",
+				"type": "Mesh",
+				"name": "Box",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0.38,0,1],
+				"geometry": "BABF3217-F43F-4BC1-878D-364F7C750398",
+				"material": "01441BA6-17C3-490F-8FA2-8D6441DA4D00"
+			},
+			{
+				"uuid": "920A9034-2506-4F1F-9942-649487884089",
+				"type": "Mesh",
+				"name": "Box",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-0.4,0.15,0,1],
+				"geometry": "E90A75F5-2C35-4B3C-85EC-E3BD2BC34C17",
+				"material": "41579555-AED7-4073-BF86-3C7FB69D9933"
+			},
+			{
+				"uuid": "F96F54FE-DCEC-41E1-AD97-86E9EDAE947B",
+				"type": "Mesh",
+				"name": "Box",
+				"layers": 1,
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0.4,0.15,0,1],
+				"geometry": "074764C6-5A21-4E85-8DC2-D542AB2EEF8E",
+				"material": "2B47FD2C-2771-429A-A488-7EBFE640CF90"
+			}]
+	}
+}

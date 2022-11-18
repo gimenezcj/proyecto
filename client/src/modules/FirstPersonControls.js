@@ -19,7 +19,7 @@ class FirstPersonControls {
 
 		}
 
-    this.Y_AXIS = new THREE.Vector3(0, 1, 0);
+    this.Y_AXIS = new Vector3(0, 1, 0);
 		this.object = object;
 		this.domElement = domElement;
     this.anguloGiro=0;
@@ -29,7 +29,7 @@ class FirstPersonControls {
 		this.enabled = true;
 
 		this.movementSpeed = 0.0;
-		this.lookSpeed = 0.005;
+		this.lookSpeed = 0.5;
 
 		this.lookVertical = true;
 		this.autoForward = false;
@@ -49,7 +49,7 @@ class FirstPersonControls {
 
 		// internals
 
-		this.autoSpeedFactor = 0.0;
+		this.autoSpeedFactor = 0.5;
 
 		this.mouseX = 0;
 		this.mouseY = 0;
@@ -66,6 +66,8 @@ class FirstPersonControls {
 
 		let lat = 0;
 		let lon = 0;
+
+		this.mantener=false;
 
 		//
 
@@ -95,6 +97,7 @@ class FirstPersonControls {
 
 			if ( this.activeLook ) {
 
+				// eslint-disable-next-line default-case
 				switch ( event.button ) {
 
 					case 0: this.moveForward = true; break;
@@ -112,6 +115,7 @@ class FirstPersonControls {
 
 			if ( this.activeLook ) {
 
+				// eslint-disable-next-line default-case
 				switch ( event.button ) {
 
 					case 0: this.moveForward = false; break;
@@ -142,7 +146,8 @@ class FirstPersonControls {
 		};
 
 		this.onKeyDown = function ( event ) {
-
+	
+			// eslint-disable-next-line default-case
 			switch ( event.code ) {
 
 				case 'ArrowUp':
@@ -161,6 +166,7 @@ class FirstPersonControls {
 				case 'KeyF': this.moveDown = true; break;
 
         case 'Space': this.stop=true;break;
+				case 'ShiftLeft': this.mantener=true;break;
 
 			}
 
@@ -168,25 +174,20 @@ class FirstPersonControls {
 
 		this.onKeyUp = function ( event ) {
 
+			// eslint-disable-next-line default-case
 			switch ( event.code ) {
-
 				case 'ArrowUp':
 				case 'KeyW': this.moveForward = false; break;
-
 				case 'ArrowLeft':
 				case 'KeyA': this.moveLeft = false; break;
-
 				case 'ArrowDown':
 				case 'KeyS': this.moveBackward = false; break;
-
 				case 'ArrowRight':
 				case 'KeyD': this.moveRight = false; break;
-
 				case 'KeyR': this.moveUp = false; break;
 				case 'KeyF': this.moveDown = false; break;
-
         case 'Space': this.stop=false;break;
-
+				case 'ShiftLeft': this.mantener=false;break;
 			}
 
 		};
@@ -222,31 +223,31 @@ class FirstPersonControls {
           this.stop=!this.stop;
         }
 
-        if (this.movementSpeed>0 && !this.moveForward) this.movementSpeed-=0.005;
-        else if (this.moveForward) this.movementSpeed+=0.05;
-        if (this.movementSpeed<0 && !this.moveBackward) this.movementSpeed+=0.005;
+        if (this.movementSpeed>0 && !this.moveForward  && !this.mantener) this.movementSpeed-=0.005;
+        else if (this.moveForward && this.movementSpeed<1.4) this.movementSpeed+=0.015;
+        if (this.movementSpeed<0 && !this.moveBackward && this.movementSpeed<1.4) this.movementSpeed+=0.005;
         else if (this.moveBackward)
           if (this.movementSpeed>=0) this.movementSpeed-=0.05;
-          else if(this.movementSpeed>-0.1) this.movementSpeed-=0.01;
+          else if(this.movementSpeed>-0.3) this.movementSpeed-=0.01;
 
-        if (this.movementSpeed<0) this.movementSpeed+=0.005;
-        if (this.movementSpeed>0) this.movementSpeed-=0.005;
+        if (this.movementSpeed<0 ) this.movementSpeed+=0.0005;
+        if (this.movementSpeed>0 && !this.mantener) this.movementSpeed-=0.000005;
 
         if (this.movementSpeed<0.01 && this.movementSpeed>-0.01) this.movementSpeed=0;
 
-        if ( this.moveLeft) this.anguloGiro++;
-        if ( this.moveRight) this.anguloGiro--;
+        if ( this.moveLeft && this.anguloGiro<80) this.anguloGiro+=2;
+        if ( this.moveRight && this.anguloGiro>-80) this.anguloGiro-=2;
 
-        if (this.anguloGiro<0 && this.movementSpeed!=0) this.anguloGiro+=0.5;
-        if (this.anguloGiro>0 && this.movementSpeed!=0) this.anguloGiro-=0.5;
+        if (this.anguloGiro<0 && this.movementSpeed!==0) this.anguloGiro+=0.5;
+        if (this.anguloGiro>0 && this.movementSpeed!==0) this.anguloGiro-=0.5;
         if (this.anguloGiro<0.5 && this.anguloGiro>-0.5) this.anguloGiro=0;
 
 				if ( this.moveUp ) this.object.translateY( this.movementSpeed );
 				if ( this.moveDown ) this.object.translateY( - this.movementSpeed );
 
-        if(this.movementSpeed!=0) this.object.translateZ( -this.movementSpeed );
-        if(this.anguloGiro!=0 && this.movementSpeed>0) this.object.rotateOnAxis( this.Y_AXIS, (this.anguloGiro>0?1:-1) * 0.01 );
-        if(this.anguloGiro!=0 && this.movementSpeed<0) this.object.rotateOnAxis( this.Y_AXIS, (this.anguloGiro>0?-1:1) * 0.01 );
+        if(this.movementSpeed!==0) this.object.translateZ( -this.movementSpeed );
+        if(this.anguloGiro!==0 && this.movementSpeed>0) this.object.rotateOnAxis( this.Y_AXIS, (this.anguloGiro>0?1:-1) * 0.01 );
+        if(this.anguloGiro!==0 && this.movementSpeed<0) this.object.rotateOnAxis( this.Y_AXIS, (this.anguloGiro>0?-1:1) * 0.01 );
 
 			};
 
