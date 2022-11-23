@@ -29,24 +29,25 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
   }
 
   const contarPendientes=(actividades)=> {
-    console.log(actividades);
-    var pendientes=actividades.map(function (v,k) {
-      var hayResultados=v.resultadosActividades.length>0;
-      if (hayResultados)
-      {
-        var pendientes2=v.resultadosActividades.map(function(v,k){
-          return v.completado
-        });
-        return !pendientes2.includes(true);
-      } else
-        return true;
-    });
-    var filtrado=pendientes.filter(x=>x);
-    return filtrado.length;
 
+      if (actividades !== undefined) {
+          var pendientes = actividades.map(function (v, k) {
+              var hayResultados = v.resultadosActividades.length > 0;
+              if (hayResultados) {
+                  var pendientes2 = v.resultadosActividades.map(function (v, k) {
+                      return v.completado
+                  });
+                  return !pendientes2.includes(true);
+              } else
+                  return true;
+          });
+          var filtrado = pendientes.filter(x => x);
+          return filtrado.length;
+      } else return 0;
   }
   const [cantidadP, setCantidadP] = useState(contarPendientes(rehabilitacion.actividades2));
-  const A2 = (rehabilitacion)=>{
+
+    const A2 = (rehabilitacion) => {
 
 
     const {nombre,descripcion}=rehabilitacion.escenario;
@@ -72,7 +73,9 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
     );
   }
 
-  return A2(rehabilitacion);
+    if(rehabilitacion.escenario!==undefined)
+    return A2(rehabilitacion)
+    else return (<></>);
 }
 
 export default ItemRehabilitacion;

@@ -23,7 +23,7 @@ function PacienteRoutes  ({token, setToken})  {
       setLoad(true);
       setPaciente(token?token.info.persona.paciente:false);
       setPersona(token.info.persona);
-      setListaR(token.info.persona.paciente.rehabilitaciones);
+      if (token.info.persona.paciente) setListaR(token.info.persona.paciente.rehabilitaciones);
     }
     else {
       setLoad(false);
