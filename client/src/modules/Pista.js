@@ -31,6 +31,7 @@ export default class Pista {
     loader.load(nombre,
 //      function ( obj ) {objetos[tipo]={tipo:tipo,nombre: nombre,obj: obj};},
       function ( obj ) {
+        // eslint-disable-next-line no-array-constructor
         objetos[tipo]=new Array(tipo,nombre,obj);
       },
 
@@ -96,7 +97,7 @@ export default class Pista {
           o.translateZ(e["y"]*3);
           o.translateX(e["x"]*3);
 
-          if (e["rotacion"]!=0){
+          if (e["rotacion"]!==0){
             o.rotateY((e["rotacion"]/255)*(2*Math.PI));
           }
             o.visible=true;

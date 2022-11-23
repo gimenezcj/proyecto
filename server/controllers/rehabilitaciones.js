@@ -1,3 +1,6 @@
+const Sequelize=require('sequelize');
+const {gte, lte, between, gt, lt, and,or} = Sequelize.Op;
+
 const controller={};
 
 const generaRta=require('../modules/dbfunctions');
@@ -10,6 +13,11 @@ const Actividades=require('../models/actividades');
 const ActividadesDisponibles=require('../models/actividadesDisponibles');
 const Recorridos = require('../models/recorridos');
 const DistractoresDisponibles = require('../models/distractoresDisponibles');
+const ComprarProductos=require('../models/comprarProductos');
+const Productos = require('../models/productos');
+const ResultadosActividades = require('../models/resultadosactividades');
+const ResultadosComprarProductos = require('../models/resultadoscomprarproductos');
+const ResultadosRecorridos = require('../models/resultadosrecorridos');
 
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Rehabilitaciones.findAll({
@@ -42,6 +50,70 @@ controller.porPaciente=(req,res)=>{
     attributes:{exclude: ['createdAt','updatedAt','escenarioId']}
   }))
 }
+
+controller.pendientesPorPaciente=(req,res)=>{
+  const {pacienteId}=req.params;
+  return generaRta(req,res,Rehabilitaciones.findAll({
+    attributes: { exclude:['createdAt','updatedAt','fechaCreacion','pacienteId','fonoaudiologoId','escenarioId','fechaRealizacion','realizada']},                     
+    where: { [and]: [
+      {fechaHabilitadaDesde:{ [lt]: new Date().toISOString().split('T')[0] }}, 
+      {fechaHabilitadaHasta: {[gt]: new Date().toISOString().split('T')[0]}},
+      {pacienteId:pacienteId},
+      {realizada:false}
+    ]},
+    required: false,
+    include: [
+      {
+        model: Escenarios, as: 'escenario',
+        attributes: { exclude:['createdAt','updatedAt','id','sueloPlanoId','sueloColisionId','fondoId']},
+        include: [
+          {model: Imagenes, as: 'fondo',attributes: { exclude:['createdAt','updatedAt','id']}},                          
+          {model: Imagenes, as: 'sueloPlano',attributes: { exclude:['createdAt','updatedAt','id']}},
+          {model: Imagenes, as: 'sueloColision',attributes: { exclude:['createdAt','updatedAt','id']}}
+        ]
+      },
+      {
+        model: Actividades, as: 'actividades2', required: false,  order:[[{ model: Actividades, as: 'actividades2'},'orden','ASC']],
+        attributes: { exclude:['createdAt','updatedAt','rehabilitacionId','actividadDisponibleId']},
+        include: [
+          {
+            model: ActividadesDisponibles, as: 'actividadDisponible', 
+            attributes: { exclude:['createdAt','updatedAt','id','estimuloAuditivoId','escenarioId','recorridoId']},
+            include: [
+              {model: Recorridos, as: 'recorrido',attributes: { exclude:['createdAt','updatedAt','id']}},
+              {model: Imagenes, as: 'sonido',attributes: { exclude:['createdAt','updatedAt','id']}},
+              {model: ComprarProductos, as: 'comprarProducto',required: false,
+                attributes: { exclude:['createdAt','updatedAt','id','actividadId']},
+                include: [
+                  {model: Productos, as: 'productos',attributes: { exclude:['createdAt','updatedAt','id','ayudaSonoraId','imagenId','comprarProductoId']},
+                    include: [
+                      {model: Imagenes, as: 'imagen',attributes: { exclude:['createdAt','updatedAt','id']}},
+                      {model: Imagenes, as: 'sonido',attributes: { exclude:['createdAt','updatedAt','id']}}
+                    ]
+                  }
+                ]
+              },
+
+            ]
+          },{
+            model: ResultadosActividades, as: 'resultadosActividades', required: false,
+            include: [
+              {
+                model: ResultadosComprarProductos, as: 'resultadoComprarProductos'
+              }
+            ]
+          },                              
+          {
+            model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
+          }
+
+        ]
+      }
+    ]
+  }
+  ))
+}
+
 
 controller.list=(req,res)=>{
   const {id}=req.params;

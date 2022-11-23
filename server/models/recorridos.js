@@ -16,6 +16,7 @@ const Recorridos=database.define('recorridos',{
   xBFinal: Sequelize.INTEGER,
   yBFinal: Sequelize.INTEGER,
   puntaje: Sequelize.INTEGER,
+  giroInicial: Sequelize.INTEGER,
   actividadDisponibleId: Sequelize.INTEGER
 });
 

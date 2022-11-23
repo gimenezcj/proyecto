@@ -4,7 +4,7 @@ import ItemRehabilitacion from "./ItemRehabilitacion";
 
 import '../../pages/estilos/estilos_paciente.css'
 
-function DesafiosPropuestos ({rehabilitaciones}) {
+function DesafiosPropuestos ({rehabilitaciones,personajeId}) {
   return (
     <Container>
       <Col>
@@ -12,7 +12,7 @@ function DesafiosPropuestos ({rehabilitaciones}) {
           <h4>Desafios propuestos</h4>
         </Row>
         <div className="cardContainer" style={{maxHeight: '78vh'}}>
-          {rehabilitaciones.map(x=><ItemRehabilitacion rehabilitacion={x}/>)}
+          {rehabilitaciones.map(x=><ItemRehabilitacion rehabilitacion={x} personajeId={personajeId}/>)}
         </div>
       </Col>
       

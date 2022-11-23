@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useReducer, useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation} from "react-router-dom";
 
 import Brujula from "../../components/paciente/Brujula";
 import Combustible from "../../components/paciente/Combustible";
-// import DatosPantalla from "../../components/paciente/DatosPantalla";
+ import DatosPantalla from "../../components/paciente/DatosPantalla";
 import Escenario2 from "../../components/paciente/Escenario2";
 import Tablero from "../../components/paciente/Tablero";
 import Velocimetro from "../../components/paciente/Velocimetro";
@@ -14,31 +14,50 @@ const Swal = require('sweetalert2');
 
 export default function Recorrido (){
   
-  const navigate=useNavigate();
+  const navigate= useNavigate();
+  const location=useLocation();
+  const {actividad,fondo,sueloPlano,sueloColision, rehabilitacionId, personajeId}=location.state;
+  const {recorrido,detalle}=actividad.actividadDisponible;
 
   const [brujula,setBrujula]=useState(0);
   const [sinCombustible,setSinCombustible]=useState(false);
   const [choco,setChoco]=useState(false);
   const [llego, setLlego]=useState(false);
-  const consumo=0.08;  //consumo de combustible expresado en litros por unidad de medida recorrida
+  const consumo=0.05;  //consumo de combustible expresado en litros por unidad de medida recorrida
 
   const rehabilitacion={
-    fondo:[
-      'imagenes/fondos/ciudadBsAs01.jpg', 
-      'imagenes/fondos/ciudadBsAs03.jpg',
-      'imagenes/fondos/ciudadBsAs05.jpg',
-      'imagenes/fondos/ciudadBsAs05.jpg',
-      'imagenes/fondos/ciudadBsAs04.jpg',
-      'imagenes/fondos/ciudadBsAs02.jpg'],
-    pista: 'suelo1.png',
-    colision: 'colision1.png',
-    origen:{x:17.8,y:10}, 
-    destino:{a:{x:160,y:252},b:{x:170,y:257}}
+    fondo: 'imagenes/fondos/'+fondo, 
+    pista: sueloPlano,
+    colision: sueloColision,
+    origen:{
+      x:recorrido.xInicial,
+      y:recorrido.yInicial}, 
+    destino:{
+      a:{
+        x:recorrido.xAFinal,
+        y:recorrido.yAFinal},
+      b:{
+        x:recorrido.xBFinal,
+        y:recorrido.yBFinal}}
     }
 
   const puntoMedio={x:(rehabilitacion.destino.b.x+rehabilitacion.destino.a.x)/2,y:(rehabilitacion.destino.b.y+rehabilitacion.destino.a.y)/2};
 
-  const estadoInicial={anguloGiro:0,velocidad:10,xActual:18,yActual:10,combustible:40,ejeZ:0, vectorDestino: puntoMedio,distancia:0,reset:false, choco:false, anguloInicial:180,parar: false,xAnterior:18,yAnterior:10};
+  const estadoInicial={
+    anguloGiro:0,
+    velocidad:10,
+    xActual:rehabilitacion.origen.x, 
+    yActual:rehabilitacion.origen.y,
+    combustible:40,
+    ejeZ:0, 
+    vectorDestino: puntoMedio,
+    distancia:0,
+    reset:false, 
+    choco:false, 
+    anguloInicial:recorrido.giroInicial,
+    parar: false,
+    xAnterior:rehabilitacion.origen.x,
+    yAnterior:rehabilitacion.origen.y};
   const nuevoEstado=(estado,accion)=>{  
     switch (accion.tipo) {
       case 'parar':
@@ -98,6 +117,22 @@ export default function Recorrido (){
     }
   }
 
+    useEffect(()=>{
+      Swal.fire({
+        title: 'A MANEJAR',
+        text: detalle,
+        icon: 'info',
+        showCancelButton: false,
+        confirmButtonColor: '#3f7f91',
+        confirmButtonText: 'LLEGUEMOS AL LUGAR'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          setEstado({tipo:'reset', valor: true});
+        }
+      });
+
+    },[])
+
     const [estado,setEstado]=useReducer(nuevoEstado,estadoInicial);
 
     useEffect(()=>{
@@ -124,7 +159,8 @@ export default function Recorrido (){
           confirmButtonText: 'REALIZAR LA TAREA'
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate(0);
+            //navigate(0);
+            navigate("/menorPrecio", { replace: true, state:{actividad:actividad, rehabilitacionId:rehabilitacionId, personajeId: personajeId} });
           }
         });
         if (choco){
@@ -160,7 +196,7 @@ export default function Recorrido (){
       <Velocimetro estado={estado}/>
       <Combustible estado={estado}/>
       <Brujula brujula={brujula} />
-      
+      <DatosPantalla estado={estado} rehabilitacion={rehabilitacion}/>
       <Escenario2 estado={estado} setEstado={setEstado} rehabilitacion={rehabilitacion}/>
     </>
   );

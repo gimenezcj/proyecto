@@ -1,5 +1,6 @@
 const controller={};
 
+const Decorativos = require('../models/decorativos');
 const DecorativosAvatar = require('../models/decorativosavatar');
 const Imagenes = require('../models/imagenes');
 const Personajes = require('../models/personajes');
@@ -17,6 +18,37 @@ controller.listAll=(req,res)=>{
       attributes:{exclude: ['createdAt','updatedAt']}
     }]
   }));
+}
+
+controller.personaje=(req,res)=> {
+  const {peronajeId}= req.params;
+  return generaRta(req,res,Personajes.findByPk(peronajeId,{
+    attributes: {  exclude:['createdAt','updatedAt','pacienteId','imagenId','valijaId','volanteId','tableroId']},
+    include: [ 
+      {
+        model: Decorativos, as: 'tablero', attributes: {  
+          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+      },
+      {
+        model: Decorativos, as: 'volante', attributes: {  
+          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+      },
+      {
+        model: Decorativos, as: 'valija' , attributes: { 
+          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+      },
+      {
+        model: Decorativos, as: 'imagen',attributes: {  
+          exclude:['createdAt','updatedAt','x','y','valor','baseId','nroPieza','auxiliarId']},
+        include: [{model: Imagenes, as: 'imagenBase', attributes: {  exclude:['id','createdAt','updatedAt']}}]
+      }  /*,
+      {model: GrupoDecorativos, attributes: {  exclude:['id','createdAt','updatedAt']}, through: { attributes: [] }} */
+    ]
+  }));
+
 }
 
 controller.adquirir=(req,res)=>{

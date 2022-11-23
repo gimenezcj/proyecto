@@ -5,17 +5,26 @@ const controller={};
 
 const generaRta=require('../modules/dbfunctions');
 
-const Cuentas=require('../models/cuentas');
-const Ingresos = require('../models/ingresos');
-const Imagenes = require('../models/imagenes');
-const Personas = require('../models/personas');
-const Pacientes = require('../models/pacientes');
-const Rehabilitaciones = require('../models/rehabilitaciones');
-const Personajes = require('../models/personajes');
-const GrupoDecorativos = require('../models/grupodecorativos');
-const Decorativos = require('../models/decorativos');
-const Fonoaudiologos = require('../models/fonoaudiologos');
-const ObrasSociales = require('../models/obrassociales');
+const Cuentas           = require('../models/cuentas');
+const Ingresos          = require('../models/ingresos');
+const Imagenes          = require('../models/imagenes');
+const Personas          = require('../models/personas');
+const Pacientes         = require('../models/pacientes');
+const Rehabilitaciones  = require('../models/rehabilitaciones');
+const Personajes        = require('../models/personajes');
+const GrupoDecorativos  = require('../models/grupodecorativos');
+const Decorativos       = require('../models/decorativos');
+const Fonoaudiologos    = require('../models/fonoaudiologos');
+const ObrasSociales     = require('../models/obrassociales');
+const Actividades       = require('../models/actividades');
+const ActividadesDisponibles = require('../models/actividadesDisponibles');
+const Escenarios =        require('../models/escenarios');
+const Recorridos =        require('../models/recorridos');
+const ComprarProductos =  require('../models/comprarProductos.js');
+const Productos = require('../models/productos');
+const ResultadosActividades = require('../models/resultadosactividades');
+const ResultadosComprarProductos = require('../models/resultadoscomprarproductos');
+const ResultadosRecorridos = require('../models/resultadosrecorridos');
 
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Cuentas.findAll({
@@ -46,7 +55,7 @@ controller.login=async (req, res)=>{
 
     try {
         const response=await Cuentas.findAll({
-        where: {usuario:usuario,clave:clave},    
+        where: {usuario:usuario,clave:clave},     
         include:[
           {model: Imagenes, as: 'imagen' , attributes: {  exclude:['createdAt','updatedAt']}},
           {model: Personas, as: 'persona', attributes: {  exclude:['createdAt','updatedAt','dni']},
@@ -87,7 +96,55 @@ controller.login=async (req, res)=>{
                     model: Rehabilitaciones, as: 'rehabilitaciones',
                     attributes: { exclude:['createdAt','updatedAt','fechaCreacion','pacienteId','fonoaudiologoId','escenarioId','fechaRealizacion','realizada']}                     
                     , where: { [and]: [{fechaHabilitadaDesde:{ [lt]: new Date().toISOString().split('T')[0] }}, {fechaHabilitadaHasta: {[gt]: new Date().toISOString().split('T')[0]}}]},
-                    required: false
+                    required: false,
+                    include: [
+                      {
+                        model: Escenarios, as: 'escenario',
+                        attributes: { exclude:['createdAt','updatedAt','id','sueloPlanoId','sueloColisionId','fondoId']},
+                        include: [
+                          {model: Imagenes, as: 'fondo',attributes: { exclude:['createdAt','updatedAt','id']}},                          
+                          {model: Imagenes, as: 'sueloPlano',attributes: { exclude:['createdAt','updatedAt','id']}},
+                          {model: Imagenes, as: 'sueloColision',attributes: { exclude:['createdAt','updatedAt','id']}}
+                        ]
+                      },
+                      {
+                        model: Actividades, as: 'actividades2', required: false,  order:[[{ model: Actividades, as: 'actividades2'},'orden','ASC']],
+                        attributes: { exclude:['createdAt','updatedAt','rehabilitacionId','actividadDisponibleId']},
+                        include: [
+                          {
+                            model: ActividadesDisponibles, as: 'actividadDisponible', 
+                            attributes: { exclude:['createdAt','updatedAt','id','estimuloAuditivoId','escenarioId','recorridoId']},
+                            include: [
+                              {model: Recorridos, as: 'recorrido',attributes: { exclude:['createdAt','updatedAt','id']}},
+                              {model: Imagenes, as: 'sonido',attributes: { exclude:['createdAt','updatedAt','id']}},
+                              {model: ComprarProductos, as: 'comprarProducto',required: false,
+                                attributes: { exclude:['createdAt','updatedAt','id','actividadId']},
+                                include: [
+                                  {model: Productos, as: 'productos',attributes: { exclude:['createdAt','updatedAt','id','ayudaSonoraId','imagenId','comprarProductoId']},
+                                    include: [
+                                      {model: Imagenes, as: 'imagen',attributes: { exclude:['createdAt','updatedAt','id']}},
+                                      {model: Imagenes, as: 'sonido',attributes: { exclude:['createdAt','updatedAt','id']}}
+                                    ]
+                                  }
+                                ]
+                              },
+    
+                            ]
+                          },{
+                            model: ResultadosActividades, as: 'resultadosActividades', required: false,
+                            include: [
+                              {
+                                model: ResultadosComprarProductos, as: 'resultadoComprarProductos'
+                              }
+                            ]
+                          },                              
+                          {
+                            model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
+                          }
+
+                        ]
+                      }
+                    ]
                   }
                 ]
             },

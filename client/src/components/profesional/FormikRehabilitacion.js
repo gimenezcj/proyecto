@@ -98,6 +98,7 @@ export default function FormikRehabilitacion ({rehabilitacion,pacienteId,profesi
 //      aux.fechaCreacion= fechaFormato(rehabilitacion.fechaCreacion);
       aux.fechaHabilitadaDesde= fechaFormato(rehabilitacion.fechaHabilitadaDesde);
       aux.fechaHabilitadaHasta= fechaFormato(rehabilitacion.fechaHabilitadaHasta);
+      rehabilitacion.actividades2.sort((a,b)=>a.orden>b.orden);
       formulario.setValues({rehabilitacion});
     }
   },[])
@@ -158,7 +159,7 @@ export default function FormikRehabilitacion ({rehabilitacion,pacienteId,profesi
       <Col >
         <div  className="form-group" style={{minWidth:'100%'}} ><span style={{width: '10vw'}} >Escenario</span>
         <select required tabIndex={4} className='form-field' name="rehabilitacion.escenario.id"  style={{borderColor:(formulario.errors.escenario?errorColor:okColor)}}
-          onChange={formulario.handleChange} disabled={formulario.values.rehabilitacion.realizada} required>
+          onChange={formulario.handleChange} disabled={formulario.values.rehabilitacion.realizada} >
         {(!rehabilitacion && !listaActividades.id) &&
           <option value={-1} selected>Seleccione un escenario</option>
         }

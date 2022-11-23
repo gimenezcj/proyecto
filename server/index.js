@@ -31,6 +31,8 @@ app.use('/api/personajes', require('./routes/personajes'));
 
 app.use('/api/decorativos', require('./routes/decorativos'));
 
+app.use('/api/resultadoComprarProducto', require('./routes/resultadoComprarProducto'));
+
 app.use((req, res) => {
 	res.status(404).json({ errors: { global: "Seguimos trabajando en eso. Vuelva a intentarlo más tarde cuando lo implementemos." } });
 });

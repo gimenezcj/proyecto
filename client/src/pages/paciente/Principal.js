@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {Container, Row, Col, Navbar, NavbarBrand, Button} from 'react-bootstrap';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 
 
 import config from '../../config/config.json';
@@ -12,20 +12,72 @@ import LateralValija from "../../components/paciente/LateralValija";
 import Encabezado from "../../components/paciente/Encabezado";
 
 
-function Principal ({persona, setPersona, setToken}) {
+function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
+
+//  const [listaR, setListaR]=useState(persona.paciente.rehabilitaciones);
 
   const pacienteId=persona.paciente.id;
   const [personaje,setPersonaje] = useState(persona.paciente.personaje);
-
-
-
-
-
   const imagen = persona.paciente.personaje.imagen;
   const [miPersonaje, setMiPersonaje] = useState(imagen);
-  
 
   const navigate = useNavigate();
+  const location=useLocation();
+
+
+//  useEffect(()=>{
+//    if(location.state!==null)
+//      if(location.state.accion) {     
+//        const {accion}=location.state;
+//      if(accion==='volverDesafioCompleto' || accion==='volverDesafioInCompleto')        
+//        {
+//          const {actividadId,rehabilitacionId,resultadoActividad}=location.state;
+//          const indice=persona.paciente.rehabilitaciones.findIndex(x=>x.id===rehabilitacionId);
+//          if(accion==='volverDesafioCompleto'){          
+//            if(persona.paciente.rehabilitaciones[indice].actividades2.length===1){
+//              
+//              setListaR(persona.paciente.rehabilitaciones.filter(x=>x.id!==rehabilitacionId));
+//            }
+//            else {
+//                persona.paciente.rehabilitaciones[indice].actividades2=persona.paciente.rehabilitaciones[indice].actividades2.filter(x=>x.id!=actividadId);
+//                setListaR(persona.paciente.rehabilitaciones);
+//              }
+//              //setToken(token);
+////            setPersona(persona);          
+////            setToken({...token,info:{...token.info,persona:persona}});
+//          }
+////          elemento.resultadosActividades.push(resultadoActividad);
+//        }
+//    }
+//  },[])
+  const leerRehabilitaciones=()=>{
+    fetch(config.SERVER_API_URL+'rehabilitaciones/pendientes/'+pacienteId,{
+      method: 'GET',
+      headers: {
+       'Content-Type': 'application/json'
+      }
+    })
+    .then (datos=>datos.json())
+    .then (datos=>setListaR(datos.data));
+  }
+  const leerPersonaje=()=>{
+    fetch(config.SERVER_API_URL+'personajes/'+personaje.id,{
+      method: 'GET',
+      headers: {
+       'Content-Type': 'application/json'
+      }
+    })
+    .then (datos=>datos.json())
+    .then (datos=>{
+//      console.log(datos);
+      setPersonaje(datos.data)
+    });
+  }
+
+  useEffect(()=>{
+    leerRehabilitaciones();
+    leerPersonaje();
+  },[])
 
   async function logout() {
     return fetch(config.SERVER_API_URL + 'cuentas/logout', {
@@ -37,7 +89,7 @@ function Principal ({persona, setPersona, setToken}) {
   const salir = async e => {
     const token = await logout();
     setToken(token); 
-    navigate("/", { replace: true });
+    navigate("/");
   }
   
   return (
@@ -47,7 +99,7 @@ function Principal ({persona, setPersona, setToken}) {
         <Col style={{paddingRight:'0'}}>
           <LateralPersonaje personaje={personaje} cambio={true} pi={personaje.imagen}/>
         </Col>
-        <Col xs={6}><DesafiosPropuestos rehabilitaciones={persona.paciente.rehabilitaciones}/></Col>
+        <Col xs={6}><DesafiosPropuestos rehabilitaciones={listaR} personajeId={personaje.id}/></Col>
         <Col xs={3} style={{paddingLeft:'0'}}><LateralValija personaje={personaje} cambio={true} pi={personaje.valija}/></Col>
       </Row>
       <div className="fixed-bottom">  

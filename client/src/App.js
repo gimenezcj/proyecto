@@ -18,6 +18,8 @@ const App = (props) => {
   const { token, setToken } = useToken();
   const [load,setLoad]=useState(false);
 
+  document.body.style.backgroundColor= "burlywood";
+
   useEffect(()=>{
     setLoad(true);
   },[token])

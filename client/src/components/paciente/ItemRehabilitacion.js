@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {Button, Card} from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -7,40 +8,59 @@ import '../../pages/estilos/estilos_paciente.css';
 
 const time = require( '../../modules/Time');
 
-function ItemRehabilitacion ({rehabilitacion}) {
+function ItemRehabilitacion ({rehabilitacion, personajeId}) {
+  const navigate= useNavigate();
+
   const redireccionar=()=>{
-      window.location.href ='http://www.pixpaper.com.ar/auto/ejemplo2.html';
+
+    var lista=rehabilitacion.actividades2.filter(x=>(x.resultadosActividades.filter(y=>y.completo).length===0))
+//    console.log(lista);
+    lista.sort((a,b)=>a.orden>b.orden);
+
+//    console.log(lista);
+    if(lista.length>0)
+//    console.log(lista[0]);
+      navigate("/recorrido", { state:{actividad:lista[0],
+        fondo: rehabilitacion.escenario.fondo.nombreArchivo, 
+        sueloPlano: rehabilitacion.escenario.sueloPlano.nombreArchivo, 
+        sueloColision: rehabilitacion.escenario.sueloColision.nombreArchivo,
+        rehabilitacionId: rehabilitacion.id, personajeId: personajeId
+      }});
   }
 
-  const a1=(rehabilitacion)=>{
-    return (
-      <>
-      <Card ><Card.Body>
-        <Card.Img variant="top" src={"/imagenes/ciudadesprevios/" + 'buenosaires.png' } style={{width:'10vw'}}/>
-        
-          <Card.Title>Buenos Aires</Card.Title>
-          <Card.Text>
-            <p>Recorremos las calles de Buenos Aires y completamos el desafio.</p>
-            <footer className="blockquote-footer">
-            Disponible desde: <cite title="Source Title">01/11/2022</cite> hasta: <cite title="Source Title">10/11/2022</cite>
-            </footer>
-          </Card.Text>
-          <Button onClick={redireccionar}>ACCEDER AL DESAFIO</Button>
-        </Card.Body>
-      </Card>    
-    </>
+  const contarPendientes=(actividades)=> {
+    console.log(actividades);
+    var pendientes=actividades.map(function (v,k) {
+      var hayResultados=v.resultadosActividades.length>0;
+      if (hayResultados)
+      {
+        var pendientes2=v.resultadosActividades.map(function(v,k){
+          return v.completado
+        });
+        return !pendientes2.includes(true);
+      } else
+        return true;
+    });
+    var filtrado=pendientes.filter(x=>x);
+    return filtrado.length;
 
-    );
   }
-console.log(rehabilitacion);
-  const a2 = (rehabilitacion)=>{
+  const [cantidadP, setCantidadP] = useState(contarPendientes(rehabilitacion.actividades2));
+  const A2 = (rehabilitacion)=>{
+
+
+    const {nombre,descripcion}=rehabilitacion.escenario;
+    const cantidad=rehabilitacion.actividades2.length;
+    
+
     return (
       <>
         <div className="card" onClick={redireccionar}>
           <div className="cardImage" style={{backgroundImage: 'url("/imagenes/ciudadesprevios/buenosaires2.png")'}}></div>
           <div className="cardBody"> 
-            <div className="cardTextTitle">Buenos Aires</div>
-            <div className="cardTextBody">Recorremos las calles de Buenos Aires y completamos el desafio.</div>
+            <div className="cardTextTitle">{nombre}</div>
+            <div className="cardTextBody">{descripcion}</div>
+            <div className="cardTextBody">Cantidad actividades: {cantidadP}/{cantidad}</div>
           </div>
           <div className="cardFootBody">
             <div className="cardFoot"> 
@@ -52,7 +72,7 @@ console.log(rehabilitacion);
     );
   }
 
-  return a2(rehabilitacion);
+  return A2(rehabilitacion);
 }
 
 export default ItemRehabilitacion;

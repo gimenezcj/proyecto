@@ -30,7 +30,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       actividadId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'actividades',
+          key: 'id'
+        }
       },
       createdAt: {
         allowNull: false,

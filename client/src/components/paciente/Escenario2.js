@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Vector2 } from "three";
-import { CubeTextureLoader } from "three";
+import { TextureLoader } from "three";
 
 import { FirstPersonControls } from "../../modules/FirstPersonControls";
 import Pista from "../../modules/Pista";
@@ -14,7 +14,7 @@ export default function Escenario2(props){
 
   const [unaCamara, setUnaCamara]= useState(null);
   const [unControl, setUnControl]= useState(null);
-  const [animacionId,setAnimacionId]= useState(null);
+  const [,setAnimacionId]= useState(null);
   const aux=useRef(estado.reset);
 
   const ventana=useRef(null);
@@ -52,7 +52,15 @@ export default function Escenario2(props){
   }
 
   const iniciarFondo=()=>{
-    scene.background = new CubeTextureLoader().load(rehabilitacion.fondo);
+//    scene.background = new CubeTextureLoader().load(rehabilitacion.fondo);  //version anterior
+    const loader2 = new TextureLoader();
+    loader2.load(rehabilitacion.fondo,
+      (t) => {
+        t.encoding = THREE.sRGBEncoding;
+        t.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = t;
+      });
+
   }
 
   const iniciarSuelo=()=>{
@@ -95,13 +103,13 @@ export default function Escenario2(props){
     pista.objeto('modelos/senalAvanzar.json',25);
     pista.objeto('modelos/senalCombustible.json',26);
     pista.objeto('modelos/estacionServicio2.json',115);
+    pista.objeto('modelos/almacen.json',200);
+    pista.objeto('modelos/ferreteria.json',201);
+    pista.objeto('modelos/floreria.json',202);
     pista.cargarSuelo('imagenes/suelo/'+rehabilitacion.pista,'imagenes/suelo/'+rehabilitacion.colision);
   }
 
-  
-  
-
-  useEffect(()=>{
+    useEffect(()=>{
     if(reset){
       aux.current=true;
       setEstado({tipo:'reset', valor:false});
@@ -113,8 +121,6 @@ export default function Escenario2(props){
       unControl.anguloGiro=0;
   }
   },[reset])
-
-
 
   useEffect(()=>{
     iniciarAmbiente();

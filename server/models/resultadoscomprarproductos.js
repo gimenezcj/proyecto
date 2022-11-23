@@ -9,10 +9,14 @@ const ResultadosComprarProductos=database.define('resultadosComprarProductos',{
     autoIncrement: true,
   },
   equivocoSeleccion: Sequelize.BOOLEAN,
-  ordenQueSelecciono: Sequelize.STRING
+  ordenQueSelecciono: Sequelize.STRING,
+  resultadoActividadId: Sequelize.INTEGER,
+  cuando: Sequelize.INTEGER,
+  productoId: Sequelize.INTEGER
 });
 
 ResultadosComprarProductos.belongsTo(ResultadosActividades,{foreignKey: 'resultadoActividadId',as: 'resultadoActividad'});
+ResultadosActividades.hasOne(ResultadosComprarProductos, {foreignKey: 'resultadoActividadId',as: 'resultadoComprarProductos'})
 
 ResultadosComprarProductos.sync();
 

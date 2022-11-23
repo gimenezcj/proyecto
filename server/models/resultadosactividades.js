@@ -14,11 +14,15 @@ const ResultadosActividades=database.define('resultadosActividades',{
   ayudaVisual: Sequelize.BOOLEAN,
   completado: Sequelize.BOOLEAN,
   tiempoTranscurrido: Sequelize.INTEGER,
-  actividadId: Sequelize.INTEGER
+  actividadId: {
+    type: Sequelize.INTEGER,
+  } 
 });
 
-ResultadosActividades.belongsTo(Actividades, {foraingKey:'actividadId', as: 'actividad'});
+ResultadosActividades.belongsTo(Actividades , {foraingKey: 'actividadId', as: 'actividad'});
+Actividades.hasMany(ResultadosActividades   , {foraingKey: 'actividadId', as: 'resultadosActividades'})
 
+Actividades.sync();
 ResultadosActividades.sync();
 
 module.exports=ResultadosActividades;

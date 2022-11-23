@@ -1,8 +1,9 @@
 import React from "react";
 
 export default function DatosPantalla (props){
-  const {estado}= props;
+  const {estado,rehabilitacion}= props;
   const {velocidad,anguloGiro,xActual,yActual,distancia,combustible}=estado;
+  
   return (
     <>
     <div style={{position: 'absolute', top: '0',  left: '10px',  right: '0',  margin: '0 auto'}}>
