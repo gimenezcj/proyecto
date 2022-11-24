@@ -15,7 +15,8 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
 
     var lista=rehabilitacion.actividades2.filter(x=>(x.resultadosActividades.filter(y=>y.completo).length===0))
 //    console.log(lista);
-    lista.sort((a,b)=>a.orden>b.orden);
+      lista.sort((a, b) => a.orden - b.orden);
+ 
 
 //    console.log(lista);
     if(lista.length>0)

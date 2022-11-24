@@ -130,10 +130,13 @@ export default function MenorPrecio (props) {
       guardar(false);
       ventanaFestejo();
     }      
-    if(estado.seleccion.abandonado)
+      if (estado.seleccion.abandonado)  {
       guardar(true);
-//      navigate("/", { state:{accion:'volverDesafioInCompleto',
-//        rehabilitacionId:rehabilitacionId, actividadId: actividad.id, resultadoActividad:estado.seleccion}});
+      navigate("/", { state:{accion:'volverDesafioInCompleto',
+          rehabilitacionId: rehabilitacionId, actividadId: actividad.id, resultadoActividad: estado.seleccion
+      }
+      });
+      }
   },[estado.seleccion.completado,estado.seleccion.abandonado])
 
   return (

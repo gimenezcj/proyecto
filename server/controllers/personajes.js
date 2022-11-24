@@ -21,7 +21,11 @@ controller.listAll=(req,res)=>{
 }
 
 controller.personaje=(req,res)=> {
-  const {peronajeId}= req.params;
+    const { peronajeId } = req.params;
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+    res.set("Pragma", "no-cache");
+    res.set("Expires", 0);
+
   return generaRta(req,res,Personajes.findByPk(peronajeId,{
     attributes: {  exclude:['createdAt','updatedAt','pacienteId','imagenId','valijaId','volanteId','tableroId']},
     include: [ 
