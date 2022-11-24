@@ -24,6 +24,7 @@ export default function Recorrido (){
   const [choco,setChoco]=useState(false);
   const [llego, setLlego]=useState(false);
   const consumo=0.05;  //consumo de combustible expresado en litros por unidad de medida recorrida
+  const verDatos=false;
 
   const rehabilitacion={
     fondo: 'imagenes/fondos/'+fondo, 
@@ -196,7 +197,8 @@ export default function Recorrido (){
       <Velocimetro estado={estado}/>
       <Combustible estado={estado}/>
       <Brujula brujula={brujula} />
-      <DatosPantalla estado={estado} rehabilitacion={rehabilitacion}/>
+      {verDatos && <>
+        <DatosPantalla estado={estado} rehabilitacion={rehabilitacion}/> </>}
       <Escenario2 estado={estado} setEstado={setEstado} rehabilitacion={rehabilitacion}/>
     </>
   );

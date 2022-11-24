@@ -16,6 +16,10 @@ export default function Escenario2(props){
   const [unControl, setUnControl]= useState(null);
   const [,setAnimacionId]= useState(null);
   const aux=useRef(estado.reset);
+  const [cargarModelos, setCargarModelos]=useState(false);
+  const [modeloCargado,setModeloCargado]=useState(false);
+  const [pista,setPista]=useState(false);
+
 
   const ventana=useRef(null);
 
@@ -23,7 +27,15 @@ export default function Escenario2(props){
   var scene;
   var camera;
   var renderer,controls;
-  var pista;
+  //var pista;
+
+  useEffect(()=>{
+  if (pista)
+    if(pista.hayColision(Math.floor(xActual/3)+1,Math.floor(yActual/3)+1)===0){
+          unControl.movementSpeed=0;
+          setEstado({tipo:'choco'});
+    }
+},[xActual,yActual])
   
   const iniciarVehiculo=()=>{
     camera.position.y=2;    
@@ -78,35 +90,47 @@ export default function Escenario2(props){
     setUnControl(controls);
   }
 
+  useEffect(()=>{
+    if (cargarModelos && pista){
+      pista.objeto('modelos/almacen.json',200,setModeloCargado,false);
+      pista.objeto('modelos/ferreteria.json',201,setModeloCargado,false);
+      pista.objeto('modelos/floreria.json',202,setModeloCargado,false);
+
+      pista.objeto('modelos/sueloPlaza4.json',90,setModeloCargado,false);
+      pista.objeto('modelos/nomenclador.json',150,setModeloCargado,false);
+      pista.objeto('modelos/fabrica.json',140,setModeloCargado,false);
+      pista.objeto('modelos/calle1.json',20,setModeloCargado,false);
+      pista.objeto('modelos/banco2.json',100,setModeloCargado,false);
+      pista.objeto('modelos/edificio1.json',111,setModeloCargado,false);
+      pista.objeto('modelos/edificio2.json',110,setModeloCargado,false);
+      pista.objeto('modelos/local1.json',112,setModeloCargado,false);
+      pista.objeto('modelos/local2.json',113,setModeloCargado,false);
+      pista.objeto('modelos/local3.json',114,setModeloCargado,false);
+      pista.objeto('modelos/semaforo.json',80,setModeloCargado,false);
+      pista.objeto('modelos/senalNoAvanzar.json',33,setModeloCargado,false);
+      pista.objeto('modelos/senalMaxima80.json',40,setModeloCargado,false);
+      pista.objeto('modelos/arbol1.json',77,setModeloCargado,false);
+      pista.objeto('modelos/arbol2.json',240,setModeloCargado,false);
+      pista.objeto('modelos/arbol3.json',120,setModeloCargado,false);
+      pista.objeto('modelos/arbol4.json',130,setModeloCargado,false);
+      pista.objeto('modelos/senal2.json',22,setModeloCargado,false);
+      pista.objeto('modelos/senalGiroDerecha.json',23,setModeloCargado,false);
+      pista.objeto('modelos/senalGiroIzquierda.json',24,setModeloCargado,false);
+      pista.objeto('modelos/senalAvanzar.json',25,setModeloCargado,false);
+      pista.objeto('modelos/senalCombustible.json',26,setModeloCargado,false);
+      pista.objeto('modelos/estacionServicio2.json',115,setModeloCargado,true);
+    }
+  },[cargarModelos])
+
+  useEffect(()=>{
+    if(modeloCargado)
+      pista.cargarSuelo('imagenes/suelo/'+rehabilitacion.pista,'imagenes/suelo/'+rehabilitacion.colision);
+  },[modeloCargado])
+
   const cargarEscenario=(animate,scene)=>{
-    pista=new Pista(animate,scene);
-    pista.objeto('modelos/sueloPlaza4.json',90);
-    pista.objeto('modelos/nomenclador.json',150);
-    pista.objeto('modelos/fabrica.json',140);
-    pista.objeto('modelos/calle1.json',20);
-    pista.objeto('modelos/banco2.json',100);
-    pista.objeto('modelos/edificio1.json',111);
-    pista.objeto('modelos/edificio2.json',110);
-    pista.objeto('modelos/local1.json',112);
-    pista.objeto('modelos/local2.json',113);
-    pista.objeto('modelos/local3.json',114);
-    pista.objeto('modelos/semaforo.json',80);
-    pista.objeto('modelos/senalNoAvanzar.json',33);
-    pista.objeto('modelos/senalMaxima80.json',40);
-    pista.objeto('modelos/arbol1.json',77);
-    pista.objeto('modelos/arbol2.json',240);
-    pista.objeto('modelos/arbol3.json',120);
-    pista.objeto('modelos/arbol4.json',130);
-    pista.objeto('modelos/senal2.json',22);
-    pista.objeto('modelos/senalGiroDerecha.json',23);
-    pista.objeto('modelos/senalGiroIzquierda.json',24);
-    pista.objeto('modelos/senalAvanzar.json',25);
-    pista.objeto('modelos/senalCombustible.json',26);
-    pista.objeto('modelos/estacionServicio2.json',115);
-    pista.objeto('modelos/almacen.json',200);
-    pista.objeto('modelos/ferreteria.json',201);
-    pista.objeto('modelos/floreria.json',202);
-    pista.cargarSuelo('imagenes/suelo/'+rehabilitacion.pista,'imagenes/suelo/'+rehabilitacion.colision);
+    setPista(new Pista(animate,scene));
+    setCargarModelos(true);
+    
   }
 
     useEffect(()=>{
@@ -119,7 +143,7 @@ export default function Escenario2(props){
       unaCamara.rotateY(anguloInicial/180*Math.PI);
       unControl.movementSpeed=0;
       unControl.anguloGiro=0;
-  }
+    }
   },[reset])
 
   useEffect(()=>{
@@ -180,11 +204,6 @@ export default function Escenario2(props){
             }
       }})
     
-        if(pista.hayColision(Math.floor(xActual/3)+1,Math.floor(yActual/3)+1)===0 ){
-          controls.movementSpeed=0;
-          setEstado({tipo:'choco'});
-        }
-    
       controls.update();
       renderer.render( scene, camera );
   
@@ -192,6 +211,7 @@ export default function Escenario2(props){
     };
     
     cargarEscenario(animate,scene);
+
   },[])
 
   return (<><div ref={ventana} /></>)

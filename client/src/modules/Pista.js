@@ -17,10 +17,11 @@ export default class Pista {
     this.ctxColision = this.canvas2.getContext('2d');
   }
 
-  objeto(nombre,tipo){
+  objeto(nombre,tipo,func,valor){
     var loader;
     const extension=nombre.split(".").pop()
-
+    
+//    console.log('objeto',nombre);
     this.objetos[tipo]=false;
     var objetos=this.objetos;
     if (extension==='json')
@@ -33,6 +34,7 @@ export default class Pista {
       function ( obj ) {
         // eslint-disable-next-line no-array-constructor
         objetos[tipo]=new Array(tipo,nombre,obj);
+        func(valor);    
       },
 
       function ( xhr ) {//console.log( (nombre+':'+xhr.loaded / xhr.total * 100) + '% cargado' );
@@ -48,18 +50,23 @@ export default class Pista {
 
   cargarPista (nombre) {
     var ppal=this;
-    async function delay(delayInms) {
-      return new Promise(resolve  => {
-        setTimeout(() => {resolve(2);}, delayInms);
-      });
-    }
+//    async function delay(delayInms) {
+//      return new Promise(resolve  => {
+//        setTimeout(() => {resolve(2);}, delayInms);
+//      });
+//    }
     this.imagen.onload=function(){
       ppal.ctx.drawImage(this,0,0);
-      async function continua() {
-        while (!ppal.objetos.every(e=>e!==false)){await delay(1000);}
-        ppal.procesar(ppal);
-      }
-      continua();}
+//      async function continua() {
+//        while (!ppal.objetos.every(e=>e!==false)){await delay(1000);}
+//        ppal.procesar(ppal);
+//      }
+//      continua();
+setTimeout(() => {
+  ppal.procesar(ppal);
+}, 1000);
+
+    }
     this.imagen.src = nombre;
   }
   cargarColision (nombre) {
@@ -74,6 +81,8 @@ export default class Pista {
 
   procesar (armar) {
 //    console.log(this.scene);
+//console.log('procesando...');
+
     var ancho = armar.imagen.width;
     var alto  = armar.imagen.height;
     var pixel;
