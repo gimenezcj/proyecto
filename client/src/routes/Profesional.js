@@ -19,6 +19,7 @@ function ProfesionalRoutes  ({token, setToken})  {
   const [persona, setPersona] = useState(false);
   const [load,setLoad]=useState(false);
   const [paciente,setPaciente]=useState(false);
+  const [fono,setFono]=useState(false);
   const [elementoId,setElementoId]=useState(null);
   const [elemento, setElemento]=useState(null);
   const [escenarios,setEscenarios] =useState(null);
@@ -35,6 +36,7 @@ function ProfesionalRoutes  ({token, setToken})  {
     if(token!==undefined && token!==null) {
       setLoad(true);
       setPaciente(token?token.info.persona.paciente:false);
+      setFono(token?token.info.persona.fonoaudiologo:false);
       setPersona(token.info.persona);
     }
     else {
@@ -54,7 +56,7 @@ function ProfesionalRoutes  ({token, setToken})  {
   return (
     <>
     <Routes>
-    {(load && !paciente) && <>
+    {(load && fono) && <>
       <Route exact path='/' element={<Principal persona={persona} setToken={setToken}/>}/>
       <Route path='/paciente/nuevo' element={< NuevoPaciente  token={token} setToken={setToken} accion='nuevo' persona={persona}/>} />
       <Route path='/paciente/informacion/:id' element={< NuevoPaciente  token={token} setToken={setToken} accion='informacion' persona={persona}/>} />
@@ -66,6 +68,7 @@ function ProfesionalRoutes  ({token, setToken})  {
         rehabilitacion={elemento} profesional={persona} setToken={setToken}  escenarios={escenarios}  
       />}/>
       </>}
+      
     </Routes>
     </>
   );

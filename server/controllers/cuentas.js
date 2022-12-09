@@ -51,7 +51,7 @@ controller.login=async (req, res)=>{
   res.set("Pragma", "no-cache");
   res.set("Expires", 0);
 
-  console.log((new Date()).toISOString().split('T')[0]);
+//  console.log((new Date()).toISOString().split('T')[0]);
 
     try {
         const response=await Cuentas.findAll({
@@ -61,7 +61,7 @@ controller.login=async (req, res)=>{
           {model: Personas, as: 'persona', attributes: {  exclude:['createdAt','updatedAt','dni']},
             include:[
               {
-                model: Pacientes, as: 'paciente', 
+                model: Pacientes, as: 'paciente',  where: {activo:true}, required: false,
                 attributes: {  exclude:['createdAt','updatedAt','personaId','obraSocialId','fonoaudiologoId','']},
                 include: [
 
@@ -153,7 +153,7 @@ controller.login=async (req, res)=>{
               attributes: {  exclude:['createdAt','updatedAt','personaId']},
               include: [
                 {
-                  model: Pacientes, as: 'pacientes',
+                  model: Pacientes, as: 'pacientes',  where: {activo:true},
                   attributes: { exclude:['createdAt','updatedAt','personaId','fonoaudiologoId','obraSocialId']},
                   include: [
                     {model: ObrasSociales, as: 'obraSocial', attributes: { exclude:['createdAt','updatedAt']}},

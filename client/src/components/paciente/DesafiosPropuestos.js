@@ -14,6 +14,7 @@ function DesafiosPropuestos ({rehabilitaciones,personajeId}) {
         <div className="cardContainer" style={{maxHeight: '78vh'}}>
           {rehabilitaciones.map(x=><ItemRehabilitacion rehabilitacion={x} personajeId={personajeId}/>)}
         </div>
+        {(!rehabilitaciones.length) && <><h2>Ud no posee rehabilitaciones pendientes de realizar el dia de hoy</h2></>}
       </Col>
       
     </Container>

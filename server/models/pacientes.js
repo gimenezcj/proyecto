@@ -10,7 +10,8 @@ var Pacientes=database.define('pacientes',{
     primaryKey: true,
     autoIncrement: true,
   },
-  nroAfiliado: Sequelize.STRING
+  nroAfiliado: Sequelize.STRING,
+  activo: Sequelize.BOOLEAN
 });
 
 Pacientes.belongsTo(Personas,{foreignKey: 'personaId', as: 'persona'});

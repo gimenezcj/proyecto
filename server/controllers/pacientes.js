@@ -37,7 +37,7 @@ controller.getOne=(req,res)=>{
   const {id}=req.params;
 
   return generaRta(req,res,Pacientes.findByPk(id,
-  {
+  { where: [{activo:false}],
     include: [
       {
         model: Personas, as: 'persona',
@@ -61,8 +61,8 @@ controller.eliminar=(req,res)=> {
 
   Pacientes.findByPk(id)
   .then(paciente=>{
-    paciente.destroy()
-    .then(cantidad=>{
+    paciente.update({activo:false})
+    .then((cantidad,quedo)=>{
       return  res.json({cantidad: cantidad, deleted: true, operation:'deleted'});
     })
   })
