@@ -35,7 +35,7 @@ controller.listAll=(req,res)=>{
 controller.porPaciente=(req,res)=>{
   const {pacienteId}=req.params;
   return generaRta(req,res,Rehabilitaciones.findAll({
-    where: {pacienteId:pacienteId},
+    where: {pacienteId:pacienteId,activo:true},
     include: [
       {
         model: Escenarios, as: 'escenario',attributes:{exclude: ['createdAt','updatedAt']}
@@ -59,7 +59,7 @@ controller.pendientesPorPaciente=(req,res)=>{
       {fechaHabilitadaDesde:{ [lt]: new Date().toISOString().split('T')[0] }}, 
       {fechaHabilitadaHasta: {[gt]: new Date().toISOString().split('T')[0]}},
       {pacienteId:pacienteId},
-      {realizada:false}
+      {realizada:false},{activo:true}
     ]},
     required: false,
     include: [
@@ -149,11 +149,13 @@ controller.eliminar=(req,res)=> {
 
   Rehabilitaciones.findByPk(rehabilitacionId)
   .then(rehabilitacion=>{
-    Actividades.findAll({where: {rehabilitacionId:rehabilitacionId}})
-    .then(actividad=>actividad.map(i=>i.destroy())
-    );
-    rehabilitacion.destroy()
-    .then(cantidad=>{
+
+//    Actividades.findAll({where: {rehabilitacionId:rehabilitacionId}})
+//    .then(actividad=>actividad.map(i=>i.destroy())
+//    );
+//    rehabilitacion.destroy()
+    rehabilitacion.update({activo:false})
+    .then((cantidad,que)=>{
       return  res.json({cantidad: cantidad, deleted: true, operation:'deleted'});
     })
   })

@@ -21,7 +21,8 @@ const Rehabilitaciones=database.define('rehabilitaciones',{
   dificultad: {
     type: Sequelize.ENUM('bajo','medio','alto'),
     defaultValue: 'bajo'
-  }
+  },
+  activo: Sequelize.BOOLEAN
 });
 
 Rehabilitaciones.belongsTo(Pacientes, {foreignKey:'pacienteId', as: 'paciente'});
