@@ -11,7 +11,8 @@ const Actividades=database.define('actividades',{
   },
   rehabilitacionId: Sequelize.INTEGER,
   actividadDisponibleId: Sequelize.INTEGER,
-  orden: Sequelize.INTEGER
+  orden: Sequelize.INTEGER,
+
 },{
   name: {
     singular: 'actividad',

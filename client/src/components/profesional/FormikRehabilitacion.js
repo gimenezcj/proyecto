@@ -183,13 +183,14 @@ export default function FormikRehabilitacion ({rehabilitacion,pacienteId,profesi
 
     {(formulario.values['rehabilitacion']['actividades2']) &&
       formulario.values['rehabilitacion']['actividades2'].map((v,k)=>{
+        const aux=formulario.values.rehabilitacion.actividades2[k].resultadosActividades&&formulario.values.rehabilitacion.actividades2[k].resultadosActividades.length>0&&formulario.values.rehabilitacion.actividades2[k].resultadosActividades[0].completado;
       return(
       <>
 <Row>
   <Col>
   <div  className="form-group" style={{minWidth:'100%'}} ><span style={{width: '5vw'}} >{ordinal(k+1)}</span>
         <select tabIndex={5+k} className='form-field' name={"rehabilitacion.actividades2["+k+"].actividadDisponible.id"} onChange={formulario.handleChange} 
-          disabled={formulario.values.rehabilitacion.realizada}>
+          disabled={formulario.values.rehabilitacion.realizada||aux}>
           {!formulario.values['rehabilitacion']['actividades2'][k].id &&
           <option value={-1} selected>Seleccione una actividad</option>
           }
@@ -200,7 +201,7 @@ export default function FormikRehabilitacion ({rehabilitacion,pacienteId,profesi
         </select>
         </div>
         </Col>
-        {(!formulario.values.rehabilitacion.realizada) &&
+        {(!formulario.values.rehabilitacion.realizada&&!aux) &&
   <Col xs={2} style={{display: 'flex', justifyContent:'flex-end', width: 'inherit'}}>
     <Button className="botonIcono" variant="primary" disabled ><Image src={config.ICONOS+'configurar.png '} width='15vw'/></Button>
     <Button className="botonIcono" variant="danger" onClick={()=>eliminarActividad(k)}><Image src={config.ICONOS+'papelera.png '} width='15vw'/></Button>

@@ -20,7 +20,7 @@ const Swal = require('sweetalert2');
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function ListaPacientes ({persona})  {
+export default function ListaPacientes ({persona,pacientes})  {
 
   const navigate = useNavigate();
 
@@ -29,17 +29,18 @@ export default function ListaPacientes ({persona})  {
   const [buscar,setBuscar] = useState('');
 
   useEffect(()=>{
-    setLista(persona.fonoaudiologo.pacientes.map((paciente) => { 
+    console.log(pacientes);
+    setLista(pacientes.map((paciente) => { 
       return {
         id:paciente.id,
         dni: paciente.persona.dni,
         nombreCompleto: paciente.persona.apellido +', '+ paciente.persona.nombre,
         nroAfiliado: paciente.nroAfiliado,
-        obraSocial: paciente.obraSocial.nombre
+        obraSocial: paciente.obraSocial.nombre 
       }
     }
     ));
-  },[]);
+  },[pacientes]);
 
   const encabezadoBusqueda=(order, column)=>{
     if (!order) return (<span></span>);
