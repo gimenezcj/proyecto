@@ -44,7 +44,12 @@ controller.porPaciente=(req,res)=>{
         attributes:{exclude: ['createdAt','updatedAt','rehabilitacionId','actividadDisponibleId']},order:[['orden','ASC']],
         include: [
           {model: ActividadesDisponibles, as: 'actividadDisponible',
-          attributes:{exclude: ['createdAt','updatedAt','recorridoId','escenarioId']}}]
+          attributes:{exclude: ['createdAt','updatedAt','recorridoId','escenarioId']}},
+          {
+            model: ResultadosActividades, as: 'resultadosActividades', required: false,
+            attributes: { exclude:['createdAt','updatedAt','actividadId','inicio','finalizo','ayudaAuditiva','ayudaVisual','tiempoTranscurrido']},
+          }
+        ]
       }
     ],
     attributes:{exclude: ['createdAt','updatedAt','escenarioId']}
@@ -97,9 +102,10 @@ controller.pendientesPorPaciente=(req,res)=>{
             ]
           },{
             model: ResultadosActividades, as: 'resultadosActividades', required: false,
+            attributes: { exclude:['createdAt','updatedAt']},
             include: [
               {
-                model: ResultadosComprarProductos, as: 'resultadoComprarProductos'
+                model: ResultadosComprarProductos, as: 'resultadoComprarProductos', required: false,
               }
             ]
           },                              

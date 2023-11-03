@@ -7,11 +7,25 @@ import config from '../../config/config.json';
 
 export default function Principal ({persona, setToken}) { 
 
+  const [pacientes,setPacientes]=useState([]);
+
+  const leerPacientes = async ()=>{
+    fetch(config.SERVER_API_URL+'fonos/'+persona.fonoaudiologo.id+'/pacientes',{method:'GET'})
+    .then(res=>res.json())
+    .then(valor=>{setPacientes(valor.data.pacientes);console.log('pacientes leidos...')})
+  }
+  useEffect(()=>{
+    if(pacientes.length===0){console.log('leer pacientes...');
+      leerPacientes();
+    }
+
+  },[])
+
   return (
     <>
       <Encabezado  persona={persona}/>
       <Menu setToken={setToken} titulo="Listado de pacientes" botones={config.BOTONES.CERRAR+config.BOTONES.NUEVOPACIENTE} iconoVentana='pacientes2.png'/>
-      <ListaPacientes persona={persona}/>
+      <ListaPacientes persona={persona} pacientes={pacientes}/>
 
     </>
   );
