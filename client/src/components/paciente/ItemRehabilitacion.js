@@ -21,7 +21,7 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
 //    console.log(lista);
     if(lista.length>0)
 //    console.log(lista[0]);
-      navigate("/recorrido", { state:{actividad:lista[0],
+      navigate("/recorrido", { state:{actividad:lista[Math.round(Math.random()*lista.length)],
         fondo: rehabilitacion.escenario.fondo.nombreArchivo, 
         sueloPlano: rehabilitacion.escenario.sueloPlano.nombreArchivo, 
         sueloColision: rehabilitacion.escenario.sueloColision.nombreArchivo,
