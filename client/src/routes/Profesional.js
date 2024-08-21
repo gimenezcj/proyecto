@@ -1,5 +1,4 @@
-import React from "react";
-import { useState,useEffect} from "react";
+import React, { useState,useEffect} from "react";
 import { Routes, Route} from "react-router-dom";
 import NuevoPaciente from "../pages/profesional/nuevoPaciente";
 import Rehabilitaciones from '../pages/profesional/Rehabilitaciones';
@@ -11,6 +10,7 @@ import Principal2 from "../pages/profesional/Principal2";
 import RegistrarEstudios from "../pages/profesional/RegistrarEstudios";
 import FormikRehabilitacion from "../components/profesional/FormikRehabilitacion";
 import Rehabilitacion from "../pages/profesional/Rehabilitacion";
+import Estadisticas from "../pages/profesional/Estadisticas";
 
 import config from '../config/config.json';
 
@@ -54,23 +54,22 @@ function ProfesionalRoutes  ({token, setToken})  {
   },[paciente])
 
   return (
-    <>
     <Routes>
     {(load && fono) && <>
       <Route exact path='/' element={<Principal persona={persona} setToken={setToken}/>}/>
       <Route path='/paciente/nuevo' element={< NuevoPaciente  token={token} setToken={setToken} accion='nuevo' persona={persona}/>} />
-      <Route path='/paciente/informacion/:id' element={< NuevoPaciente  token={token} setToken={setToken} accion='informacion' persona={persona}/>} />
+      <Route path='/paciente/informacion/:id' element={< NuevoPaciente  token={token} setToken={setToken} accion='informacion' persona={persona}/>} />      
       <Route path='/paciente/rehabilitaciones/:id' element={< Rehabilitaciones token={token} setToken={setToken}  persona={persona} setElemento={setElemento}/>}/>
       <Route path='/rehabilitacion/nueva/' element={<Rehabilitacion 
         rehabilitacion={null} profesional={persona} setToken={setToken} escenarios={escenarios} 
       />}/>
+      <Route path='/rehabilitacion/estadistica' element={< Estadisticas  rehabilitacion={elemento} profesional={persona} setToken={setToken}/>} />
       <Route path='/rehabilitacion/informacion' element={<Rehabilitacion 
         rehabilitacion={elemento} profesional={persona} setToken={setToken}  escenarios={escenarios}  
       />}/>
       </>}
       
     </Routes>
-    </>
   );
 }
 

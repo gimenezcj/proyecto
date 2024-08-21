@@ -8,7 +8,7 @@ var EvaluacionesPresenciales=database.define('evaluacionesPresenciales',{
     primaryKey: true,
     autoIncrement: true,
   },
-  fecha: Sequelize.DATE
+  fecha: Sequelize.DATE,
   observacion: Sequelize.STRING,
   dificultad: Sequelize.INTEGER
 });

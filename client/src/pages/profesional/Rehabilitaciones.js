@@ -19,7 +19,7 @@ export default function Rehabilitaciones ({setToken,token,persona, setElemento})
     return (
       <>
         <Encabezado  persona={persona}/>
-        <Menu setToken={setToken}  botones={config.BOTONES.CERRAR+config.BOTONES.VOLVER+config.BOTONES.NUEVAREHABILIACION} iconoVentana='rehabilitaciones.png'
+        <Menu setToken={setToken}  botones={config.BOTONES.VOLVER+config.BOTONES.NUEVAREHABILIACION} iconoVentana='rehabilitaciones.png'
           titulo={'Listado de rehabilitaciones'}  setState={setState}/>
         <ListaRehabilitaciones paciente={pacientes[0]} fonoaudiologoId={persona.fonoaudiologo.id} setElemento={setElemento}/>
       </>)

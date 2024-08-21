@@ -1,10 +1,7 @@
 import React from "react";
-import { useState,useEffect} from "react";
 import { Routes, Route} from "react-router-dom";
 
 import Principal from "../pages/persona/Principal";
-
-import config from '../config/config.json';
 
 function PersonaRoutes  ({persona, setToken})  {
   return (

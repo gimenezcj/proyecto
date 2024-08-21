@@ -1,5 +1,4 @@
-import React from "react";
-import { useState,useEffect} from "react";
+import React, { useState,useEffect} from "react";
 import { Routes, Route} from "react-router-dom";
 
 //Paginas
@@ -33,8 +32,7 @@ function PacienteRoutes  ({token, setToken})  {
   },[token])
 
 
-  return (
-    <>
+  return (    
     <Routes>
      {(load && paciente) && <>
       <Route path='/' element={<Principal persona={persona} setPersona={setPersona} setListaR={setListaR} listaR={listaR} setToken={setToken}/>}/>
@@ -43,8 +41,7 @@ function PacienteRoutes  ({token, setToken})  {
       <Route path='/recorrido' element={<Recorrido/>}/>    
       <Route path="/menorPrecio" element={<MenorPrecio/>}/>
       </>}
-    </Routes>
-    </>
+    </Routes>    
   );
 }
 

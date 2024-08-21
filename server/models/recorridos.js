@@ -17,7 +17,7 @@ const Recorridos=database.define('recorridos',{
   yBFinal: Sequelize.INTEGER,
   puntaje: Sequelize.INTEGER,
   giroInicial: Sequelize.INTEGER,
-  actividadDisponibleId: Sequelize.INTEGER
+
 });
 
 Recorridos.belongsToMany(DistractoresDisponibles,{ through: 'distractores', foreignKey: 'recorridoId'})

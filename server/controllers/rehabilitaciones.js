@@ -19,6 +19,133 @@ const ResultadosActividades = require('../models/resultadosactividades');
 const ResultadosComprarProductos = require('../models/resultadoscomprarproductos');
 const ResultadosRecorridos = require('../models/resultadosrecorridos');
 
+controller.iniciaActividad= (req, res) => {
+  const {idActividad}= req.params;
+  const ahora=new Date();
+  ResultadosActividades.create({inicio:ahora,actividadId: idActividad})
+    .then(ra => {
+          return res.json({idResultadoActividad:ra.id});
+    });  
+}
+
+controller.iniciaRecorrido= (req, res) => { 
+  const {idResultadoActividad}= req.params;
+  console.log('Creando recorrido:'+idResultadoActividad);
+  const ahora=new Date();
+      ResultadosRecorridos.create({fecha:ahora, actividadId: idResultadoActividad})
+        .then(rr => {
+          return res.json({idResultadoRecorrido: rr.id});
+      });      
+}
+controller.chocaCasa = (req, res) => {
+  const {idResultadoRecorrido}= req.params;
+  const {distancia}= req.body;
+  const ahora=new Date();
+  ResultadosRecorridos.findByPk(idResultadoRecorrido)
+    .then(rr=>{
+      const tiempo=Math.round((ahora-rr.fecha)/1000);
+      rr.update({chocoCasa:true, recorrioDistancia: distancia, recorrioTiempo: tiempo});
+      rr.save();    
+      return res.json({actualizado: true});
+    });
+}
+
+controller.sinCombustible = (req, res) => {
+  const {idResultadoRecorrido}= req.params;
+  const {distancia}= req.body;
+  const ahora=new Date();
+  ResultadosRecorridos.findByPk(idResultadoRecorrido)
+    .then(rr=>{
+      const tiempo=Math.round((ahora-rr.fecha)/1000);
+      rr.update({sinCombustible:true, recorrioDistancia: distancia, recorrioTiempo: tiempo});
+      rr.save();    
+      return res.json({actualizado: true});
+    });
+}
+
+controller.completo = (req, res) => {
+  const {idResultadoRecorrido}= req.params;
+  const {distancia}= req.body;
+  const ahora=new Date();
+  ResultadosRecorridos.findByPk(idResultadoRecorrido)
+    .then(rr=>{
+      const tiempo=Math.round((ahora-rr.fecha)/1000);
+      rr.update({completo:true, recorrioDistancia: distancia, recorrioTiempo: tiempo});
+      rr.save();    
+      return res.json({actualizado: true});
+    });
+}
+
+controller.iniciaMenorPrecio= (req, res) => {
+  const {idResultadoActividad}= req.params;
+  const {opcionCorrecta,listaItems}= req.body;
+  const ahora=new Date();
+  ResultadosComprarProductos.create({fecha:ahora, resultadoActividadId: idResultadoActividad, opcionCorrecta: opcionCorrecta, fechaInicio: ahora, listaItems: listaItems})
+  .then(rcp=> {
+    return res.json({idResultadoMenorPrecio: rcp.id});
+  });
+}
+
+controller.menorPrecioAbandona = (req, res) => {
+  const {idResultadoMenorPrecio}= req.params;
+  const ahora=new Date();
+  ResultadosComprarProductos.findByPk(idResultadoMenorPrecio)
+    .then(rcp=>{
+      rcp.update({abandono:true, fechaFinaliza: ahora});
+      rcp.save();    
+      return res.json({actualizado: true});
+    });
+}
+
+controller.menorPrecioSeleccion = (req, res) => {
+  const {idResultadoMenorPrecio}= req.params;
+  const {idSeleccion}= req.body;
+  const ahora=new Date(); 
+  ResultadosComprarProductos.findByPk(idResultadoMenorPrecio)
+    .then(rcp=>{
+      const tiempo=Math.round((ahora-rcp.fechaInicio)/1000);
+      const orden=rcp.ordenQueSelecciono+','+idSeleccion;
+      const segundo= rpc.segundosQueSelecciono+","+tiempo;
+      const completo=idSeleccion==rpc.opcionCorrecta
+      console.log(orden);
+      console.log(segundo);
+      console.log(completo);
+      rcp.update({ordenQueSelecciono: orden, segundosQueSelecciono: segundo, completo: completo});
+      rcp.save();    
+      return res.json({actualizado: true, completo: completo});
+    });
+}
+
+controller.menorPrecioAyudaVisual= (req,res) => {
+  const {idResultadoMenorPrecio}= req.params;
+  const ahora=new Date(); 
+  ResultadosComprarProductos.findByPk(idResultadoMenorPrecio)
+    .then(rcp=>{
+      const tiempo=Math.round((ahora-rcp.fechaInicio)/1000);
+      const nuevaAyudaVisual=rcp.ayudaVisual+","+tiempo;
+      console.log(nuevaAyudaVisual);
+      rcp.update({ayudaVisual: nuevaAyudaVisual});
+      rcp.save();    
+      return res.json({actualizado: true});
+    });
+}
+
+controller.menorPrecioAyudaSonora= (req,res) => {
+  const {idResultadoMenorPrecio}= req.params;
+  const ahora=new Date(); 
+  ResultadosComprarProductos.findByPk(idResultadoMenorPrecio)
+    .then(rcp=>{
+      const tiempo=Math.round((ahora-rcp.fechaInicio)/1000);
+      const nuevaAyudaSonora=rcp.ayudaVisual+","+tiempo;
+      console.log(nuevaAyudaSonora);
+      rcp.update({ayudaSonora: nuevaAyudaSonora});
+      rcp.save();    
+      return res.json({actualizado: true});
+    });
+
+}
+
+
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Rehabilitaciones.findAll({
     include: [
@@ -105,12 +232,12 @@ controller.pendientesPorPaciente=(req,res)=>{
             attributes: { exclude:['createdAt','updatedAt']},
             include: [
               {
-                model: ResultadosComprarProductos, as: 'resultadoComprarProductos', required: false,
+                model: ResultadosComprarProductos, as: 'resultadosComprarProductos', required: false,
+              },                              
+              {
+                model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
               }
             ]
-          },                              
-          {
-            model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
           }
 
         ]

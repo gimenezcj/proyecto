@@ -1,10 +1,13 @@
 {
-  "SERVER_API_URL": "http://localhost:3001/api/",
+  "SERVER_API_URL": "http://localhost:3001/api/", 
   "ICONOS": "/imagenes/base/iconos/",
   "BOTONES": {
     "CERRAR": 1,
     "VOLVER": 2,
     "NUEVOPACIENTE": 4,
-    "NUEVAREHABILIACION": 8
+    "NUEVAREHABILIACION": 8,
+    "RECORRIDO":16,
+    "TAREA": 32,
+    "ESTADISTICA": 64
   }
 }

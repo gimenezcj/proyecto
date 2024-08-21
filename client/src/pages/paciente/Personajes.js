@@ -1,13 +1,16 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {Container, Row, Col, Navbar, NavbarBrand, Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-
+import PropTypes from 'prop-types';
 import Encabezado from "../../components/paciente/Encabezado";
 import LateralPersonaje from "../../components/paciente/LateralPersonaje";
 import ListaPersonajes from "../../components/paciente/ListaPersonajes";
 
 function Personajes ({persona, setPersona}) {
+
+  Personajes.propTypes = {
+    persona: PropTypes.object.isRequired
+  }
 
   const [personaje] = useState(persona.paciente.personaje);
   const [personajeImagen,setPersonajeImagen] = useState (personaje.imagen);

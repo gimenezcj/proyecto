@@ -20,7 +20,7 @@ export default function Rehabilitacion ({rehabilitacion,profesional,setToken,esc
     return (
       <>
         <Encabezado  persona={profesional}/>
-        <Menu setToken={setToken}  botones={config.BOTONES.CERRAR+config.BOTONES.VOLVER} iconoVentana='rehabilitaciones.png'
+        <Menu setToken={setToken}  botones={config.BOTONES.VOLVER} iconoVentana='rehabilitaciones.png'
                 titulo={!rehabilitacion ? 'Nueva rehabilitacion' : 'Informacion de la rehabilitacion'} />
             <Container style={{
                 fontSize: '1vw'

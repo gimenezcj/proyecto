@@ -4,27 +4,29 @@ import { useNavigate,useLocation} from "react-router-dom";
 
 import Brujula from "../../components/paciente/Brujula";
 import Combustible from "../../components/paciente/Combustible";
- import DatosPantalla from "../../components/paciente/DatosPantalla";
+import DatosPantalla from "../../components/paciente/DatosPantalla";
 import Escenario2 from "../../components/paciente/Escenario2";
 import Tablero from "../../components/paciente/Tablero";
 import Velocimetro from "../../components/paciente/Velocimetro";
 import Volante from "../../components/paciente/Volante";
+import config from '../../config/config.json';
 
 const Swal = require('sweetalert2');
 
 export default function Recorrido (){
-  
+
   const navigate= useNavigate();
   const location=useLocation();
-  const {actividad,fondo,sueloPlano,sueloColision, rehabilitacionId, personajeId}=location.state;
+  const {actividad,fondo,sueloPlano,sueloColision, rehabilitacionId, personajeId, idResultadoActividad, idResultadoRecorrido}=location.state;
   const {recorrido,detalle}=actividad.actividadDisponible;
 
   const [brujula,setBrujula]=useState(0);
   const [sinCombustible,setSinCombustible]=useState(false);
   const [choco,setChoco]=useState(false);
   const [llego, setLlego]=useState(false);
+  const [nuevoIdRecorrido,setNuevoIdRecorrido]= useState(idResultadoRecorrido);
   const consumo=0.05;  //consumo de combustible expresado en litros por unidad de medida recorrida
-  const verDatos=false;
+  const verDatos=false;  
 
   const rehabilitacion={
     fondo: 'imagenes/fondos/'+fondo, 
@@ -111,8 +113,8 @@ export default function Recorrido (){
         }
       case 'normal':
         return estadoInicial;
-      case 'choco':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual: estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: true,anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+      case 'choco':      
+          return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual: estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: true,anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
       default: 
         return estado;
     }
@@ -128,16 +130,43 @@ export default function Recorrido (){
         confirmButtonText: 'LLEGUEMOS AL LUGAR'
       }).then((result) => {
         if (result.isConfirmed) {
-          setEstado({tipo:'reset', valor: true});
+          setElEstado({tipo:'reset', valor: true});
         }
       });
 
     },[])
 
-    const [estado,setEstado]=useReducer(nuevoEstado,estadoInicial);
+    const [elEstado,setElEstado]=useReducer(nuevoEstado,estadoInicial);
+//Llamadas a la api
+const apiChocaCasa=async (opcion)=>{
+  //const idResultadoRecorrido=nuevoIdRecorrido; console.log(idResultadoRecorrido);
+  if(nuevoIdRecorrido!=null)
+  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoRecorrido/'+nuevoIdRecorrido +'/'+opcion,{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({distancia: elEstado.distancia})
+  })
+    .then (datos=>datos.json())
+    .then (datos=>{IniciarRecorrido()});
+}
+const IniciarRecorrido=async ()=>{
+  if(idResultadoActividad!=null)
+  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
+    method: 'POST', 
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then (datos=>datos.json())
+  .then (datos=>{
+    setNuevoIdRecorrido(datos.idResultadoRecorrido);    
+  });
+}
+
+
+
 
     useEffect(()=>{
-      if(sinCombustible)
+      if(sinCombustible){
+        apiChocaCasa('sinCombustible');
         Swal.fire({
           title: 'Opsss!',
           text: 'Te has quedado sin combustible. Vuelve a intentarlo!!!!',
@@ -147,10 +176,11 @@ export default function Recorrido (){
           confirmButtonText: 'VOLVER A INTENTARLO'
         }).then((result) => {
           if (result.isConfirmed) {
-            setEstado({tipo:'reset', valor: true});
+            setElEstado({tipo:'reset', valor: true});
           }
-        });
-      if (llego)
+        });}
+      if (llego){
+        apiChocaCasa('completo');
         Swal.fire({
           title: 'GENIAL!',
           text: 'Has llegado al tu destino. Completa la tarea!!!!',
@@ -160,46 +190,47 @@ export default function Recorrido (){
           confirmButtonText: 'REALIZAR LA TAREA'
         }).then((result) => {
           if (result.isConfirmed) {
-            //navigate(0);
-            navigate("/menorPrecio", { replace: true, state:{actividad:actividad, rehabilitacionId:rehabilitacionId, personajeId: personajeId} });
-          }
-        });
-        if (choco){
-        setEstado({tipo:'normal', valor: false});
-        Swal.fire({
-          title: 'Opsss!',
-          text: 'Chocaste, reintenta el recorrido',
-          icon: 'warning',
-          showCancelButton: false,
-          confirmButtonColor: '#3f7f91',
-          confirmButtonText: 'REINTENTAR RECORRIDO'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            setEstado({tipo:'reset', valor: true});           
+            navigate("/menorPrecio", { replace: true, state:{actividad:actividad, rehabilitacionId:rehabilitacionId, personajeId: personajeId, idResultadoActividad: idResultadoActividad} });
           }
         });}
+        if (choco){
+          apiChocaCasa('chocoCasa');
+          //setElEstado({tipo:'normal', valor: false});
+          Swal.fire({
+            title: 'Opsss!',
+            text: 'Chocaste, reintenta el recorrido',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3f7f91',
+            confirmButtonText: 'REINTENTAR RECORRIDO'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              setElEstado({tipo:'reset', valor: true});
+            }
+          });
+        }
 
     },[sinCombustible, llego, choco]);
 
     useEffect(()=>{
-      const {xActual,yActual, ejeZ,combustible, choco}= estado;
+      const {xActual,yActual, ejeZ,combustible, choco}= elEstado;
       setLlego((xActual>=rehabilitacion.destino.a.x && xActual<=rehabilitacion.destino.b.x) && (yActual>=rehabilitacion.destino.a.y && yActual<=rehabilitacion.destino.b.y));
       const nuevoValor=(ejeZ)*180/Math.PI;
       setBrujula(-nuevoValor);
       setSinCombustible(combustible<=0);
       setChoco(choco);
-    },[estado])
+    },[elEstado])
 
     return (
     <>
       <Tablero/>
-      <Volante estado={estado} />
-      <Velocimetro estado={estado}/>
-      <Combustible estado={estado}/>
+      <Volante estado={elEstado} />
+      <Velocimetro estado={elEstado}/>
+      <Combustible estado={elEstado}/>
       <Brujula brujula={brujula} />
       {verDatos && <>
-        <DatosPantalla estado={estado} rehabilitacion={rehabilitacion}/> </>}
-      <Escenario2 estado={estado} setEstado={setEstado} rehabilitacion={rehabilitacion}/>
+        <DatosPantalla estado={elEstado} rehabilitacion={rehabilitacion}/> </>}
+      <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion}/>
     </>
   );
 }

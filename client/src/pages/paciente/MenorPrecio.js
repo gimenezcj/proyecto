@@ -16,7 +16,7 @@ export default function MenorPrecio (props) {
 
   const navigate= useNavigate();
   const location=useLocation();
-  const {actividad, rehabilitacionId, personajeId}=location.state;
+  const {actividad, rehabilitacionId, personajeId, idResultadoActividad}=location.state;
   const {estimuloVisual,permanenciaVisual,sonido,comprarProducto, puntosAOtorgar}= actividad.actividadDisponible;
 
   const lista=comprarProducto.productos.map((v,k)=>{
@@ -123,6 +123,7 @@ export default function MenorPrecio (props) {
   useEffect(()=> {
     estado.items.sort(() => Math.random() - 0.5);
     setEstado({tipo: 'calcular'});
+    //Iniciar menor precio api
   },[])
 
   useEffect(()=>{
@@ -140,14 +141,12 @@ export default function MenorPrecio (props) {
   },[estado.seleccion.completado,estado.seleccion.abandonado])
 
   return (
-    <>
-      <Container>
-        <Festejo estado={estado} ovacion='ovacion.mp3' todomal='error.mp3' setEstado={setEstado}/>
-        <MenuMenorPrecio estado={estado} setEstado={setEstado} ayudaEnCurso={estado.activarAyuda.ayudaEnCurso} completado={estado.seleccion.completado}
-          activarVisual={estado.ayuda.visual.activar} activarSonora={estado.ayuda.sonora.activar}/>
-        <Ayuda  estado={estado} setEstado={setEstado}/>
-        <ListaItemsMenorPrecio  estado={estado} setEstado={setEstado}/>
-      </Container>
-    </>
+    <Container>
+      <Festejo estado={estado} ovacion='ovacion.mp3' todomal='error.mp3' setEstado={setEstado}/>
+      <MenuMenorPrecio estado={estado} setEstado={setEstado} ayudaEnCurso={estado.activarAyuda.ayudaEnCurso} completado={estado.seleccion.completado}
+        activarVisual={estado.ayuda.visual.activar} activarSonora={estado.ayuda.sonora.activar}/>
+      <Ayuda  estado={estado} setEstado={setEstado}/>
+      <ListaItemsMenorPrecio  estado={estado} setEstado={setEstado}/>
+    </Container>
   )
 }

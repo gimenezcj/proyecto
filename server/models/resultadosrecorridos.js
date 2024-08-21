@@ -1,6 +1,7 @@
 const Sequelize=require('sequelize');
-const Actividades = require('./actividades');
 const database=require('./database');
+const ResultadosActividades=require('./resultadosactividades');
+const moment = require('moment');
 
 const ResultadosRecorridos=database.define('resultadosRecorridos',{
   id:{
@@ -10,17 +11,27 @@ const ResultadosRecorridos=database.define('resultadosRecorridos',{
   },
   chocoElemento: Sequelize.BOOLEAN,
   chocoCasa: Sequelize.BOOLEAN,
+  sinCombustible: Sequelize.BOOLEAN,
   completo: Sequelize.BOOLEAN,
-  fecha: Sequelize.DATE,
+  fecha: {
+    type:Sequelize.DATE,
+/*    get(){
+   const rawValue = this.getDataValue('inicio')      
+      return moment(rawValue).format('DD/MM/YYYY h:mm:ss');
+      return new Date(this.getDataValue('inicio'));
+    }*/
+  },
   recorrioDistancia: Sequelize.INTEGER,
   recorrioTiempo: Sequelize.INTEGER,
   actividadId: Sequelize.INTEGER
 });
 
-ResultadosRecorridos.belongsTo(Actividades, {foreingKey: 'actividadId', as: 'actividad'});
-Actividades.hasMany(ResultadosRecorridos,{foreingKey: 'actividadId', as: 'resultadosRecorridos'});
+ResultadosRecorridos.belongsTo(ResultadosActividades, {foreignKey: 'actividadId'});
 
-Actividades.sync();
+ResultadosActividades.hasMany(ResultadosRecorridos,{foreignKey: 'actividadId', as: 'resultadosRecorridos'});
+
 ResultadosRecorridos.sync();
+ResultadosActividades.sync();
+
 
 module.exports=ResultadosRecorridos; 

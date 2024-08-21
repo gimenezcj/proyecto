@@ -22,6 +22,49 @@ const ResultadosComprarProductos = require('../models/resultadoscomprarproductos
 const ResultadosRecorridos = require('../models/resultadosrecorridos');
 const ObrasSociales     = require('../models/obrassociales');
 
+controller.resultadoRehabilitacion=(req,res) => {
+  const {idActividad}=req.params;
+  return generaRta(req,res,ResultadosActividades.findAll({
+      include: [
+        {
+          model: ResultadosRecorridos, as: 'resultadosRecorrido'
+        },
+        {
+          model: ResultadosComprarProductos, as: 'resultadosComprarProductos',
+          include: [{model: Productos, as: 'producto'}]
+        }      
+      ],
+      attributes:{exclude: ['createdAt','updatedAt','actividadId']},
+      where: {actividadId:idActividad}
+  }));
+}
+
+controller.resultadoRecorridos=(req,res) => {
+  const {idActividad}=req.params;
+  return generaRta(req,res, ResultadosRecorridos.findAll({
+    include: [{model: ResultadosActividades, where: {actividadId:idActividad},attributes: []}],
+    attributes:{exclude: ['createdAt','updatedAt','actividadId']},    
+  })); 
+}
+
+controller.resultadoRehabilitacionResumen=(req, res) => {
+  const {idRehabilitacion}= req.params;
+  return generaRta(req,res, Rehabilitaciones.findByPk(idRehabilitacion,{
+    include: [
+      {model: Escenarios, as: 'escenario', attributes:{exclude: ['createdAt','updatedAt','id','sueloPlanoId','sueloColisionId','fondoId']}},
+      {model: Actividades, as: 'actividades2', attributes:{exclude: ['createdAt','updatedAt','rehabilitacionId','actividadDisponibleId']},
+      include:[
+        {model: ActividadesDisponibles, as: 'actividadDisponible', attributes:{
+          exclude: ['createdAt','updatedAt','recorridoId','escenarioId','estimuloVisual','estimuloAuditivo','puntosAOtorgar','detalle','estimuloAuditivoId']
+        }},
+        {model: ResultadosActividades, attributes:{ exclude: ['createdAt','updatedAt','actividadId']}
+        }
+      ]}
+    ],
+    attributes:{exclude: ['createdAt','updatedAt','pacienteId','fonoaudiologoId','escenarioId']}
+  }))
+}
+
 controller.listAll=(req,res)=>{
   return generaRta(req,res,Fonoaudiologos.findAll({
     include: [
@@ -119,12 +162,12 @@ controller.listPacientes=(req,res)=>{
                     model: ResultadosActividades, as: 'resultadosActividades', required: false,
                     include: [
                       {
-                        model: ResultadosComprarProductos, as: 'resultadoComprarProductos'
-                      }
-                    ]
-                  },                              
+                        model: ResultadosComprarProductos, as: 'resultadosComprarProductos'
+                      },                              
                   {
                     model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
+                  }
+                    ]
                   }
 
                 ]

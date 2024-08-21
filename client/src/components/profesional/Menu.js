@@ -22,6 +22,9 @@ function Menu ({setToken,titulo, iconoVentana, botones, setState}) {
     navigate("/", { replace: true });
   }
 
+  const condicionRecorrido=(botones & config.BOTONES.RECORRIDO)>0;
+  const condicionEstadistica=(botones & config.BOTONES.ESTADISTICA)>0;
+  const condicionTarea=(botones & config.BOTONES.TAREA)>0;
   const condicionNuevoPaciente=(botones & config.BOTONES.NUEVOPACIENTE)>0;
   const condicionNuevaRehabilitacion=(botones & config.BOTONES.NUEVAREHABILIACION)>0;
   const condicionSalir=(botones & config.BOTONES.CERRAR)>0;
@@ -36,6 +39,12 @@ function Menu ({setToken,titulo, iconoVentana, botones, setState}) {
         <Row style={{alignContent: 'baseline', fontSize: '2.5vw'}}>
           <Col xs={8}>{titulo}</Col>
           <Col style={{display: 'flex', justifyContent: 'flex-end'}}>
+            {(condicionRecorrido) && <>
+              <Button className="botonIcono" ><Image src={config.ICONOS+'recorrido.png '} width='33vw'/></Button> </>}
+            {(condicionTarea) && <>
+              <Button className="botonIcono" ><Image src={config.ICONOS+'tarea.png '} width='33vw'/></Button> </>}
+            {(condicionEstadistica) && <>
+              <Button className="botonIcono" ><Image src={config.ICONOS+'estadisticas.png '} width='33vw'/></Button> </>}
             {(condicionNuevoPaciente) && <>
               <Button className="botonIcono" onClick={()=>navigate('/paciente/nuevo')}><Image src={config.ICONOS+'nuevoPaciente.png '} width='33vw'/></Button> </>}
             {(condicionNuevaRehabilitacion) && <>

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {Button, Card} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-
-
+import config from '../../config/config.json';
 
 import '../../pages/estilos/estilos_paciente.css';
 
@@ -10,39 +9,72 @@ const time = require( '../../modules/Time');
 
 function ItemRehabilitacion ({rehabilitacion, personajeId}) {
   const navigate= useNavigate();
+  const [idResultadoActividad, setIdResultadoActividad]= useState(null);
+  const [idResultadoRecorrido, setIdResultadoRecorrido]= useState(null);
+  const [actividadActual, setActividadActual]= useState(null);
+
+//Llamadas a la api
+const IniciarActividad=()=>{
+  if(actividadActual!=null)
+  fetch(config.SERVER_API_URL+'rehabilitaciones/actividad/'+actividadActual.id+'/inicia',{
+    method: 'POST',
+    headers: {
+     'Content-Type': 'application/json'
+    }
+  })
+  .then (datos=>datos.json())
+  .then (datos=>{
+    setIdResultadoActividad(datos.idResultadoActividad);
+    IniciarRecorrido(datos.idResultadoActividad)
+  });
+}
+
+const IniciarRecorrido=(idResultadoActividad)=>{
+  if(idResultadoActividad!=null)
+  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
+    method: 'POST', 
+    headers: {'Content-Type': 'application/json'}
+  })
+  .then (datos=>datos.json())
+  .then (datos=>{
+    setIdResultadoRecorrido(datos.idResultadoRecorrido);
+    navigate("/recorrido", { state:{actividad:actividadActual,
+      fondo: rehabilitacion.escenario.fondo.nombreArchivo, 
+      sueloPlano: rehabilitacion.escenario.sueloPlano.nombreArchivo, 
+      sueloColision: rehabilitacion.escenario.sueloColision.nombreArchivo,
+      rehabilitacionId: rehabilitacion.id, personajeId: personajeId,
+      idResultadoActividad: idResultadoActividad, idResultadoRecorrido: datos.idResultadoRecorrido
+    }});
+});
+}
+
+
 
   const redireccionar=()=>{
 
-    var lista=rehabilitacion.actividades2.filter(x=>(x.resultadosActividades.filter(y=>y.completo).length===0))
-//    console.log(lista);
-      lista.sort((a, b) => a.orden - b.orden);
- 
-
-//    console.log(lista);
+    let lista=rehabilitacion.actividades2.filter(x=>(x.resultadosActividades.filter(y=>y.completo).length===0))
+    lista.sort((a, b) => a.orden - b.orden);
     if(lista.length>0)
-//    console.log(lista[0]);
-      navigate("/recorrido", { state:{actividad:lista[Math.round(Math.random()*lista.length)],
-        fondo: rehabilitacion.escenario.fondo.nombreArchivo, 
-        sueloPlano: rehabilitacion.escenario.sueloPlano.nombreArchivo, 
-        sueloColision: rehabilitacion.escenario.sueloColision.nombreArchivo,
-        rehabilitacionId: rehabilitacion.id, personajeId: personajeId
-      }});
+    //Seleccion de la acticidad a realizar
+    //En este caso vamos a respetar el orden, en un futuro podria ser aleatoria: actividad:lista[Math.round(Math.random()*lista.length)]
+    setActividadActual(lista[0]);
+    IniciarActividad();
   }
 
   const contarPendientes=(actividades)=> {
 
       if (actividades !== undefined) {
-          var pendientes = actividades.map(function (v, k) {
-              var hayResultados = v.resultadosActividades.length > 0;
+          let pendientes = actividades.map(function (v, k) {
+              let hayResultados = v.resultadosActividades.length > 0;
               if (hayResultados) {
-                  var pendientes2 = v.resultadosActividades.map(function (v, k) {
+                  let pendientes2 = v.resultadosActividades.map(function (v, k) {
                       return v.completado
                   });
                   return !pendientes2.includes(true);
               } else
                   return true;
           });
-          var filtrado = pendientes.filter(x => x);
+          let filtrado = pendientes.filter(x => x);
           return filtrado.length;
       } else return 0;
   }
@@ -56,7 +88,6 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
     
 
     return (
-      <>
         <div className="card" onClick={redireccionar}>
           <div className="cardImage" style={{backgroundImage: 'url("/imagenes/ciudadesprevios/buenosaires2.png")'}}></div>
           <div className="cardBody"> 
@@ -70,7 +101,6 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
             </div>
           </div>
         </div>
-      </>
     );
   }
 

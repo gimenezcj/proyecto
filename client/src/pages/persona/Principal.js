@@ -2,10 +2,15 @@ import React from "react";
 import {Container, Row, Col, Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 
-
 import config from '../../config/config.json';
+import { propTypes } from "react-bootstrap/esm/Image";
+
 
 function Principal ({persona, setToken}) {
+
+  Principal.propTypes = {
+    persona:propTypes.object.isRequired
+  }
 
   const navigate = useNavigate();
   

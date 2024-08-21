@@ -39,23 +39,18 @@ const App = (props) => {
   },[token]);
 
   return (
-    <>
     <BrowserRouter>
-      {(paciente) && <><PacienteRoutes token={token} setToken={setToken}/></>}     
-      {(!paciente&&fono) && <><ProfesionalRoutes token={token} setToken={setToken} /></>}
-      {(!paciente&&!fono&&persona) && <><PersonaRoutes persona={persona} setToken={setToken} /></>}
+      {(paciente) && <PacienteRoutes token={token} setToken={setToken}/>}     
+      {(!paciente&&fono) && <ProfesionalRoutes token={token} setToken={setToken} />}
+      {(!paciente&&!fono&&persona) && <PersonaRoutes persona={persona} setToken={setToken} />}
 
       <Routes>
-        {(!token || token===null) && <>
-          <Route path='/' element={<Inicio setToken={setToken}  token={token}/>} />
-               
-        </>}
+        {(!token || token===null) && <Route path='/' element={<Inicio setToken={setToken}  token={token}/>} />}
         <Route path='/tabla' element={<Tabla/>} /> 
         <Route path='/logout' element= {<Logout/>} />
         <Route path='*' render={() => <h1>Not found!</h1>} />
       </Routes>
     </BrowserRouter>
-    </>
   )
 }
 

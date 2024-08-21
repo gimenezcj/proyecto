@@ -134,13 +134,13 @@ controller.login=async (req, res)=>{
                             model: ResultadosActividades, as: 'resultadosActividades', required: false,
                             include: [
                               {
-                                model: ResultadosComprarProductos, as: 'resultadoComprarProductos'
+                                model: ResultadosComprarProductos, as: 'resultadosComprarProductos'
+                              },{
+                            model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
                               }
                             ]
                           },                              
-                          {
-                            model: ResultadosRecorridos, as: 'resultadosRecorridos', required: false,                              
-                          }
+                          
 
                         ]
                       }

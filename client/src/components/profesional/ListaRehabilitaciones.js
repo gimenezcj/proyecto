@@ -78,39 +78,52 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   }
 
   const linkFollow = (cell, row, rowIndex, formatExtraData) => {
+    function habilitada(r){return r.realizada;}
     return (<>
       <Button className="botonIcono" onClick={()=> {
         setElemento(listaCruda.filter(x=>x.id===row.id)[0]);
         navigate('/rehabilitacion/informacion',{state:{pacienteId:paciente.id}})}}>
         <Image src={config.ICONOS+'informacion.png'} className='iconos'/></Button>
-      <Button className="botonIcono"><Image src={config.ICONOS+'estadisticas.png'} className='iconos' /></Button>
-      <Button className="botonIcono" variant="danger" onClick={()=>btnEliminar(row.id)}><Image src={config.ICONOS+'papelera.png'} className='iconos'/></Button>
+      <Button className="botonIcono" disabled={!habilitada(row)} ><Image src={config.ICONOS+'estadisticas.png'} className='iconos' 
+        onClick={()=> {          setElemento(listaCruda.filter(x=>x.id===row.id)[0]);
+          navigate('/rehabilitacion/estadistica',{state:{pacienteId:paciente.id}})}} /></Button>
+      <Button disabled={habilitada(row)} className="botonIcono" variant="danger" onClick={()=>btnEliminar(row.id)}><Image src={config.ICONOS+'papelera.png'} className='iconos'/></Button>
     </>);
   };
 
   const fechaFormato = (cell, row, rowIndex, formatExtraData) => {
     if(!cell) return (<>Sin fecha</>)
     else {
-      const completo=new Date(cell);
-      completo.setDate(completo.getDate() +1 );
+      const completo=new Date(cell.substring(0,23));
+      completo.setDate(completo.getDate() );
       const dia = `${(completo.getDate())}`.padStart(2,'0');
-      const mes = `${(completo.getMonth()+1)}`.padStart(2,'0');
+      const mes = `${(completo.getMonth())}`.padStart(2,'0');
       const ano = completo.getFullYear();
-
       return (<>{dia}-{mes}-{ano}</>);
     }
   }
   const realizadaFormato = (cell, row, rowIndex, formatExtraData) => {
-    if(cell) return (<><span style={{color: 'green'}}>Lista</span></>)
-    else return (<>Pendiente</>)
+    
+    //const desde=new Date(row.fechaHabilitadaDesde);
+    const hasta=new Date(row.fechaHabilitadaHasta); hasta.setHours(0,0,0,0);
+    const actual= new Date(); actual.setHours(0,0,0,0);
+        
+    if(row.realizada) return (<><span style={{color: 'green'}}>Lista</span></>)
+    else{
+      if(actual<=hasta)
+        return (<>Pendiente</>)
+      else
+        return (<><span style={{color: 'red'}}>Vencida</span></>)
+    } 
   }
 
   const columnas=[
-    { dataField: 'fechaCreacion', text: 'Creada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato },    
-    { dataField: 'fechaHabilitadaDesde', text: 'Desde', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
-    { dataField: 'fechaHabilitadaHasta', text: 'Hasta', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
-    { dataField: 'fechaRealizacion', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
-    { dataField: 'realizada', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: realizadaFormato},
+    { align: 'center',valign: 'middle', dataField: 'id', text: '# interno',sort:true,sortCaret: encabezadoBusqueda},
+    { align: 'center',valign: 'middle', dataField: 'fechaCreacion', text: 'Creada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato },    
+    { align: 'center',valign: 'middle', dataField: 'fechaHabilitadaDesde', text: 'Desde', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
+    { align: 'center',valign: 'middle', dataField: 'fechaHabilitadaHasta', text: 'Hasta', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
+    { align: 'center',valign: 'middle', dataField: 'fechaRealizacion', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: fechaFormato},
+    { align: 'center',valign: 'middle', dataField: 'realizada', text: 'Realizada', sort: true, sortCaret: encabezadoBusqueda, formatter: realizadaFormato},
     {
       dataField: "id",
       text: "Acciones",
@@ -121,7 +134,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   const defaultSorted = [{dataField: 'fechaCreacion',order: 'asc'}];
 
   return (
-    <>
+    
     <Container style={{ fontSize: '1vw', maxWidth: '95%'}}>
       <Row style={{ marginTop: '2vh' }} >
         <Col ><span style={{fontSize:'2vw'}}>Paciente: </span><span style={{fontSize:'2.5vw'}}>{paciente.persona.nombre} {paciente.persona.apellido}</span></Col>
@@ -132,6 +145,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
         columns={columnas}
         search
         filter={buscar}
+        data-flat="true"
         
       > 
         {
@@ -162,6 +176,5 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   }
      </ToolkitProvider>
      </Container>
-    </>
   );
 }

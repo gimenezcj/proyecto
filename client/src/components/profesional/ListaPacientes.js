@@ -18,8 +18,6 @@ import es from 'date-fns/locale/es';
 const Swal = require('sweetalert2');
 
 
-//import 'bootstrap/dist/css/bootstrap.min.css';
-
 export default function ListaPacientes ({persona,pacientes})  {
 
   const navigate = useNavigate();
@@ -103,7 +101,7 @@ export default function ListaPacientes ({persona,pacientes})  {
   const defaultSorted = [{dataField: 'nombreCompleto',order: 'asc'}];
 
   return (
-    <>  
+    
           <Container style={{
               fontSize: '1vw', maxWidth:'95%'
           }}>
@@ -143,6 +141,5 @@ export default function ListaPacientes ({persona,pacientes})  {
   }
      </ToolkitProvider>
      </Container>
-    </>
   );
 }

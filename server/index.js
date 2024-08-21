@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 var cors = require('cors');
+app.use(express.static('build'));	//Agergado
+const path = require('path');		//Agergado
 
 // settings
 
@@ -40,4 +42,12 @@ app.use((req, res) => {
 // iniciando el servidor
 app.listen(app.get('port'),() => {
 	console.log(`Servidor en el puerto: ${app.get('port')}`);
+	console.log(new Date().toLocaleString('es-AR', {
+		timeZone: 'America/Argentina/Buenos_Aires'
+	}));
+	process.env.TZ = 'America/Argentina/Buenos_Aires';
+
+
 });
+app.get('*', (req, res) => {res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));});  //Agregado
+

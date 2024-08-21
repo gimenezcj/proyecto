@@ -1,6 +1,7 @@
 const Sequelize=require('sequelize');
 const database=require('./database');
 const Actividades=require('./actividades');
+const moment = require('moment');
 
 const ResultadosActividades=database.define('resultadosActividades',{
   id:{
@@ -8,19 +9,31 @@ const ResultadosActividades=database.define('resultadosActividades',{
     primaryKey: true,
     autoIncrement: true,
   },
-  inicio: Sequelize.DATE,
-  finalizo: Sequelize.DATE,
+  inicio: {
+    type:Sequelize.DATE,
+/*    get(){
+      const rawValue = this.getDataValue('inicio')      
+      return moment(rawValue).format('DD/MM/YYYY h:mm:ss');;
+    }*/
+  },
+  finalizo: {
+    type:Sequelize.DATE,
+/*    get(){
+      const rawValue = this.getDataValue('inicio')      
+      return moment(rawValue).format('DD/MM/YYYY h:mm:ss');;
+    }*/
+  },
   ayudaAuditiva: Sequelize.BOOLEAN,
   ayudaVisual: Sequelize.BOOLEAN,
   completado: Sequelize.BOOLEAN,
   tiempoTranscurrido: Sequelize.INTEGER,
-  actividadId: {
+/*  actividadId: {
     type: Sequelize.INTEGER,
-  } 
+  } */
 });
 
-ResultadosActividades.belongsTo(Actividades , {foraingKey: 'actividadId', as: 'actividad'});
-Actividades.hasMany(ResultadosActividades   , {foraingKey: 'actividadId', as: 'resultadosActividades'})
+ResultadosActividades.belongsTo(Actividades , {foreignKey: 'actividadId', as: 'actividad'});
+Actividades.hasMany(ResultadosActividades   , {foreignKey: 'actividadId'})
 
 Actividades.sync();
 ResultadosActividades.sync();

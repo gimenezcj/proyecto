@@ -57,12 +57,6 @@ function ListaPersonajes ({setMiPersonaje, miPersonaje, puntajeAcumulado}) {
     );
   }
 
-
-  //const [personaje, setPesonaje]=useState(miPersonaje.imagen);
-  
-
-  //console.log(imageUrl);
-
   const listItems = imageUrl.map((item) =>  
     <ItemPersonaje 
       personaje={item} 
