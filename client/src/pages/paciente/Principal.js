@@ -52,7 +52,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
 //    }
 //  },[])
   const leerRehabilitaciones=()=>{
-    fetch(configUtils.getUrl()+'rehabilitaciones/pendientes/'+pacienteId,{
+    fetch(Utils.getUrl()+'rehabilitaciones/pendientes/'+pacienteId,{
       method: 'GET',
       headers: {
        'Content-Type': 'application/json'
