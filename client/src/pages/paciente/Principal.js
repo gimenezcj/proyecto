@@ -52,7 +52,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
 //    }
 //  },[])
   const leerRehabilitaciones=()=>{
-    fetch(config.SERVER_API_URL+'rehabilitaciones/pendientes/'+pacienteId,{
+    fetch(configUtils.getUrl()+'rehabilitaciones/pendientes/'+pacienteId,{
       method: 'GET',
       headers: {
        'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
     .then (datos=>setListaR(datos.data));
   }
   const leerPersonaje=()=>{
-    fetch(config.SERVER_API_URL+'personajes/'+personaje.id,{
+    fetch(config.Utils.getUrl()+'personajes/'+personaje.id,{
       method: 'GET',
       headers: {
        'Content-Type': 'application/json'

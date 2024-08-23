@@ -26,7 +26,7 @@ export default function NuevoPaciente ({setToken,token,accion,persona}) {
   const verificarNombreUsuario= async (nombre) => {
 
     const verifica= async (nombre) => {
-      fetch(config.SERVER_API_URL+'cuentas/verificar/'+nombre,{
+      fetch(Utils.getUrl()+'cuentas/verificar/'+nombre,{
         method: 'GET',
       }).then(data => data.json().then(aux =>setUsuarioValido(aux.encontrado&&(aux.cantidad<=1&&nuevo)?'false':'true')));     
     }
@@ -93,7 +93,7 @@ export default function NuevoPaciente ({setToken,token,accion,persona}) {
 
     if(nuevo) valores.paciente.profesionalId=persona.fonoaudiologo.id;
 
-    fetch( config.SERVER_API_URL+'pacientes/guardar/' + (nuevo?'nuevo':valores.paciente.id),{
+    fetch( Utils.getUrl()+'pacientes/guardar/' + (nuevo?'nuevo':valores.paciente.id),{
       method: 'POST',
       headers: {
        'Content-Type': 'application/json'

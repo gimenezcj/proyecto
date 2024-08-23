@@ -10,6 +10,7 @@ import Tablero from "../../components/paciente/Tablero";
 import Velocimetro from "../../components/paciente/Velocimetro";
 import Volante from "../../components/paciente/Volante";
 import config from '../../config/config.json';
+import Utils from "../../utils/Utils";
 
 const Swal = require('sweetalert2');
 
@@ -141,7 +142,7 @@ export default function Recorrido (){
 const apiChocaCasa=async (opcion)=>{
   //const idResultadoRecorrido=nuevoIdRecorrido; console.log(idResultadoRecorrido);
   if(nuevoIdRecorrido!=null)
-  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoRecorrido/'+nuevoIdRecorrido +'/'+opcion,{
+  fetch(Utils.getUrl()+'rehabilitaciones/resultadoRecorrido/'+nuevoIdRecorrido +'/'+opcion,{
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({distancia: elEstado.distancia})
@@ -151,7 +152,7 @@ const apiChocaCasa=async (opcion)=>{
 }
 const IniciarRecorrido=async ()=>{
   if(idResultadoActividad!=null)
-  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
+  fetch(Utils.getUrl()+'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
     method: 'POST', 
     headers: {'Content-Type': 'application/json'}
   })

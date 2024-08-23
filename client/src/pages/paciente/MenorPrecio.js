@@ -9,6 +9,7 @@ import Festejo from "../../components/paciente/Festejo";
 import ListaItemsMenorPrecio from "../../components/paciente/ListaItemsMenorPrecio";
 import MenuMenorPrecio from "../../components/paciente/MenuMenorPrecio";
 import config from '../../config/config.json';
+import Utils from "../../utils/Utils";
 
 const Swal = require('sweetalert2');
 
@@ -106,7 +107,7 @@ export default function MenorPrecio (props) {
   }
 
   const guardar= async(salto) => {
-    fetch(config.SERVER_API_URL+'resultadoComprarProducto',{
+    fetch(Utils.getUrl()+'resultadoComprarProducto',{
       method: 'POST',
       headers: {
        'Content-Type': 'application/json'
