@@ -1,1 +1,1 @@
-"SERVER_API_URL": "http://servidor.gama.net.ar/api/",
+"SERVER_API_URL": window.location.origin+"/api/",

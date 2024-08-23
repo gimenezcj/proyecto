@@ -13,6 +13,7 @@ import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './table.css';
 import es from 'date-fns/locale/es';
+import Utils from "../../utils/Utils";
 
 
 const Swal = require('sweetalert2');
@@ -50,7 +51,7 @@ export default function ListaPacientes ({persona,pacientes})  {
   function btnEliminar(id){
 
     const eliminarBase= async(id) => { 
-      fetch( config.SERVER_API_URL+'pacientes/' + id,{
+      fetch( Utils.getUrl()+'pacientes/' + id,{
         method: 'DELETE',
         headers: {
          'Content-Type': 'application/json'

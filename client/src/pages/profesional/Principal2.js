@@ -14,13 +14,14 @@ import es from 'date-fns/locale/es';
 import './style.css';
 import logo from './edit.png';
 import camino from './camino.png';
+import Utils from "../../utils/Utils";
 function Principal2 ({persona, setToken}) {  
 
   const navigate = useNavigate();
   
  
   async function logout() {
-    return fetch(config.SERVER_API_URL + 'cuentas/logout', {
+    return fetch(Utils.getUrl()+ 'cuentas/logout', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     }).then(data => data.json())

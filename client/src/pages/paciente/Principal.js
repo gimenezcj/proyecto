@@ -11,6 +11,7 @@ import LateralPersonaje from "../../components/paciente/LateralPersonaje";
 import LateralValija from "../../components/paciente/LateralValija";
 import Encabezado from "../../components/paciente/Encabezado";
 
+import Utils from "../../utils/Utils";
 
 function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
 
@@ -80,7 +81,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
   },[])
 
   async function logout() {
-    return fetch(config.SERVER_API_URL + 'cuentas/logout', {
+    return fetch(Utils.getUrl()+ 'cuentas/logout', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     }).then(data => data.json())

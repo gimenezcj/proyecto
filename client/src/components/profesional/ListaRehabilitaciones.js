@@ -13,6 +13,7 @@ import { FaSearch } from 'react-icons/fa';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './table.css';
 import es from 'date-fns/locale/es';
+import Utils from "../../utils/Utils";
 
 export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setElemento})  {
 
@@ -24,7 +25,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   const Swal = require('sweetalert2');
 
   const cargarRehabilitaciones=async () => {
-    fetch(config.SERVER_API_URL+'rehabilitaciones/paciente/'+paciente.id, {method: 'GET'})
+    fetch(Utils.getUrl()+'rehabilitaciones/paciente/'+paciente.id, {method: 'GET'})
       .then(res=>res.json()).then((data)=>setListaCruda(data.data));
   }
 
@@ -51,7 +52,7 @@ export default function ListaRehabilitaciones ({paciente,fonoaudiologoId, setEle
   function btnEliminar(id){
 
     const eliminarBase= async(id) => { 
-      fetch( config.SERVER_API_URL+'rehabilitaciones/' + id,{
+      fetch( Utils.getUrl()+'rehabilitaciones/' + id,{
         method: 'DELETE',
         headers: {
          'Content-Type': 'application/json'

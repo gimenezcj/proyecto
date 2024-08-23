@@ -1,11 +1,13 @@
 import React,{ useState } from "react";
 import PropTypes from 'prop-types';
 import {Form,Button} from 'react-bootstrap';
-import config from '../config/config.json';
+import Utils from "../utils/Utils";
+
+//import config from '../config/config.json';
 
 async function loginUser(credentials) {
 
- return fetch(config.SERVER_API_URL + 'cuentas/login', {
+ return fetch(Utils.getUrl() + 'cuentas/login', {
    method: 'POST',
    headers: { 'Content-Type': 'application/json'},
    body: JSON.stringify(credentials)

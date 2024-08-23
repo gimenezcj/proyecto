@@ -12,6 +12,7 @@ import DatePicker, { registerLocale } from "react-datepicker"
 import es from 'date-fns/locale/es';
 import {  useFormik } from "formik";
 import {  Container, Col, Row, Button } from "react-bootstrap";
+import Utils from "../../utils/Utils";
 
 registerLocale("es",es)
 
@@ -78,7 +79,7 @@ export default function NuevoPaciente ({setToken,token,accion,persona}) {
 
   const cargarDatos= async ()=>{
     if((accion==='informacion' || accion==='editar')){
-      return fetch(config.SERVER_API_URL + 'pacientes/'+location.state.id, {
+      return fetch(Utils.getUrl()+ 'pacientes/'+location.state.id, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
       }).then(data => {data.json().then(aux=>{setPaciente(aux.data);formulario.setValues({paciente:aux.data});setNuevo(false);

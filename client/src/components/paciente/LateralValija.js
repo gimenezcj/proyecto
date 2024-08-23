@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-import { Row, Col, Button} from 'react-bootstrap';
+import React, { useState } from "react";
+import { Button, Col, Row } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import config from '../../config/config.json';
 
 import Puntaje from "./Puntaje";
 
+import Utils from "../../utils/Utils";
 import Valija from "./Valija";
 
 const Swal = require('sweetalert2');
@@ -22,7 +22,7 @@ function LateralValija ({personaje, cambio,pi}) {
 
       const info={personajeId:a, valijaSeleccionadaId:b, nuevoPuntajeAcumulado:c}
   console.log(info);
-      const data = await fetch(config.SERVER_API_URL + 'personajes/adquirirValija', {
+      const data = await fetch(Utils.getUrl() + 'personajes/adquirirValija', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(info)

@@ -3,6 +3,7 @@ import {Row, Col,Image, Button} from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import config from '../../config/config.json';
 import './table.css';
+import Utils from "../../utils/Utils";
 
 
 function Menu ({setToken,titulo, iconoVentana, botones, setState}) {
@@ -10,7 +11,7 @@ function Menu ({setToken,titulo, iconoVentana, botones, setState}) {
   const navigate = useNavigate();
 
   async function logout() {
-    return fetch(config.SERVER_API_URL + 'cuentas/logout', {
+    return fetch(Utils.getUrl()+ 'cuentas/logout', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     }).then(data => data.json())

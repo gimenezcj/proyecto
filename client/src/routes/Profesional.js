@@ -13,6 +13,7 @@ import Rehabilitacion from "../pages/profesional/Rehabilitacion";
 import Estadisticas from "../pages/profesional/Estadisticas";
 
 import config from '../config/config.json';
+import Utils from "../utils/Utils";
 
 function ProfesionalRoutes  ({token, setToken})  {
 
@@ -26,7 +27,7 @@ function ProfesionalRoutes  ({token, setToken})  {
 
 
   const escenariosDisponibles = async ()=>{
-    fetch(config.SERVER_API_URL+'escenarios/list',{method:'GET'})
+    fetch(Utils.getUrl()+'escenarios/list',{method:'GET'})
     .then(res=>res.json())
     .then(valor=>setEscenarios(valor.data))
   }

@@ -1,9 +1,8 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import {Container, Row, Col} from 'react-bootstrap';
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row } from 'react-bootstrap';
 
-import config from '../../config/config.json';
 
+import Utils from "../../utils/Utils";
 import ItemValija from "./ItemValija";
 
 function ListaPersonajes ({setMiValija, miValija, puntajeAcumulado}) {
@@ -16,7 +15,7 @@ function ListaPersonajes ({setMiValija, miValija, puntajeAcumulado}) {
     if (isLoading) {
       async function fetchData() {
         try {
-          const response = await fetch(config.SERVER_API_URL + 'decorativos/listAny', {
+          const response = await fetch(Utils.getUrl()+ 'decorativos/listAny', {
             method: 'POST',
             headers: {'Content-Type': 'application/json', "access-control-allow-origin" : "*"},
             body: JSON.stringify({grupoId:11})

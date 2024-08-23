@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import config from '../../config/config.json';
 import { Button, Col, Image, Row,Alert } from "react-bootstrap";
 import '../../pages/estilos/estilos_forms.css';
+import Utils from "../../utils/Utils";
 
 const okColor='#8f8f9d8f';
 const errorColor='red';
@@ -48,7 +49,7 @@ export default function FormikRehabilitacion ({rehabilitacion,pacienteId,profesi
 
 //    if(nuevo) valores.paciente.profesionalId=persona.fonoaudiologo.id;
 
-    fetch( config.SERVER_API_URL+'rehabilitaciones/guardar/' + (!rehabilitacion?'nueva/'+profesionalId+'/'+pacienteId:'actualizar'),{
+    fetch( Utils.getUrl()+'rehabilitaciones/guardar/' + (!rehabilitacion?'nueva/'+profesionalId+'/'+pacienteId:'actualizar'),{
       method: 'POST',
       headers: {
        'Content-Type': 'application/json'

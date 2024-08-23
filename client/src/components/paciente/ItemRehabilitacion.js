@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import config from '../../config/config.json';
 
 import '../../pages/estilos/estilos_paciente.css';
+import Utils from "../../utils/Utils";
 
 const time = require( '../../modules/Time');
 
@@ -16,7 +17,7 @@ function ItemRehabilitacion ({rehabilitacion, personajeId}) {
 //Llamadas a la api
 const IniciarActividad=()=>{
   if(actividadActual!=null)
-  fetch(config.SERVER_API_URL+'rehabilitaciones/actividad/'+actividadActual.id+'/inicia',{
+  fetch(Utils.getUrl() + 'rehabilitaciones/actividad/'+actividadActual.id+'/inicia',{
     method: 'POST',
     headers: {
      'Content-Type': 'application/json'
@@ -31,7 +32,7 @@ const IniciarActividad=()=>{
 
 const IniciarRecorrido=(idResultadoActividad)=>{
   if(idResultadoActividad!=null)
-  fetch(config.SERVER_API_URL+'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
+  fetch(Utils.getUrl() + 'rehabilitaciones/resultadoActividad/'+idResultadoActividad+'/iniciaRecorrido',{
     method: 'POST', 
     headers: {'Content-Type': 'application/json'}
   })

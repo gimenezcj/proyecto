@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import config from '../../config/config.json';
 import { propTypes } from "react-bootstrap/esm/Image";
+import Utils from "../../utils/Utils";
 
 
 function Principal ({persona, setToken}) {
@@ -15,7 +16,7 @@ function Principal ({persona, setToken}) {
   const navigate = useNavigate();
   
   async function logout() {
-    return fetch(config.SERVER_API_URL + 'cuentas/logout', {
+    return fetch(Utils.getUrl()+ 'cuentas/logout', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
     }).then(data => data.json())
