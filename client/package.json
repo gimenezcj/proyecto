@@ -28,6 +28,7 @@
     "react-datepicker": "^4.8.0",
     "react-devtools": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-gamepads": "^1.0.0",
     "react-icons": "^4.4.0",
     "react-native-formik": "^1.7.8",
     "react-native-network-info": "^5.2.1",

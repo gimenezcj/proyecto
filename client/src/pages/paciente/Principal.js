@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect , useState, useReducer } from "react";
 import {Container, Row, Col, Navbar, NavbarBrand, Button} from 'react-bootstrap';
 import { useNavigate,useLocation } from "react-router-dom";
+
 
 
 import config from '../../config/config.json';
@@ -10,8 +10,11 @@ import DesafiosPropuestos from './../../components/paciente/DesafiosPropuestos';
 import LateralPersonaje from "../../components/paciente/LateralPersonaje";
 import LateralValija from "../../components/paciente/LateralValija";
 import Encabezado from "../../components/paciente/Encabezado";
+import Menu from './../../components/paciente/Menu';
 
 import Utils from "../../utils/Utils";
+
+import Controles from "../../components/emuns/Controles";
 
 function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
 
@@ -25,32 +28,19 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
   const navigate = useNavigate();
   const location=useLocation();
 
+  const comandosIniciales={
+    control: Controles.NINGUNO,
+  };
+  const nuevoComando=(comando,accion)=>{  
+    switch (accion.tipo) {
+      case 'nuevoDispositivo':
+        return {...comando, control: accion.dispositivo};
+      default: 
+        return comando;
+    }
+  }
+  const [comandos,setComandos]=useReducer(nuevoComando,comandosIniciales);
 
-//  useEffect(()=>{
-//    if(location.state!==null)
-//      if(location.state.accion) {     
-//        const {accion}=location.state;
-//      if(accion==='volverDesafioCompleto' || accion==='volverDesafioInCompleto')        
-//        {
-//          const {actividadId,rehabilitacionId,resultadoActividad}=location.state;
-//          const indice=persona.paciente.rehabilitaciones.findIndex(x=>x.id===rehabilitacionId);
-//          if(accion==='volverDesafioCompleto'){          
-//            if(persona.paciente.rehabilitaciones[indice].actividades2.length===1){
-//              
-//              setListaR(persona.paciente.rehabilitaciones.filter(x=>x.id!==rehabilitacionId));
-//            }
-//            else {
-//                persona.paciente.rehabilitaciones[indice].actividades2=persona.paciente.rehabilitaciones[indice].actividades2.filter(x=>x.id!=actividadId);
-//                setListaR(persona.paciente.rehabilitaciones);
-//              }
-//              //setToken(token);
-////            setPersona(persona);          
-////            setToken({...token,info:{...token.info,persona:persona}});
-//          }
-////          elemento.resultadosActividades.push(resultadoActividad);
-//        }
-//    }
-//  },[])
   const leerRehabilitaciones=()=>{
     fetch(Utils.getUrl()+'rehabilitaciones/pendientes/'+pacienteId,{
       method: 'GET',
@@ -62,7 +52,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
     .then (datos=>setListaR(datos.data));
   }
   const leerPersonaje=()=>{
-    fetch(config.Utils.getUrl()+'personajes/'+personaje.id,{
+    fetch(Utils.getUrl()+'personajes/'+personaje.id,{
       method: 'GET',
       headers: {
        'Content-Type': 'application/json'
@@ -70,7 +60,6 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
     })
     .then (datos=>datos.json())
     .then (datos=>{
-//      console.log(datos);
       setPersonaje(datos.data)
     });
   }
@@ -95,21 +84,17 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
   
   return (
     <Container fluid>
+      {comandos.control.elemento}
       <Encabezado persona={persona}/>
-      <Row  style={{ paddingTop: '1.5vw'}}>
+      <Row  style={{ paddingTop: '0'}}>
         <Col style={{paddingRight:'0'}}>
           <LateralPersonaje personaje={personaje} cambio={true} pi={personaje.imagen}/>
         </Col>
         <Col xs={6}><DesafiosPropuestos rehabilitaciones={listaR} personajeId={personaje.id}/></Col>
         <Col xs={3} style={{paddingLeft:'0'}}><LateralValija personaje={personaje} cambio={true} pi={personaje.valija}/></Col>
+        <Col xs={1} style={{paddingLeft:'0'}}><Menu setToken={setToken} setConfiguracion={setComandos}/></Col>
       </Row>
-      <div className="fixed-bottom">  
-            <Navbar color="dark" dark='true'>
-                <Container>
-                    <NavbarBrand><Button variant="primary" size="lg" onClick={salir}>SALIR</Button></NavbarBrand>
-                </Container>
-            </Navbar>
-        </div>
+
     </Container>
   );
 }
