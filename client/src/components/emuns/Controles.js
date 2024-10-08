@@ -2,11 +2,11 @@
 import Joystick from "../controles/Joystick";
 
 const Controles= {
-    TECLADO:  {nombre: 'teclado', elemento:<></>},
-    VOLANTE:  {nombre: "volante", elemento:<></>},
-    JOYSTICK: {nombre: "joystick", elemento: <Joystick estadoInicial={{timestamp:0}}/>},
-    CELULAR:  {nombre: "celular", elemento:<></>},
-    NINGUNO:  {nombre:'ninguno', elemento:<></>}
+    TECLADO:  {nombre: 'teclado', elemento:()=>{return <></>}},
+    VOLANTE:  {nombre: "volante", elemento:()=>{return <></>}},
+    JOYSTICK: {nombre: "joystick", elemento: (comandos, setComandos)=> {return <Joystick comandos={comandos} setComandos={setComandos}/>}},
+    CELULAR:  {nombre: "celular", elemento:()=>{return <></>}},
+    NINGUNO:  {nombre:'ninguno', elemento:()=>{return <></>}}
 }; 
 
 export default Controles;

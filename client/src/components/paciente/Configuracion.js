@@ -7,9 +7,12 @@ import Modal from 'react-bootstrap/Modal';
 import config from '../../config/config.json';
 import Controles from "../emuns/Controles";
 
-function Configuracion({activo, setActivo, setConfiguracion}) {
+function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
 
-  const handleClose = () => setActivo(false);
+  const handleClose = () => {
+    setConfiguracion({tipo:'sinOperacion'});
+    setActivo(false);
+  }
   const [dispositivoActual, setDispositivoActual]=useState(Controles.NINGUNO);
 
   const radios = [
@@ -32,10 +35,23 @@ function Configuracion({activo, setActivo, setConfiguracion}) {
 useEffect(()=>{setConfiguracion({tipo:'nuevoDispositivo', dispositivo: dispositivoActual});},[dispositivoActual.nombre]);
 
 function setearAcelerar(){
-
+  console.log("configuracion setear acelerar");
+  setConfiguracion({tipo:'setearAcelerador', dispositivoActual})
+}
+function setearFrenar(){
+  console.log("configuracion setear frenar");
+  setConfiguracion({tipo:'setearFreno', dispositivoActual})
+}
+function setearDerecha(){
+  console.log("configuracion setear derecha");
+  setConfiguracion({tipo:'setearDerecha', dispositivoActual})
+}
+function setearIzquierda(){
+  console.log("configuracion setear izquierda");
+  setConfiguracion({tipo:'setearIzquierda', dispositivoActual})
 }
 
-  return (
+return (
       <Modal show={activo} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
           <Modal.Title>Configuracion de dispositivo</Modal.Title>
@@ -65,10 +81,10 @@ function setearAcelerar(){
           <Col>Ejemplo</Col>
           <Col>
             <Row>Acciones</Row>
-            <Row><Button onClick={setearAcelerar()}>Acelerar</Button></Row>
-            <Row><Button>Frenar</Button></Row>
-            <Row><Button>Girar a la derecha</Button></Row>
-            <Row><Button>Girar a la izquierda</Button></Row>
+            <Row><Button onClick={setearAcelerar}>{configuracion.operacion==='setearAcelerador'?'presione...':'Acelerar'}</Button></Row>
+            <Row><Button onClick={setearFrenar}>{configuracion.operacion==='setearFreno'?'presione...':'Frenar'}</Button></Row>
+            <Row><Button onClick={setearDerecha}>{configuracion.operacion==='setearDerecha'?'presione...':'Girar a la derecha'}</Button></Row>
+            <Row><Button onClick={setearIzquierda}>{configuracion.operacion==='setearIzquierda'?'presione...':'Girar a la izquierda'}</Button></Row>
           </Col></Row>
 
         </Modal.Body>

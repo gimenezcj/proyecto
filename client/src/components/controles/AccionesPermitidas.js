@@ -1,28 +1,28 @@
 import {useReducer,useEffect } from "react";
 
-export default function AccionesPermitidas(nuevaAccion) {
+export default function AccionesPermitidas() {
 const accionesPermitidas={
     acelerar: null,
     frenar: null,
     frenoMano: null,
     doblarDerecha:null,
     doblarIzquierda: null,
-    mantenerVelocidad: null
+    mantenerVelocidad: null,    
+    operacion:null
 };
 
 const nuevoSeteo=(acciones,accion)=>{  
     switch (accion.tipo) {
-      case 'acelerar':
-        return {...acciones, acelerar: accion.comando};
+      case 'setearAcelerador':
+      case 'setearFreno':
+        return {...acciones, operacion: accion.tipo};
+      case 'sinOperacion':
+        return {...acciones, operacion:null};
       default: 
         return acciones;
     }
   }
   const [teclas,setTeclas]=useReducer(nuevoSeteo,accionesPermitidas);
 
-  useEffect(()=>{
-    setTeclas(nuevaAccion);
-  },[nuevaAccion]);
-
-  return teclas;
+  return {teclas,setTeclas};
 }
