@@ -5,7 +5,7 @@ import config from '../../config/config.json';
 import Utils from "../../utils/Utils";
 import Configuracion from './../../components/paciente/Configuracion';
 
-function Menu ({setToken, setConfiguracion, configuracion}) {
+function Menu ({setToken, setConfiguracion, configuracion,comando}) {
     const navigate = useNavigate();
 
     async function logout() {
@@ -27,6 +27,7 @@ function Menu ({setToken, setConfiguracion, configuracion}) {
     return (
         <><Configuracion activo={show} setActivo={setShow} setConfiguracion={setConfiguracion} configuracion={configuracion}></Configuracion>
         <Row>
+            <Col>{comando}</Col>
             <Col><Button className="botonIcono" onClick={handleShow}><Image src={config.ICONOS+'configurar.png '} width='33vw' height='33vw'/></Button></Col>
             <Col><Button className="botonIcono"  onClick={salir}><Image src={config.ICONOS+'salir.png '} width='33vw' height='33vw'/></Button></Col>
         </Row>

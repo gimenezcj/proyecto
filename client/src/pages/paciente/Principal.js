@@ -14,10 +14,7 @@ import Menu from './../../components/paciente/Menu';
 
 import Utils from "../../utils/Utils";
 
-import Controles from "../../components/emuns/Controles";
-import AccionesPermitidas from "../../components/controles/AccionesPermitidas";
-
-function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
+function Principal ({persona, setPersona, listaR, setListaR, setToken, comandos}) {
 
 //  const [listaR, setListaR]=useState(persona.paciente.rehabilitaciones);
 
@@ -28,37 +25,6 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
 
   const navigate = useNavigate();
   const location=useLocation();
-
-  const comandosIniciales={
-    control: Controles.NINGUNO,
-    teclas: AccionesPermitidas(),
-    operacion: null,
-  };
-  const nuevoComando=(comando,accion)=>{  
-    switch (accion.tipo) {
-      case 'nuevoDispositivo':
-        return {...comando, control: accion.dispositivo};
-      case 'setearAcelerador':
-        console.log("setenado acelerador...");      
-        return {...comando,operacion: 'setearAcelerador'};
-      case 'setearFreno':
-          console.log("setenado freno...");      
-          return {...comando,operacion: 'setearFreno'};     
-      case 'setearDerecha':
-        console.log("setenado derecha...");      
-        return {...comando,operacion: 'setearDerecha'}; 
-      case 'setearIzquierda':
-        console.log("setenado izquierda...");      
-        return {...comando,operacion: 'setearIzquierda'};     
-      case 'sinOperacion' :
-        return {...comando,operacion:null};
-      default: 
-        return comando;
-    }
-  }
-  const [comandos,setComandos]=useReducer(nuevoComando,comandosIniciales);
-
-
 
   const leerRehabilitaciones=()=>{
     fetch(Utils.getUrl()+'rehabilitaciones/pendientes/'+pacienteId,{
@@ -100,10 +66,9 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
     setToken(token); 
     navigate("/");
   }
-  
+  console.log(comandos);
   return (
     <Container fluid>
-      {comandos.control.elemento({comandos, setComandos})}
       <Encabezado persona={persona}/>
       <Row  style={{ paddingTop: '0'}}>
         <Col style={{paddingRight:'0'}}>
@@ -111,7 +76,9 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken}) {
         </Col>
         <Col xs={6}><DesafiosPropuestos rehabilitaciones={listaR} personajeId={personaje.id}/></Col>
         <Col xs={3} style={{paddingLeft:'0'}}><LateralValija personaje={personaje} cambio={true} pi={personaje.valija}/></Col>
-        <Col xs={1} style={{paddingLeft:'0'}}><Menu setToken={setToken} setConfiguracion={setComandos} configuracion={comandos}/></Col>
+        <Col xs={1} style={{paddingLeft:'0'}}>
+          <Menu setToken={setToken} setConfiguracion={comandos.setComandos} configuracion={comandos.comandos} comando={comandos.comandos.control.elemento(comandos)}/>
+        </Col>
       </Row>
 
     </Container>

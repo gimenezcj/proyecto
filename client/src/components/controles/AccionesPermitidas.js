@@ -12,7 +12,21 @@ const accionesPermitidas={
 };
 
 const nuevoSeteo=(acciones,accion)=>{  
-    switch (accion.tipo) {
+//  console.log(accion);
+    switch (accion.tipo) {      
+      case 'setear':
+        switch(accion.operacion)       {
+          case 'setearAcelerador':
+            return {...acciones,acelerar:accion.teclas}
+          case 'setearFreno':
+            return {...acciones,frenar:accion.teclas}
+          case 'setearDerecha':
+            return {...acciones,doblarDerecha:accion.teclas}
+          case 'setearIzquierda':
+            return {...acciones,doblarIzquierda:accion.teclas}                
+          default:
+            return acciones;
+        }
       case 'setearAcelerador':
       case 'setearFreno':
         return {...acciones, operacion: accion.tipo};

@@ -14,7 +14,7 @@ import Utils from "../../utils/Utils";
 
 const Swal = require('sweetalert2');
 
-export default function Recorrido (){
+export default function Recorrido ({comandos}){
 
   const navigate= useNavigate();
   const location=useLocation();
@@ -132,9 +132,10 @@ export default function Recorrido (){
       }).then((result) => {
         if (result.isConfirmed) {
           setElEstado({tipo:'reset', valor: true});
+          comandos.setComandos({tipo:'lectura'});
         }
       });
-
+     
     },[])
 
     const [elEstado,setElEstado]=useReducer(nuevoEstado,estadoInicial);
@@ -232,6 +233,10 @@ const IniciarRecorrido=async ()=>{
       {verDatos && <>
         <DatosPantalla estado={elEstado} rehabilitacion={rehabilitacion}/> </>}
       <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion}/>
+      <><div style={{position: 'absolute',top: '70vh', width: '40vw', left: '00vw',overflow: 'hidden'}}>
+      {comandos.comandos.control.elemento(comandos)}
+      </div>
+    </>
     </>
   );
 }

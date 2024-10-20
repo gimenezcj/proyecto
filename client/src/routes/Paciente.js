@@ -7,6 +7,7 @@ import Personajes from "../pages/paciente/Personajes";
 import Valijas from "../pages/paciente/Valijas";
 import Recorrido from "../pages/paciente/Recorrido";
 import MenorPrecio from "../pages/paciente/MenorPrecio";
+import Comandos from "../components/controles/Comandos";
 
 function PacienteRoutes  ({token, setToken})  {
 
@@ -15,6 +16,8 @@ function PacienteRoutes  ({token, setToken})  {
   const [load,setLoad]=useState(false);
   const [paciente,setPaciente]=useState(false);
   const [listaR, setListaR]=useState([]);
+
+  const {comandos, setComandos}=Comandos();
 
   useEffect(()=>{
 
@@ -35,10 +38,10 @@ function PacienteRoutes  ({token, setToken})  {
   return (    
     <Routes>
      {(load && paciente) && <>
-      <Route path='/' element={<Principal persona={persona} setPersona={setPersona} setListaR={setListaR} listaR={listaR} setToken={setToken}/>}/>
+      <Route path='/' element={<Principal persona={persona} setPersona={setPersona} setListaR={setListaR} listaR={listaR} setToken={setToken} comandos={{comandos,setComandos}}/>}/>
       <Route path='/personajes' element={<Personajes persona={persona} setPersona={setPersona}/>}/>
       <Route path='/valijas' element={<Valijas persona={persona} setPersona={setPersona}/>}/>
-      <Route path='/recorrido' element={<Recorrido/>}/>    
+      <Route path='/recorrido' element={<Recorrido comandos={{comandos,setComandos}}/>}/>    
       <Route path="/menorPrecio" element={<MenorPrecio/>}/>
       </>}
     </Routes>    
