@@ -19,7 +19,7 @@ function Banner (props) {
           <Carousel.Item>
               <img
                   className="d-block w-100"
-                  src="/imagenes/banner/equipo.jpeg"
+                  src="/imagenes/banner/equipoLina.jpeg"
                   alt="Equipo"
               />
               <Carousel.Caption className="carruselshadow">
