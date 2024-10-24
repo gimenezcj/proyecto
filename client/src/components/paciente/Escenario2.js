@@ -9,7 +9,7 @@ import Pista from "../../modules/Pista";
 
 export default function Escenario2(props){
 
-  const {estado,setEstado, rehabilitacion}= props;
+  const {estado,setEstado, rehabilitacion,vehiculo}= props;
   var {xActual,yActual,vectorDestino,reset,anguloInicial,xAnterior,yAnterior}=estado;
 
   const [unaCamara, setUnaCamara]= useState(null);
@@ -28,6 +28,8 @@ export default function Escenario2(props){
   var camera;
   var renderer,controls;
   //var pista;
+
+  useEffect(()=>{console.log(vehiculo);},[vehiculo])
 
   useEffect(()=>{
   if (pista)

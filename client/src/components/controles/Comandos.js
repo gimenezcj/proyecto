@@ -1,18 +1,21 @@
 import React, {useReducer } from "react";
 import Controles from "../../components/emuns/Controles";
 import AccionesPermitidas from "../../components/controles/AccionesPermitidas";
+import Vehiculo from "./Vehiculo";
 
 export default function Comandos (){
     const {teclas, setTeclas}=AccionesPermitidas();
+    const {vehiculo, setVehiculo}=Vehiculo();
 
     const comandosIniciales={
         control: Controles.NINGUNO,
         teclas: teclas,
         operacion: null,
+        vehiculo: {vehiculo:vehiculo, setVehiculo: setVehiculo}
       };
       const nuevoComando=(comando,accion)=>{ 
         //console.log(accion.tipo) ;
-        console.log(accion);
+        //console.log(accion);
         switch (accion.tipo) {
           case 'nuevoDispositivo':
             return {...comando, control: accion.dispositivo};
@@ -33,8 +36,11 @@ export default function Comandos (){
             return {...comando,operacion:null,teclas:teclas};
           case 'sinOperacion' :
             return {...comando,operacion:null};
-          case 'lectura': console.log("seteando la lectura");
+          case 'lectura': 
             return {...comando,operacion:"lectura"};
+          case 'enviarComando':
+             setVehiculo(accion.valor);
+             return {...comando,vehiculo: {vehiculo:vehiculo, setVehiculo:setVehiculo},operacion:'lectura'};
           default: 
             return comando;
         }

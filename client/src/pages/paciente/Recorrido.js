@@ -65,21 +65,21 @@ export default function Recorrido ({comandos}){
   const nuevoEstado=(estado,accion)=>{  
     switch (accion.tipo) {
       case 'parar':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual:estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino, distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: accion.valor, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, parar: accion.valor}
       case 'distancia':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual:estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino, distancia: accion.valor, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, distancia: accion.valor}
       case 'anguloGiro':          
-        return {anguloGiro:accion.valor,velocidad:estado.velocidad,xActual:estado.xActual,yActual:estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino, distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, anguloGiro:accion.valor}
       case 'velocidad':
-        return {anguloGiro:estado.anguloGiro,velocidad:accion.valor,xActual:estado.xActual,yActual:estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino, distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, velocidad:accion.valor}
       case 'xActual':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:accion.valor,yActual:estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, xActual:accion.valor}
       case 'yActual':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual:accion.valor,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, yActual:accion.valor}
       case 'combustible':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual: estado.yActual,combustible: accion.valor, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, combustible: accion.valor}
       case 'ejeZ':
-        return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual: estado.yActual,combustible: estado.combustible, ejeZ: accion.valor, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: estado.choco, anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+        return {...estado, ejeZ: accion.valor}
       case 'combo':    
         return {
           xAnterior: estado.xAnterior, yAnterior: estado.yAnterior,
@@ -115,7 +115,7 @@ export default function Recorrido ({comandos}){
       case 'normal':
         return estadoInicial;
       case 'choco':      
-          return {anguloGiro:estado.anguloGiro,velocidad:estado.velocidad,xActual:estado.xActual,yActual: estado.yActual,combustible: estado.combustible, ejeZ: estado.ejeZ, vectorDestino: estado.vectorDestino,distancia: estado.distancia, reset: estado.reset, choco: true,anguloInicial: estado.anguloInicial, parar: estado.parar, xAnterior: estado.xAnterior, yAnterior:estado.yAnterior}
+          return {...estado, choco: true}
       default: 
         return estado;
     }
@@ -232,7 +232,7 @@ const IniciarRecorrido=async ()=>{
       <Brujula brujula={brujula} />
       {verDatos && <>
         <DatosPantalla estado={elEstado} rehabilitacion={rehabilitacion}/> </>}
-      <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion}/>
+      <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion} vehiculo={comandos.comandos.vehiculo.vehiculo}/>
       <><div style={{position: 'absolute',top: '70vh', width: '40vw', left: '00vw',overflow: 'hidden'}}>
       {comandos.comandos.control.elemento(comandos)}
       </div>

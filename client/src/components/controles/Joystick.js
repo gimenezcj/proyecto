@@ -74,7 +74,7 @@ export default function Joystick({comandos},{setComandos}) {
     };
 
     useEffect(()=> {
-        console.log(comandos);
+
         //Cada vez que iniciamos definimos los comandos iniciales si timestamp=0
         if(control.timestamp===0)
             console.log("iniciando predefinido");
@@ -90,7 +90,12 @@ export default function Joystick({comandos},{setComandos}) {
                     //comandos.setComandos({tipo: 'sinOperacion'});                    
                     break;
                 case 'lectura':
-                    console.log("presiono tecla...");
+                    //veamos que paso para actuar en consecuencia
+                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'acelerar-valor',valor:0.1}});
+
+                    //console.log("presiono tecla...");
+
+
                     break;
                 default:
                     break;

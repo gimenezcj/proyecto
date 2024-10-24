@@ -165,7 +165,7 @@ class FirstPersonControls {
 				case 'KeyR': this.moveUp = true; break;
 				case 'KeyF': this.moveDown = true; break;
 
-        case 'Space': this.stop=true;break;
+        		case 'Space': this.stop=true;break;
 				case 'ShiftLeft': this.mantener=true;break;
 
 			}
