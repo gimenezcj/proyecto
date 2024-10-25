@@ -35,10 +35,10 @@ export default function Joystick({comandos},{setComandos}) {
                 if(element!==1||element!==-1){                    
                     //es un control x rango (0..1 o 0..-1)
                     if(element>0)
-                        tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,'id':key});
+                        tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,'id':key, 'valor': element});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,key);
                     else
-                        tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Menos1,'id':key});
+                        tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Menos1,'id':key, 'valor': element});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Menos1,key);
                 }else{
                     //es un control 0-1 o 0--1
@@ -53,16 +53,16 @@ export default function Joystick({comandos},{setComandos}) {
         }
         for (const key in control.buttons){
             const button=control.buttons[key];
-            if(button.pressed){
+            if(button.pressed){/* 
                 if(button.value!==1||button.value!==-1){                    
                     //es un control x rango (0..1 o 0..-1)
                     if(button.value>0)
-                        tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Mas1,'id':key});
+                        tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Mas1,'id':key, 'valor': button.value});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Variable+TipoBoton.Mas1,key);
                     else
-                        tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Menos1,'id':key});
+                        tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Menos1,'id':key, 'valor': button.value});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Variable+TipoBoton.Menos1,key);
-                }else{
+                }else{ */
                     //es un control 0-1 o 0--1
                     if(button.value>0) 
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Mas1,'id':key});
@@ -70,7 +70,7 @@ export default function Joystick({comandos},{setComandos}) {
                     else 
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Menos1,'id':key});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Menos1,key);
-                }
+                //}
             }
         }
         return tecla;
@@ -113,16 +113,37 @@ export default function Joystick({comandos},{setComandos}) {
     const buscarCombinacionTeclas=(gamepad,teclas) => {
         const tecla=buscarTeclas(gamepad); 
 
-        let lista=[];
-        if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) lista.push({accion:'acelerar-valor',valor:0.1});
-        if(estaLaCombinacionDeEn(tecla,teclas.frenar)) lista.push({accion:'frenar-valor',valor:-0.1});
-        if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) lista.push({accion:'volante-valor',valor:0.1});
-        if(estaLaCombinacionDeEn(tecla,teclas.doblarIzquierda)) lista.push({accion:'volante-valor',valor:-0.1});
+        let lista=[];//console.log(teclas.doblarDerecha );
+        if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) 
+            if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0)
+                lista.push({accion:'acelerar-set', valor: -tecla[0].valor});
+            else
+                lista.push({accion:'acelerar-valor',valor:0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.frenar)) 
+            if((teclas.frenar[0].tipo & TipoBoton.Variable)>0)
+                lista.push({accion:'frenar-set', valor: -tecla[0].valor});
+            else
+                lista.push({accion:'frenar-valor',valor:-0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) 
+            if((teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0) 
+                lista.push({accion:'volante-set',valor: tecla[0].valor})
+            else 
+                lista.push({accion:'volante-valor',valor:0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarIzquierda)) 
+            if((teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0) 
+                lista.push({accion:'volante-set',valor: tecla[0].valor})
+            else 
+                lista.push({accion:'volante-valor',valor:-0.1});
         if(estaLaCombinacionDeEn(tecla,teclas.frenoMano)) lista.push('frenoMano');
         if(estaLaCombinacionDeEn(tecla,teclas.mantenerVelocidad)) lista.push('mantenerVelocidad');
-        if(estaLaCombinacionDeEn(tecla,teclas.cambioDireccion)) lista.push('cambioDireccion');
+        if(estaLaCombinacionDeEn(tecla,teclas.cambioDireccion)) lista.push({accion:'cambioDireccion'});
 
         if(lista.length===0)
+            //Si no hay teclas presionadas, debemos verificar si tenemos configurada un boton axial variable para volverlo a cero (volante o acelerador)
+            if((teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0||(teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0)
+                lista.push({accion:'volante-set',valor:0});
+            if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0||(teclas.frenar[0].tipo & TipoBoton.Variable)>0)
+                lista.push({accion:'acelerador-set',valor:0});
             lista.push('nada');
         return lista;
     }

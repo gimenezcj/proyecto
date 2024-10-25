@@ -79,8 +79,8 @@ export default function Vehiculo(){
                     return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador-accion.valor,EXTREMOS.acelerador),freno: acotar(valoresAnteriores.freno-accion.valor,EXTREMOS.freno), direccion: nuevaDireccionAcelerado}
 
 
-            case 'acelerar-set':                
-                return {...valoresAnteriores, acelerador: acotar(accion.valor, EXTREMOS.acelerador)}
+            case 'acelerar-set':       console.log('acelerando',accion.valor);
+                return {...valoresAnteriores, acelerador: accion.valor}
             case 'acelerar-01':
                 if(valoresAnteriores.direccion===DIRECCION.ADELANTE)
                     return {...valoresAnteriores,acelerador: accion.valor*EXTREMOS.acelerador.MAXIMO}
@@ -95,6 +95,8 @@ export default function Vehiculo(){
                 } else return {...valoresAnteriores}
             case 'frenar':
                 return {...valoresAnteriores, acelerador: 0}
+            case 'frenar-set':
+                return {...valoresAnteriores, freno: accion.valor}
             case 'frenar-valor': 
                 const nuevaDireccionFrenado=(valoresAnteriores.velocidadActual===0?DIRECCION.ATRAS:valoresAnteriores.direccion);
                 if(nuevaDireccionFrenado===DIRECCION.ADELANTE)
@@ -108,8 +110,9 @@ export default function Vehiculo(){
                 return {...valoresAnteriores, volante: acotar(valoresAnteriores.volante+ accion.valor, EXTREMOS.volante)}
             case 'volante-set':
                 return {...valoresAnteriores, volante: acotar(accion.valor, EXTREMOS.volante)}
-            case 'cambioDireccion':
-                return {...valoresAnteriores, direccion: DIRECCION.cambio(valoresAnteriores.direccion)}
+            case 'cambioDireccion': 
+                if(valoresAnteriores.velocidadActual===0)
+                    return {...valoresAnteriores, direccion: DIRECCION.cambio(valoresAnteriores.direccion)}
              case 'iterar-Evento': 
                 let nuevosValores=valoresAnteriores;
 
