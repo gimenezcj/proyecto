@@ -66,7 +66,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken, comandos}
     setToken(token); 
     navigate("/");
   }
-  console.log(comandos);
+  //console.log(comandos);
   return (
     <Container fluid>
       <Encabezado persona={persona}/>

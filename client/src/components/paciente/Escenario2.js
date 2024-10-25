@@ -6,10 +6,11 @@ import { TextureLoader } from "three";
 
 import { FirstPersonControls } from "../../modules/FirstPersonControls";
 import Pista from "../../modules/Pista";
+import Controles from "../emuns/Controles";
 
 export default function Escenario2(props){
 
-  const {estado,setEstado, rehabilitacion,vehiculo}= props;
+  const {estado,setEstado, rehabilitacion,vehiculo,control}= props;
   var {xActual,yActual,vectorDestino,reset,anguloInicial,xAnterior,yAnterior}=estado;
 
   const [unaCamara, setUnaCamara]= useState(null);
@@ -22,7 +23,8 @@ export default function Escenario2(props){
 
   const velocidad=useRef(0);
   const volante=useRef(0);
-  const direccion=useRef(0);
+  const direccion=useRef(1);
+  const controlu=useRef(control);
 
 
   const ventana=useRef(null);
@@ -162,6 +164,9 @@ export default function Escenario2(props){
   },[reset])
 
   useEffect(()=>{
+
+   
+
     iniciarAmbiente();
     iniciarEscenario();
     iniciarFondo();
@@ -222,13 +227,20 @@ export default function Escenario2(props){
               item.rotateY(0.05);
             }
       }})
-    
-     // controls.update(); -> teclado
+      
+      if(control===Controles.TECLADO) {
+        volante.current=controls.anguloGiro;
+        velocidad.current=controls.movementSpeed;
 
-     if(volante.current!==0 && velocidad.current>0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?1:-1) * 0.01 );
-     if(volante.current!==0 && velocidad.current<0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?-1:1) * 0.01 );
+        controls.update(); 
+      }
+      if((control===Controles.JOYSTICK)||(control===Controles.VOLANTE)){
+        if(volante.current!==0 && velocidad.current>0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?1:-1) * 0.01 );
+        if(volante.current!==0 && velocidad.current<0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?-1:1) * 0.01 );
+        if(velocidad.current>0)  camera.translateZ(-direccion.current*velocidad.current);
+    }
 
-      if(velocidad.current>0)  camera.translateZ(-direccion.current*velocidad.current);
+      
         
 /*       if ( this.moveUp ) this.object.translateY( this.movementSpeed );
       if ( this.moveDown ) this.object.translateY( - this.movementSpeed );

@@ -32,7 +32,7 @@ export default function Joystick({comandos},{setComandos}) {
         for (const key in control.axes) {
             const element=control.axes[key];
             if(element!==0){
-                if(element!==1||element!==-1){                    
+                if(element!==1&&element!==-1){   
                     //es un control x rango (0..1 o 0..-1)
                     if(element>0)
                         tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,'id':key, 'valor': element});
@@ -113,7 +113,7 @@ export default function Joystick({comandos},{setComandos}) {
     const buscarCombinacionTeclas=(gamepad,teclas) => {
         const tecla=buscarTeclas(gamepad); 
 
-        let lista=[];//console.log(teclas.doblarDerecha );
+        let lista=[];//console.log(teclas.acelerar,'-',teclas.frenar );
         if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) 
             if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0)
                 lista.push({accion:'acelerar-set', valor: -tecla[0].valor});
@@ -140,10 +140,10 @@ export default function Joystick({comandos},{setComandos}) {
 
         if(lista.length===0)
             //Si no hay teclas presionadas, debemos verificar si tenemos configurada un boton axial variable para volverlo a cero (volante o acelerador)
-            if((teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0||(teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0)
+             if((teclas.doblarDerecha!==null&&(teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0)||(teclas.doblarIzquierda!==null&&(teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0))
                 lista.push({accion:'volante-set',valor:0});
             if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0||(teclas.frenar[0].tipo & TipoBoton.Variable)>0)
-                lista.push({accion:'acelerador-set',valor:0});
+                lista.push({accion:'acelerador-set',valor:0}); 
             lista.push('nada');
         return lista;
     }

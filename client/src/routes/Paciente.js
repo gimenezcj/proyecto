@@ -34,6 +34,9 @@ function PacienteRoutes  ({token, setToken})  {
     }
   },[token])
 
+  useEffect(()=>{
+    setComandos({tipo:'nada'})
+  },[])
 
   return (    
     <Routes>

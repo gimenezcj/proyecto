@@ -122,6 +122,8 @@ export default function Recorrido ({comandos}){
   }
 
     useEffect(()=>{
+
+
       Swal.fire({
         title: 'A MANEJAR',
         text: detalle,
@@ -232,7 +234,7 @@ const IniciarRecorrido=async ()=>{
       <Brujula brujula={brujula} />
       {verDatos && <>
         <DatosPantalla estado={elEstado} rehabilitacion={rehabilitacion}/> </>}
-      <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion} vehiculo={comandos.comandos.vehiculo.vehiculo}/>
+      <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion} vehiculo={comandos.comandos.vehiculo.vehiculo} control={comandos.comandos.control}/>
       <><div style={{position: 'absolute',top: '70vh', width: '40vw', left: '00vw',overflow: 'hidden'}}>
       {comandos.comandos.control.elemento(comandos)}
       </div>

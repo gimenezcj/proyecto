@@ -79,7 +79,7 @@ export default function Vehiculo(){
                     return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador-accion.valor,EXTREMOS.acelerador),freno: acotar(valoresAnteriores.freno-accion.valor,EXTREMOS.freno), direccion: nuevaDireccionAcelerado}
 
 
-            case 'acelerar-set':       console.log('acelerando',accion.valor);
+            case 'acelerar-set':       
                 return {...valoresAnteriores, acelerador: accion.valor}
             case 'acelerar-01':
                 if(valoresAnteriores.direccion===DIRECCION.ADELANTE)

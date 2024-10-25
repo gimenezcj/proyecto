@@ -65,7 +65,7 @@ function setearCambioDireccion(){
   }
   
 
-console.log (configuracion);
+//console.log (configuracion);
 return (
       <Modal show={activo} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
