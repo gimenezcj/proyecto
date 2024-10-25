@@ -31,46 +31,48 @@ export default function Joystick({comandos},{setComandos}) {
         //buscar en axes y buttons 
         for (const key in control.axes) {
             const element=control.axes[key];
-            if(element!==0){
+            if(element>0.02||element<-0.02){
                 if(element!==1&&element!==-1){   
                     //es un control x rango (0..1 o 0..-1)
-                    if(element>0)
+                    if(element>0.02)
                         tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,'id':key, 'valor': element});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Mas1,key);
-                    else
+                    else{  if(element.value<-0.02)
                         tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Menos1,'id':key, 'valor': element});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Variable+TipoBoton.Menos1,key);
-                }else{
+                    }}else{
                     //es un control 0-1 o 0--1
-                    if(element>0) 
+                    if(element>0.02) 
                         tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Mas1,'id':key});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Mas1,key);
-                    else 
+                    else {  if(element<-0.02)
                         tecla.push({'tipo':TipoBoton.Axe+TipoBoton.Menos1,'id':key});
                         //agregarTecla(TipoBoton.Axe+TipoBoton.Menos1,key);
-                }
+                    }}
             }                        
         }
         for (const key in control.buttons){
             const button=control.buttons[key];
-            if(button.pressed){/* 
+            if(button.pressed||(button.touched!==null&&button.touched)){
                 if(button.value!==1||button.value!==-1){                    
                     //es un control x rango (0..1 o 0..-1)
                     if(button.value>0)
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Mas1,'id':key, 'valor': button.value});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Variable+TipoBoton.Mas1,key);
-                    else
+                    else{  
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Variable+TipoBoton.Menos1,'id':key, 'valor': button.value});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Variable+TipoBoton.Menos1,key);
-                }else{ */
+                    }
+
+                }else{ 
                     //es un control 0-1 o 0--1
                     if(button.value>0) 
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Mas1,'id':key});
                         //agregarTecla(TipoBoton.Button+TipoBoton.Mas1,key);
-                    else 
+                    else { 
                         tecla.push({'tipo':TipoBoton.Button+TipoBoton.Menos1,'id':key});
-                        //agregarTecla(TipoBoton.Button+TipoBoton.Menos1,key);
-                //}
+                    }      //agregarTecla(TipoBoton.Button+TipoBoton.Menos1,key);
+                }
             }
         }
         return tecla;
@@ -99,7 +101,6 @@ export default function Joystick({comandos},{setComandos}) {
 
     const buscarTecla=(gamepad,teclas) => {
         const tecla=buscarTeclas(gamepad); 
-
         if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) return 'acelerar';
         if(estaLaCombinacionDeEn(tecla,teclas.frenar)) return 'frenar';
         if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) return 'doblarDerecha';
@@ -113,10 +114,10 @@ export default function Joystick({comandos},{setComandos}) {
     const buscarCombinacionTeclas=(gamepad,teclas) => {
         const tecla=buscarTeclas(gamepad); 
 
-        let lista=[];//console.log(teclas.acelerar,'-',teclas.frenar );
+        let lista=[];console.log(teclas.acelerar,'-',teclas.frenar );
         if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) 
             if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0)
-                lista.push({accion:'acelerar-set', valor: -tecla[0].valor});
+                lista.push({accion:'acelerar-set', valor: tecla[0].valor});
             else
                 lista.push({accion:'acelerar-valor',valor:0.1});
         if(estaLaCombinacionDeEn(tecla,teclas.frenar)) 
@@ -126,12 +127,12 @@ export default function Joystick({comandos},{setComandos}) {
                 lista.push({accion:'frenar-valor',valor:-0.1});
         if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) 
             if((teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0) 
-                lista.push({accion:'volante-set',valor: tecla[0].valor})
+                lista.push({accion:'volante-set',valor: -tecla[0].valor})
             else 
                 lista.push({accion:'volante-valor',valor:0.1});
         if(estaLaCombinacionDeEn(tecla,teclas.doblarIzquierda)) 
             if((teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0) 
-                lista.push({accion:'volante-set',valor: tecla[0].valor})
+                lista.push({accion:'volante-set',valor: -tecla[0].valor})
             else 
                 lista.push({accion:'volante-valor',valor:-0.1});
         if(estaLaCombinacionDeEn(tecla,teclas.frenoMano)) lista.push('frenoMano');
@@ -139,10 +140,12 @@ export default function Joystick({comandos},{setComandos}) {
         if(estaLaCombinacionDeEn(tecla,teclas.cambioDireccion)) lista.push({accion:'cambioDireccion'});
 
         if(lista.length===0)
+            
             //Si no hay teclas presionadas, debemos verificar si tenemos configurada un boton axial variable para volverlo a cero (volante o acelerador)
              if((teclas.doblarDerecha!==null&&(teclas.doblarDerecha[0].tipo & TipoBoton.Variable)>0)||(teclas.doblarIzquierda!==null&&(teclas.doblarIzquierda[0].tipo & TipoBoton.Variable)>0))
                 lista.push({accion:'volante-set',valor:0});
-            if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0||(teclas.frenar[0].tipo & TipoBoton.Variable)>0)
+            if(teclas.acelerar!=null&&((teclas.acelerar[0].tipo & TipoBoton.Variable)>0)||
+                teclas.frenar!=null&&((teclas.frenar[0].tipo & TipoBoton.Variable)>0))
                 lista.push({accion:'acelerador-set',valor:0}); 
             lista.push('nada');
         return lista;
@@ -160,7 +163,7 @@ export default function Joystick({comandos},{setComandos}) {
                 case 'setearDerecha':
                 case 'setearIzquierda':
                 case 'setearCambioDireccion':
-                    const a=buscarTeclas(control);
+                    const a=buscarTeclas(control);console.log(a,control);
                     comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: a});
                     //comandos.setComandos({tipo: 'sinOperacion'});                    
                     break;
