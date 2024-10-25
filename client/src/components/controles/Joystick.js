@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {Image} from 'react-bootstrap';
 import { useGamepads } from 'react-gamepads';
+import { useInterval } from 'usehooks-ts'
+
 import config from '../../config/config.json';
+
 
 const TipoBoton={
     Menos1:1,Mas1:2,Variable:4,Axe:8,Button:16
@@ -23,7 +26,7 @@ export default function Joystick({comandos},{setComandos}) {
         setItems([...items,{tipo,id}]);
     }
 
-    const buscarTeclas= ()=> {
+    const buscarTeclas= (control)=> {
         const tecla=[];
         //buscar en axes y buttons 
         for (const key in control.axes) {
@@ -73,6 +76,40 @@ export default function Joystick({comandos},{setComandos}) {
         return tecla;
     };
 
+    const teclasIguales=(a,b)=>{
+        return a.tipo===b.tipo&&a.id===b.id;
+    }
+    const estaLaCombinacionDeEn=(teclasPres,teclasConf)=>{ //console.log(teclasConf,teclasPres);
+        if(teclasConf===null||teclasPres===null) return false;
+        if(teclasConf.length===0||teclasPres.length===0) return false;
+        if(teclasConf.length>teclasPres.length) return false;
+        let iguales=true;
+        teclasConf.forEach((item)=>{
+            let iguales2=false;
+            teclasPres.forEach((item2)=>{
+                iguales2=iguales2 || (item.id===item2.id && item.tipo===item2.tipo);
+            });
+            iguales=iguales && iguales2;
+
+        })
+
+        return iguales;
+
+    }
+
+    const buscarTecla=(gamepad,teclas) => {
+        const tecla=buscarTeclas(gamepad); 
+
+        if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) return 'acelerar';
+        if(estaLaCombinacionDeEn(tecla,teclas.frenar)) return 'frenar';
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) return 'doblarDerecha';
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarIzquierda)) return 'doblarIzquierda';
+        if(estaLaCombinacionDeEn(tecla,teclas.frenoMano)) return 'frenoMano';
+        if(estaLaCombinacionDeEn(tecla,teclas.mantenerVelocidad)) return 'mantenerVelocidad';
+        if(estaLaCombinacionDeEn(tecla,teclas.cambioDireccion)) return 'cambioDireccion';
+        return 'nada';
+    }
+
     useEffect(()=> {
 
         //Cada vez que iniciamos definimos los comandos iniciales si timestamp=0
@@ -84,24 +121,50 @@ export default function Joystick({comandos},{setComandos}) {
                 case 'setearFreno':
                 case 'setearDerecha':
                 case 'setearIzquierda':
-                    const a=buscarTeclas();
-//                    console.log(a);
+                case 'setearCambioDireccion':
+                    const a=buscarTeclas(control);
                     comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: a});
                     //comandos.setComandos({tipo: 'sinOperacion'});                    
-                    break;
-                case 'lectura':
-                    //veamos que paso para actuar en consecuencia
-                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'acelerar-valor',valor:0.1}});
-
-                    //console.log("presiono tecla...");
-
-
                     break;
                 default:
                     break;
 
             }            
     },[control.timestamp]);
+
+
+
+
+  useInterval(
+    () => {
+      // Your custom logic here
+      const tecla=buscarTecla(control,comandos.comandos.teclas);
+      switch(tecla){
+          case 'acelerar':
+              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'acelerar-valor',valor:0.1}});
+              break;
+          case 'frenar':
+              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'frenar-valor',valor:-0.1}});
+              break;
+          case 'doblarDerecha':
+              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'volante-valor',valor:0.1}});
+              break;
+          case 'doblarIzquierda':
+              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'volante-valor',valor:-0.1}});
+              break;
+          case 'cambioDireccion': 
+              comandos.setComandos({tipo:'enviarComando',valor: {tipo:'cambiarDireccion'}});
+              break;                                        
+          default:
+              break;
+      };
+      comandos.setComandos({tipo:'enviarComando',valor: {tipo:'iterar-Evento',valor:300}});
+           
+    },
+    // Delay in milliseconds or null to stop it
+    comandos.comandos.operacion==='lectura'?300:null
+  )
+
 
 /*     useEffect(()=>{
         switch(comandos.comandos.operacion) {

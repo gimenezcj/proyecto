@@ -29,7 +29,7 @@ export default function Escenario2(props){
   var renderer,controls;
   //var pista;
 
-  useEffect(()=>{console.log(vehiculo);},[vehiculo])
+  useEffect(()=>{console.log({direccion:vehiculo.direccion, velocidadActual: vehiculo.velocidadActual, acelerador: vehiculo.acelerador, freno: vehiculo.freno});},[vehiculo])
 
   useEffect(()=>{
   if (pista)

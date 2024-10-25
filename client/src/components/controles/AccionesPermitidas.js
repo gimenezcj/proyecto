@@ -8,6 +8,7 @@ const accionesPermitidas={
     doblarDerecha:null,
     doblarIzquierda: null,
     mantenerVelocidad: null,    
+    cambioDireccion: null,
     operacion:null
 };
 
@@ -24,6 +25,8 @@ const nuevoSeteo=(acciones,accion)=>{
             return {...acciones,doblarDerecha:accion.teclas}
           case 'setearIzquierda':
             return {...acciones,doblarIzquierda:accion.teclas}                
+          case 'setearCambioDireccion':
+            return {...acciones,cambioDireccion:accion.teclas}                
           default:
             return acciones;
         }

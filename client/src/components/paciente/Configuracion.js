@@ -58,6 +58,13 @@ function setearIzquierda(){
 //  console.log("configuracion setear izquierda");
   setConfiguracion({tipo:'setearIzquierda', dispositivoActual})
 }
+
+function setearCambioDireccion(){
+  //  console.log("configuracion setear izquierda");
+    setConfiguracion({tipo:'setearCambioDireccion', dispositivoActual})
+  }
+  
+
 console.log (configuracion);
 return (
       <Modal show={activo} onHide={handleClose} size="xl">
@@ -93,6 +100,7 @@ return (
             <Row><Button variant={configuracion.teclas.frenar!==null?'success':'danger'} onClick={setearFrenar}>{configuracion.operacion==='setearFreno'?'presione...':'Frenar'}</Button></Row>
             <Row><Button variant={configuracion.teclas.doblarDerecha!==null?'success':'danger'} onClick={setearDerecha}>{configuracion.operacion==='setearDerecha'?'presione...':'Girar a la derecha'}</Button></Row>
             <Row><Button variant={configuracion.teclas.doblarIzquierda!==null?'success':'danger'} onClick={setearIzquierda}>{configuracion.operacion==='setearIzquierda'?'presione...':'Girar a la izquierda'}</Button></Row>
+            <Row><Button variant={configuracion.teclas.cambioDireccion!==null?'success':'danger'} onClick={setearCambioDireccion}>{configuracion.operacion==='setearCambioDireccion'?'presione...':'Adelate/Atras'}</Button></Row>
           </Col></Row>
 
         </Modal.Body>
