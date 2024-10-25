@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
-import { Vector2 } from "three";
+import { Vector2, Vector3 } from "three";
 import { TextureLoader } from "three";
 
 import { FirstPersonControls } from "../../modules/FirstPersonControls";
@@ -20,6 +20,10 @@ export default function Escenario2(props){
   const [modeloCargado,setModeloCargado]=useState(false);
   const [pista,setPista]=useState(false);
 
+  const velocidad=useRef(0);
+  const volante=useRef(0);
+  const direccion=useRef(0);
+
 
   const ventana=useRef(null);
 
@@ -27,9 +31,17 @@ export default function Escenario2(props){
   var scene;
   var camera;
   var renderer,controls;
+  var v2;
   //var pista;
 
-  useEffect(()=>{console.log({direccion:vehiculo.direccion, velocidadActual: vehiculo.velocidadActual, acelerador: vehiculo.acelerador, freno: vehiculo.freno});},[vehiculo])
+  useEffect(()=>{
+   //console.log({direccion:vehiculo.direccion, velocidadActual: vehiculo.velocidadActual, acelerador: vehiculo.acelerador, freno: vehiculo.freno});
+   // console.log({volante:vehiculo.volante});
+    velocidad.current=vehiculo.acelerador;
+    volante.current=vehiculo.volante*-80;
+    direccion.current=vehiculo.direccion;
+    //v2=vehiculo;
+  },[vehiculo])
 
   useEffect(()=>{
   if (pista)
@@ -89,6 +101,7 @@ export default function Escenario2(props){
   const iniciarControles=()=>{
     controls = new FirstPersonControls( camera,renderer.domElement );
     controls.activeLook = false; //desactivamos el mouse
+    v2=vehiculo;
     setUnControl(controls);
   }
 
@@ -155,6 +168,7 @@ export default function Escenario2(props){
     iniciarSuelo();
     iniciarControles();
     iniciarVehiculo();
+    
     const animate = () => {
       setAnimacionId(requestAnimationFrame( animate ));
 
@@ -167,7 +181,8 @@ export default function Escenario2(props){
     
       const xActual= Math.floor(camera.position.x);
       const yActual= Math.floor(camera.position.z);
-    
+      
+      var Y_AXIS = new Vector3(0, 1, 0);
       var distancia=0;
 
       if(!aux.current) {
@@ -183,13 +198,15 @@ export default function Escenario2(props){
       }
     
       const nuevosValores={
-        anguloGiro: controls.anguloGiro,
-        velocidad:  controls.movementSpeed,
+        anguloGiro: volante.current,// controls.anguloGiro,
+        //velocidad:  controls.movementSpeed,
+        velocidad: direccion.current*velocidad.current,
         xActual: xActual,
         yActual: yActual,
         ejeZ: ares,
         distancia: distancia,
       };
+      //console.log(v2.acelerador);
       setEstado({tipo: 'combo', valor:nuevosValores});
     
       scene.children.forEach((item, i) => {
@@ -206,7 +223,16 @@ export default function Escenario2(props){
             }
       }})
     
-      controls.update();
+     // controls.update(); -> teclado
+
+     if(volante.current!==0 && velocidad.current>0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?1:-1) * 0.01 );
+     if(volante.current!==0 && velocidad.current<0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?-1:1) * 0.01 );
+
+      if(velocidad.current>0)  camera.translateZ(-direccion.current*velocidad.current);
+        
+/*       if ( this.moveUp ) this.object.translateY( this.movementSpeed );
+      if ( this.moveDown ) this.object.translateY( - this.movementSpeed );
+ */
       renderer.render( scene, camera );
   
       

@@ -110,12 +110,29 @@ export default function Joystick({comandos},{setComandos}) {
         return 'nada';
     }
 
+    const buscarCombinacionTeclas=(gamepad,teclas) => {
+        const tecla=buscarTeclas(gamepad); 
+
+        let lista=[];
+        if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) lista.push({accion:'acelerar-valor',valor:0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.frenar)) lista.push({accion:'frenar-valor',valor:-0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarDerecha)) lista.push({accion:'volante-valor',valor:0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.doblarIzquierda)) lista.push({accion:'volante-valor',valor:-0.1});
+        if(estaLaCombinacionDeEn(tecla,teclas.frenoMano)) lista.push('frenoMano');
+        if(estaLaCombinacionDeEn(tecla,teclas.mantenerVelocidad)) lista.push('mantenerVelocidad');
+        if(estaLaCombinacionDeEn(tecla,teclas.cambioDireccion)) lista.push('cambioDireccion');
+
+        if(lista.length===0)
+            lista.push('nada');
+        return lista;
+    }
+
     useEffect(()=> {
 
         //Cada vez que iniciamos definimos los comandos iniciales si timestamp=0
-        if(control.timestamp===0)
-            console.log("iniciando predefinido");
-        else 
+        if(control.timestamp!==0)
+           // console.log("iniciando predefinido");
+        //else 
             switch(comandos.comandos.operacion){
                 case 'setearAcelerador':
                 case 'setearFreno':
@@ -138,31 +155,17 @@ export default function Joystick({comandos},{setComandos}) {
   useInterval(
     () => {
       // Your custom logic here
-      const tecla=buscarTecla(control,comandos.comandos.teclas);
-      switch(tecla){
-          case 'acelerar':
-              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'acelerar-valor',valor:0.1}});
-              break;
-          case 'frenar':
-              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'frenar-valor',valor:-0.1}});
-              break;
-          case 'doblarDerecha':
-              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'volante-valor',valor:0.1}});
-              break;
-          case 'doblarIzquierda':
-              comandos.setComandos({tipo:'enviarComando', valor:{tipo:'volante-valor',valor:-0.1}});
-              break;
-          case 'cambioDireccion': 
-              comandos.setComandos({tipo:'enviarComando',valor: {tipo:'cambiarDireccion'}});
-              break;                                        
-          default:
-              break;
-      };
+      const teclas=buscarCombinacionTeclas(control,comandos.comandos.teclas);
+      teclas.forEach((accion)=>{
+        if(accion.accion!=='nada')
+            comandos.setComandos({tipo:'enviarComando', valor:{tipo:accion.accion, valor:accion.valor}})
+      });
+
       comandos.setComandos({tipo:'enviarComando',valor: {tipo:'iterar-Evento',valor:300}});
            
     },
     // Delay in milliseconds or null to stop it
-    comandos.comandos.operacion==='lectura'?300:null
+    comandos.comandos.operacion==='lectura'?100:null
   )
 
 

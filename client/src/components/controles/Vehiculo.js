@@ -17,15 +17,15 @@ export default function Vehiculo(){
         },
         velocidadAdelante:{
             MINIMO:0,
-            MAXIMO:120
+            MAXIMO:140
         },
         velocidadAtras:{
             MINIMO:0,
-            MAXIMO:10
+            MAXIMO:30
         },
         velocidad: {
-            MINIMO: -10,
-            MAXIMO: 120
+            MINIMO: -30,
+            MAXIMO: 140
         }
 
     }
@@ -56,7 +56,7 @@ export default function Vehiculo(){
 
     const calcularSegundosTotales=(velocidadActual, velocidadEsperada)=>{
         //ABS(REDONDEAR(ABS(G29-F29)/10+SI($G29<0;$G29/5;0)))
-        return Math.abs(Math.floor(Math.abs(velocidadEsperada-velocidadActual)/10+(velocidadEsperada<0?velocidadEsperada/5:0)))
+        return Math.abs(velocidadEsperada-velocidadActual)/10; //+(velocidadEsperada<0?velocidadEsperada/5:0)))
     }
     const calcularAceleracionPorSegundo=(velocidadActual, velocidadEsperada)=>{
         //(G29-F29)/I29
@@ -76,7 +76,7 @@ export default function Vehiculo(){
                 if(nuevaDireccionAcelerado===DIRECCION.ADELANTE)
                     return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador+accion.valor,EXTREMOS.acelerador), direccion: nuevaDireccionAcelerado}
                 else
-                    return {...valoresAnteriores, freno: acotar(valoresAnteriores.freno+accion.valor,EXTREMOS.freno), direccion: nuevaDireccionAcelerado}
+                    return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador-accion.valor,EXTREMOS.acelerador),freno: acotar(valoresAnteriores.freno-accion.valor,EXTREMOS.freno), direccion: nuevaDireccionAcelerado}
 
 
             case 'acelerar-set':                
@@ -98,9 +98,9 @@ export default function Vehiculo(){
             case 'frenar-valor': 
                 const nuevaDireccionFrenado=(valoresAnteriores.velocidadActual===0?DIRECCION.ATRAS:valoresAnteriores.direccion);
                 if(nuevaDireccionFrenado===DIRECCION.ADELANTE)
-                    return {...valoresAnteriores, freno: acotar(valoresAnteriores.freno+accion.valor,EXTREMOS.freno), direccion: nuevaDireccionFrenado}
+                    return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador+accion.valor,EXTREMOS.acelerador), freno: acotar(valoresAnteriores.freno+accion.valor,EXTREMOS.freno), direccion: nuevaDireccionFrenado}
                 else {  
-                    return {...valoresAnteriores,acelerador: acotar(valoresAnteriores.acelerador+accion.valor,EXTREMOS.acelerador), direccion: nuevaDireccionFrenado}
+                    return {...valoresAnteriores,acelerador: acotar(valoresAnteriores.acelerador-accion.valor,EXTREMOS.acelerador), direccion: nuevaDireccionFrenado}
                 }
             case 'frenar-valor-opcion-atras':
                 return {...valoresAnteriores}
@@ -130,8 +130,10 @@ export default function Vehiculo(){
         if(diferencia>0)        //Estoy acelerando
             velocidadEsperada=(valoresAnteriores.direccion===DIRECCION.ADELANTE?EXTREMOS.velocidadAdelante.MAXIMO:EXTREMOS.velocidadAtras.MAXIMO) * diferencia;
         else {                    //Estoy frenando
-            if(diferencia<0) 
+            if(diferencia<0) {
                 velocidadEsperada= acotar(valoresAnteriores.velocidadActual+ diferencia * EXTREMOS.velocidadAdelante.MAXIMO,EXTREMOS.velocidadAdelante);
+//                console.log('velocidad esperada:', velocidadEsperada);
+            }
             else    
                 velocidadEsperada=0;
             }
@@ -141,7 +143,16 @@ export default function Vehiculo(){
     }
     const ajustarVelocidadPorOmision=(valoresAnteriores)=>{
         //buscamos la estabilidad del sistema acelerador y volante
-        return {...valoresAnteriores, acelerador: acotar(valoresAnteriores.acelerador-0.05,EXTREMOS.acelerador), freno: acotar(valoresAnteriores.freno+0.05,EXTREMOS.freno)}
+        let nuevoValorVolante=valoresAnteriores.volante;
+        if(valoresAnteriores.volante!==0&&valoresAnteriores.velocidadActual!==0) {
+            nuevoValorVolante=valoresAnteriores.volante- Math.sign(valoresAnteriores.volante)*0.05
+            if(nuevoValorVolante<0.05&&nuevoValorVolante>-0.05) nuevoValorVolante=0;
+        }
+        return {...valoresAnteriores, 
+            acelerador: acotar(valoresAnteriores.acelerador-0.05,EXTREMOS.acelerador), 
+            freno: acotar(valoresAnteriores.freno+0.05,EXTREMOS.freno),
+            volante: nuevoValorVolante
+        }
     }
 
     const [vehiculo,setVehiculo]=useReducer(setear,vehiculoInicial);
