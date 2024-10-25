@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.912bd0dd.css",
+    "main.js": "/static/js/main.3a25819e.js",
+    "static/media/20.jpg": "/static/media/20.6c251070ef1867b37d72.jpg",
+    "static/media/camino.png": "/static/media/camino.a0359253f5f017d4a95b.png",
+    "static/media/edit.png": "/static/media/edit.830bb1d6e24e156b4678.png",
+    "index.html": "/index.html",
+    "main.912bd0dd.css.map": "/static/css/main.912bd0dd.css.map",
+    "main.3a25819e.js.map": "/static/js/main.3a25819e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.912bd0dd.css",
+    "static/js/main.3a25819e.js"
+  ]
+}

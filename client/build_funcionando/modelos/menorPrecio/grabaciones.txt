@@ -1,0 +1,8 @@
+Para realizar las grabaciones en linux desde la terminal
+
+arecord -c 2 -f S16_LE -d 10 -r 9000 --device="hw:1,0" 320.wav
+aplay 320.wav
+
+convertirlo en mp3
+
+ffmpeg -i 320.wav -acodec mp3 320.mp3

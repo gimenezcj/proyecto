@@ -1,0 +1,46 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "4BD87998-6668-4E3F-BF4D-1E842F67B612",
+			"type": "PlaneBufferGeometry",
+			"name": "plaza",
+			"width": 45,
+			"height": 45,
+			"widthSegments": 1,
+			"heightSegments": 1
+		}],
+	"materials": [
+		{
+			"uuid": "CD21024F-7B28-4E64-A0D5-00E737057945",
+			"type": "MeshPhongMaterial",
+			"color": 3142439,
+			"emissive": 0,
+			"specular": 0,
+			"shininess": 10.18,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": false,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680
+		}],
+	"object": {
+		"uuid": "0B738C62-3BFD-4933-B52D-513847387464",
+		"type": "Mesh",
+		"name": "Plane",
+		"layers": 1,
+		"matrix": [1,0,0,0,0,0,-1,0,0,1,0,0,0,0.527581,0,1],
+		"geometry": "4BD87998-6668-4E3F-BF4D-1E842F67B612",
+		"material": "CD21024F-7B28-4E64-A0D5-00E737057945"
+	}
+}

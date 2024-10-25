@@ -1,0 +1,44 @@
+.circle {
+width: 250px;
+height: 250px;
+-webkit-border-radius: 250px;
+-moz-border-radius: 250px;
+border-radius: 250px;
+background: red;
+position: absolute;
+top: 70%;
+left: 50%
+}
+#logo {
+display: inline-block;
+position: absolute;
+top: 65vh;
+left: 75vw;
+}
+#logo .speedometer {
+width: 10vw;
+height: 10vw;
+border-radius: 100%;
+border: 5vw solid #000;
+border-right: 2px dotted white;
+border-bottom:2px dotted white;    -webkit-transform: rotate(45deg);
+display: inline-block;
+}
+#logo .needle {
+width: 0.5vw;
+height: 8vw;
+background: #999999;
+border-bottom-left-radius: 5px;
+border-bottom-right-radius: 5px;
+border-top-left-radius: 100%;
+border-top-right-radius: 100%;
+display: inline-block;
+left: 7vw;
+position: absolute;
+top: 3vw;
+
+transform:rotate(-90deg);
+transform-origin:bottom;
+}
+
+}

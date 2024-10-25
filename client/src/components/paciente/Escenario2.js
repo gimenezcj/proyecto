@@ -235,8 +235,8 @@ export default function Escenario2(props){
         controls.update(); 
       }
       if((control===Controles.JOYSTICK)||(control===Controles.VOLANTE)){
-        if(volante.current!==0 && velocidad.current>0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?1:-1) * 0.01 );
-        if(volante.current!==0 && velocidad.current<0) camera.rotateOnAxis( Y_AXIS, (volante.current>0?-1:1) * 0.01 );
+        if(volante.current!==0 && velocidad.current>0) camera.rotateOnAxis( Y_AXIS, (direccion.current*volante.current>0?0.01:-0.01)  );
+        if(volante.current!==0 && velocidad.current<0) camera.rotateOnAxis( Y_AXIS, (direccion.current*volante.current>0?-0.01:0.01)  );
         if(velocidad.current>0)  camera.translateZ(-direccion.current*velocidad.current);
     }
 
