@@ -52,6 +52,8 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken, comandos}
   useEffect(()=>{
     leerRehabilitaciones();
     leerPersonaje();
+    comandos.setComandos({tipo:'sinOperacion'});
+    console.log(comandos);
   },[])
 
   async function logout() {
@@ -66,7 +68,7 @@ function Principal ({persona, setPersona, listaR, setListaR, setToken, comandos}
     setToken(token); 
     navigate("/");
   }
-  //console.log(comandos);
+  
   return (
     <Container fluid>
       <Encabezado persona={persona}/>

@@ -27,7 +27,7 @@ function Menu ({setToken, setConfiguracion, configuracion,comando}) {
     return (
         <><Configuracion activo={show} setActivo={setShow} setConfiguracion={setConfiguracion} configuracion={configuracion}></Configuracion>
         <Row>
-            <Col>{comando}</Col>
+            <Col><Button disabled>{comando}</Button></Col>
             <Col><Button className="botonIcono" onClick={handleShow}><Image src={config.ICONOS+'configurar.png '} width='33vw' height='33vw'/></Button></Col>
             <Col><Button className="botonIcono"  onClick={salir}><Image src={config.ICONOS+'salir.png '} width='33vw' height='33vw'/></Button></Col>
         </Row>

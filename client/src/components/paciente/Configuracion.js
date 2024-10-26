@@ -10,12 +10,12 @@ import Controles from "../emuns/Controles";
 function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
 
   const handleClose = () => {
-    setConfiguracion({tipo:'sinOperacion'});
-    console.log(configuracion.teclas);
+    setConfiguracion({tipo:'sinOperacion'});console.log('13');
+    //console.log(configuracion.teclas);
     setActivo(false);
   }
   const [cambio, setCambio]=useState({acelerar:false,frenar:false,derecha:false,izquierda:false,otro:false});
-  const [dispositivoActual, setDispositivoActual]=useState(Controles.NINGUNO);
+  const [dispositivoActual, setDispositivoActual]=useState(configuracion.control);
 
   const radios = [
     { name: 'teclado' , value: '1' },
@@ -34,7 +34,22 @@ function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
     }
   },[radioValue])
 
+useEffect(()=>{
+  setDispositivoActual(configuracion.control);
+  switch (configuracion.control) {
+    case Controles.TECLADO:
+      setRadioValue('1')
+      break;
+      case Controles.JOYSTICK:
+        setRadioValue('2')
+        break;
+      
+    default:
+      setRadioValue('3')
 
+  }
+
+},[])
 
 useEffect(()=>{setConfiguracion({tipo:'nuevoDispositivo', dispositivo: dispositivoActual});},[dispositivoActual.nombre]);
 /* useEffect(()=>{

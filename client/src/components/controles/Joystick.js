@@ -114,7 +114,7 @@ export default function Joystick({comandos},{setComandos}) {
     const buscarCombinacionTeclas=(gamepad,teclas) => {
         const tecla=buscarTeclas(gamepad); 
 
-        let lista=[];console.log(teclas.acelerar,'-',teclas.frenar );
+        let lista=[];//console.log(teclas.acelerar,'-',teclas.frenar );
         if(estaLaCombinacionDeEn(tecla,teclas.acelerar)) 
             if((teclas.acelerar[0].tipo & TipoBoton.Variable)>0)
                 lista.push({accion:'acelerar-set', valor: tecla[0].valor});

@@ -8,7 +8,7 @@ export default function Comandos (){
     const {vehiculo, setVehiculo}=Vehiculo();
 
     const comandosIniciales={
-        control: Controles.NINGUNO,
+        control: Controles.TECLADO,
         teclas: teclas,
         operacion: null,
         vehiculo: {vehiculo:vehiculo, setVehiculo: setVehiculo}
