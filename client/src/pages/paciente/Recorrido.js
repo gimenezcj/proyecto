@@ -11,6 +11,7 @@ import Velocimetro from "../../components/paciente/Velocimetro";
 import Volante from "../../components/paciente/Volante";
 import config from '../../config/config.json';
 import Utils from "../../utils/Utils";
+import Botones from "../../components/paciente/Botones";
 
 const Swal = require('sweetalert2');
 
@@ -232,13 +233,11 @@ const IniciarRecorrido=async ()=>{
       <Velocimetro estado={elEstado}/>
       <Combustible estado={elEstado}/>
       <Brujula brujula={brujula} />
+      <Botones control={comandos.comandos.control.elemento(comandos)}/>
       {verDatos && <>
         <DatosPantalla estado={elEstado} rehabilitacion={rehabilitacion}/> </>}
       <Escenario2 estado={elEstado} setEstado={setElEstado} rehabilitacion={rehabilitacion} vehiculo={comandos.comandos.vehiculo.vehiculo} control={comandos.comandos.control}/>
-      <><div style={{position: 'absolute',top: '70vh', width: '40vw', left: '00vw',overflow: 'hidden'}}>
-      {comandos.comandos.control.elemento(comandos)}
-      </div>
-    </>
+
     </>
   );
 }
