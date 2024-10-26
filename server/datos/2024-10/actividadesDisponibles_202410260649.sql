@@ -1,0 +1,8 @@
+INSERT INTO gama_database_development.actividadesDisponibles (nombre,estimuloVisual,estimuloAuditivo,puntosAOtorgar,timpoMaximoResolucion,dificultad,detalle,recorridoId,createdAt,updatedAt,escenarioId,permanenciaVisual,estimuloAuditivoId) VALUES
+	 ('actividad1','Seleccionar el menor precio','audio1.mp4',200,120,'bajo','actividad uno con distractor del grito de tarzan 3 segundos despues de iniciar',1,'2024-04-14 02:12:29','2024-04-14 02:12:29',1,NULL,NULL),
+	 ('actividad2','Seleccionar el menor precio2','audio1.mp4',200,120,'bajo','algo que lo describa2',1,'2024-04-14 02:12:29','2024-04-14 02:12:29',2,NULL,NULL),
+	 ('actividad3','Seleccionar el menor precio3','audio2.mp4',200,120,'bajo','algo que lo describa3',1,'2024-04-14 02:12:29','2024-04-14 02:12:29',1,NULL,NULL),
+	 ('Menor precio LUBRICANTE YPF','En esta actividad debe seleccionar el ACEITE de menor precio',NULL,200,120,'bajo','Tendras que llegar a la estacion de servicio y adquirir el lubricante de menor precio',10,'2024-04-14 02:12:29','2024-04-14 02:12:29',10,5,219),
+	 ('Menor precio MARTILLO','En esta actividad debe seleccionar el MARTILLO de menor precio',NULL,300,120,'bajo','A comprar un martillo economico para reparar la mesa',11,'2024-04-14 02:12:29','2024-04-14 02:12:29',10,5,220),
+	 ('Menor precio FLORES','En esta actividad debe seleccionar el RAMILLETE FLORAL de menor precio',NULL,400,120,'bajo','Una fecha especial, compra el ramillete de menor precio',12,'2024-04-14 02:12:29','2024-04-14 02:12:29',10,5,221),
+	 ('Menor precio HARINA','En esta actividad debe seleccionar el PAQUETE DE HARINA de menor precio',NULL,500,120,'bajo','Para preparar unas tortas fritas, necesitas harina. Consigue la mas barata!',13,'2024-04-14 02:12:29','2024-04-14 02:12:29',10,5,222);
