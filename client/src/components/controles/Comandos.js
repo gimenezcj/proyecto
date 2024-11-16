@@ -15,6 +15,9 @@ export default function Comandos (){
       };
       const nuevoComando=(comando,accion)=>{ 
         switch (accion.tipo) {
+          case 'setearInicial':
+            console.log(accion.tipo,comando);
+            return comando;
           case 'nuevoDispositivo':
             return {...comando, control: accion.dispositivo};
           case 'setearAcelerador':

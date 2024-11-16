@@ -34,6 +34,11 @@ function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
     }
   },[radioValue])
 
+  useEffect(()=>{
+    //buscar el valor de referencia
+    setConfiguracion({tipo:'setearInicial'});
+  },[dispositivoActual])
+
 useEffect(()=>{
   setDispositivoActual(configuracion.control);
   switch (configuracion.control) {
