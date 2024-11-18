@@ -6,6 +6,7 @@ import config from '../../config/config.json';
 export default function Joystick({comandos},{setComandos}) {
 
     let tipoPresicion=1;
+    const [keyPress, setKyPress]=useState([]);
 
     class GamePadButtonStatic {
         constructor (button){
@@ -107,11 +108,12 @@ export default function Joystick({comandos},{setComandos}) {
        const playAnimation=()=> {
         //Analizar si hay cambios en los gamepads
         g2.forEach(g=>{
-            const teclas=timestampGuardados[g.index].igualG(g); 
+            setKyPress(timestampGuardados[g.index].igualG(g));
+/*             const teclas=timestampGuardados[g.index].igualG(g); 
             if(teclas.length>0){
                 console.log(teclas);
             } 
-        })
+ */        })
          
 
         requestID = requestAnimationFrame(playAnimation);
@@ -127,7 +129,7 @@ export default function Joystick({comandos},{setComandos}) {
     }
     
     useEffect(()=>{
-        tipoPresicion=2; //0.5;
+        tipoPresicion=0.5;
 
         window.addEventListener("gamepadconnected", (event) => {  
             g2[event.gamepad.index]=event.gamepad;
@@ -147,6 +149,28 @@ export default function Joystick({comandos},{setComandos}) {
         });
 
     },[]);
+
+    useEffect(()=>{
+        switch(comandos.comandos.operacion){
+            case 'setearAcelerador':
+            case 'setearFreno':
+            case 'setearDerecha':
+            case 'setearIzquierda':
+            case 'setearCambioDireccion':
+                if(keyPress.length!==0) {
+                    console.log("seteando...", keyPress)
+                    comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
+                    
+                }
+                //comandos.setComandos({tipo: 'sinOperacion'});                    
+                break;
+            default:
+                break;
+
+        }            
+
+//        if(keyPress.length!==0) console.log("se presiono una tecla");
+    },[keyPress])
 
     const mostrarCondifuracion=()=>{
         console.log(comandos);

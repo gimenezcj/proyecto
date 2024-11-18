@@ -1,7 +1,7 @@
 import {useReducer,useEffect } from "react";
 
 export default function AccionesPermitidas() {
-const accionesPermitidas={
+let accionesPermitidas={
     acelerar: null,
     frenar: null,
     frenoMano: null,
@@ -13,7 +13,7 @@ const accionesPermitidas={
 };
 
 const nuevoSeteo=(acciones,accion)=>{  
-//  console.log(accion);
+ console.log(accion);
     switch (accion.tipo) {      
       case 'setear':
         switch(accion.operacion)       {

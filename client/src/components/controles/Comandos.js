@@ -31,8 +31,24 @@ export default function Comandos (){
           case 'setearCambioDireccion':
             return {...comando,operacion: 'setearCambioDireccion'};                       
           case 'seteo':
-            setTeclas({tipo:'setear', operacion: accion.operacion, teclas: accion.teclas});
-            return {...comando,operacion:null,teclas:teclas};
+
+            switch(accion.operacion) {
+              case 'setearAcelerador':
+                return {...comando,operacion:null,teclas: {...comando.teclas,acelerar: accion.teclas}}
+              case 'setearFreno':
+                return {...comando,operacion:null,teclas: {...comando.teclas,frenar:accion.teclas}}
+              case 'setearDerecha':
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarDerecha:accion.teclas}}
+              case 'setearIzquierda':
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarIzquierda:accion.teclas}}
+              case 'setearCambioDireccion':
+                return {...comando,operacion:null,teclas: {...comando.teclas,cambioDireccion:accion.teclas}}
+              default:
+                return comando
+            }
+    
+            //setTeclas({ tipo: 'setear', operacion: accion.operacion, teclas: accion.teclas });
+            //return {...comando,operacion:null,teclas:teclas};
           case 'sinOperacion' :
             return {...comando,operacion:null};
           case 'lectura': 
