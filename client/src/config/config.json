@@ -1,5 +1,5 @@
 {
-"SERVER_API_URL": "protocol//localhost:3001/api/", 
+"SERVER_API_URL": "protocol//servidor.gama.net.ar/api/", 
   "ICONOS": "/imagenes/base/iconos/",
   "BOTONES": {
     "CERRAR": 1,

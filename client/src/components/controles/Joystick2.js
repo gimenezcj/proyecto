@@ -3,7 +3,11 @@ import {Image} from 'react-bootstrap';
 import config from '../../config/config.json';
 
 
-export default function Joystick({comandos},{setComandos}) {
+export default function Joystick({comandos,setComandos,esVolante}) {
+
+//    const {esVolante}=Joystick;
+
+
 
     let tipoPresicion=1;
     const [keyPress, setKyPress]=useState([]);
@@ -63,7 +67,7 @@ export default function Joystick({comandos},{setComandos}) {
                 const igual=this.presicion(a[i])===this.axes[i];
                 if (!igual) {
                     this.axes[i]=pre;
-                    teclas.push({tipo:'axe',index:i,valor: pre});
+                    teclas.push({tipo:'variable',index:i,valor: pre});
                 }
             }
             return teclas;
@@ -74,7 +78,7 @@ export default function Joystick({comandos},{setComandos}) {
                 const igual=this.buttons[i].igualG(b[i]);
                 if(!igual) {
                      if(b[i].pressed)
-                        teclas.push({tipo:'button',index:i, press: b[i].pressed})
+                        teclas.push({tipo:'boton',index:i, press: b[i].pressed})
                     this.buttons[i]= new GamePadButtonStatic(b);
                 }
             }
@@ -108,18 +112,12 @@ export default function Joystick({comandos},{setComandos}) {
        const playAnimation=()=> {
         //Analizar si hay cambios en los gamepads
         g2.forEach(g=>{
-            setKyPress(timestampGuardados[g.index].igualG(g));
-/*             const teclas=timestampGuardados[g.index].igualG(g); 
-            if(teclas.length>0){
-                console.log(teclas);
-            } 
- */        })
-         
-
+            setKyPress(timestampGuardados[g.index].igualG(g));            
+        }) 
+               
         requestID = requestAnimationFrame(playAnimation);
       }
         playAnimation();
-    
     };
   
     const stopAnimation = () => {
@@ -127,11 +125,20 @@ export default function Joystick({comandos},{setComandos}) {
             cancelAnimationFrame(requestID);
         requestID=null;
     }
+
+    const actualizarGamepadActivos= () => {
+        g2=[];
+        navigator.getGamepads().forEach((g)=>g2[g.index]=g);
+        g2.forEach((g)=>timestampGuardados[g.index]=new GamepadStatic(g));
+        setGamepadsConnected(g2.length>0);
+        if(requestID===null&&g2.length>0)
+            startAnimation(); 
+    }
     
     useEffect(()=>{
-        tipoPresicion=0.5;
+//        tipoPresicion=0.5;
 
-        window.addEventListener("gamepadconnected", (event) => {  
+        const gamepadConnected=window.addEventListener("gamepadconnected", (event) => {  
             g2[event.gamepad.index]=event.gamepad;
             timestampGuardados[event.gamepad.index]=new GamepadStatic(event.gamepad);
             timestampGuardados[event.gamepad.index].iniciales();
@@ -140,7 +147,7 @@ export default function Joystick({comandos},{setComandos}) {
             setGamepadsConnected(true);
         });
         
-        window.addEventListener("gamepaddisconnected", (event) => {
+        const gamepadDiconnected=window.addEventListener("gamepaddisconnected", (event) => {
             g2.pop(g2[event.gamepad.index]);
             if(g2.length===0){
                 setGamepadsConnected(false);
@@ -148,33 +155,141 @@ export default function Joystick({comandos},{setComandos}) {
             }
         });
 
+        actualizarGamepadActivos();
+        
+
+        return () => {
+            if(gamepadConnected!== undefined)
+                gamepadConnected.remove();
+            if(gamepadDiconnected!== undefined)
+                gamepadDiconnected.remove();
+            stopAnimation();
+        };
     },[]);
+
+    const estaLaCombinacionDeEn=(teclasPres,teclasConf)=>{ //devuelve nulo si no hay coincidencia, en otro caso un objeto {valor} con el valor correspondiente de ser variable o 0
+        let valor=0;
+        let tipo=null;
+        if(teclasConf===null||teclasPres===null) return false;
+        if(teclasConf.length===0||teclasPres.length===0) return false;
+        if(teclasConf.length>teclasPres.length) return false;
+        let iguales=true;
+        teclasConf.forEach((item)=>{
+            let iguales2=false;
+            teclasPres.forEach((item2)=>{
+                const i=(item.index===item2.index && item.tipo===item2.tipo);
+                iguales2=iguales2 || i;
+                if(i) {
+                    tipo=item.tipo;
+                    if (item.tipo==='variable')
+                        valor=parseFloat(item2.valor);                                    
+                }
+            });
+            iguales=iguales && iguales2;
+
+        })
+
+        return (!iguales?false:{valor:valor,tipo:tipo});
+    }
+
+    const asignarMoviemientoSegunTecla=()=>{
+
+        const teclas=comandos.comandos.teclas;
+        let lista=[];
+        let respuesta=null;
+        if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.acelerar))!==false) {
+            if(esVolante&&respuesta.tipo==='variable') //Si es volante debemos cambiar el rango de  -1 a 1 => 0 a 1
+                {                    
+                    const nuevoValor=((1+respuesta.valor)/2).toFixed(2);
+                    lista.push({accion:'acelerar-set', valor: nuevoValor});
+                }
+            else
+                // TODO: debemos veridicar si es analogico o solo boton  
+                lista.push({accion:'acelerar-valor',valor:0.1});
+            }
+
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.frenar))!==false) {
+                if(esVolante&&respuesta.tipo==='variable') //Si es volante debemos cambiar el rango de  -1 a 1 => 0 a 1
+                {
+
+                    const nuevoValor=((1+respuesta.valor)/2).toFixed(1);
+                    lista.push({accion:'frenar-set', valor: -nuevoValor});
+                }
+                else
+                    // TODO: debemos veridicar si es analogico o solo boton
+                    lista.push({accion:'frenar-valor',valor:-0.1});
+            }
+
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.direccionAdelante))!==false)
+                lista.push({accion:'direccionAdelante'});
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.direccionAtras))!==false)
+                lista.push({accion:'direccionAtras'});
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.cambioDireccion))!==false)
+                lista.push({accion:'cambioDireccion'});
+
+
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.doblarDerecha))!==false) 
+                // TODO: debemos veridicar si es analogico o solo boton
+                lista.push({accion:'volante-valor',valor:0.1});
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.doblarIzquierda))!==false) 
+                // TODO: debemos veridicar si es analogico o solo boton
+                lista.push({accion:'volante-valor',valor:-0.1});
+
+            if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.moverVolante))!==false)                 
+                lista.push({accion:'volante-set', valor: respuesta.valor});
+
+        return lista;
+
+    }
 
     useEffect(()=>{
         switch(comandos.comandos.operacion){
+            case 'setearDireccionAdelante':
+            case 'setearDireccionAtras':
             case 'setearAcelerador':
             case 'setearFreno':
-            case 'setearDerecha':
-            case 'setearIzquierda':
             case 'setearCambioDireccion':
-                if(keyPress.length!==0) {
-                    console.log("seteando...", keyPress)
+                tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
+                if(keyPress.length!==0) 
                     comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
-                    
-                }
-                //comandos.setComandos({tipo: 'sinOperacion'});                    
+                break;
+            case 'setearDerecha':
+            case 'setearIzquierda':               
+                tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
+                if(keyPress.length!==0)
+                    //verificamos que sea un boton
+                    if(keyPress[0].tipo==='boton')
+                        comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
+                    else
+                        comandos.setComandos({tipo:'seteo', operacion: 'setearMoverVolante', teclas: keyPress});
+                break;
+            case 'setearMoverVolante':
+                tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
+                if(keyPress.length!==0)
+                    //verificamos que sea un variable
+                    if(keyPress[0].tipo==='variable') 
+                        comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
+                    else
+                        comandos.setComandos({tipo:'seteo', operacion: 'setearBlanquearMoverVolante'});
+                break;
+
+            case 'lectura':
+                tipoPresicion=2;
+                const listaMovimientos=asignarMoviemientoSegunTecla();
+                if(listaMovimientos.length>0) 
+                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'variasAcciones', valor:listaMovimientos}})
+                else
+                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'iterar-Evento', tiempo: 100}}); //Es cada cuantos milisegundos se ejecuta.
                 break;
             default:
+                
                 break;
 
         }            
-
-//        if(keyPress.length!==0) console.log("se presiono una tecla");
+//        console.log(keyPress);
     },[keyPress])
 
-    const mostrarCondifuracion=()=>{
-        console.log(comandos);
-    }
+    const mostrarCondifuracion=()=>console.log(comandos);
 
-    return <Image src={config.ICONOS+'joystick.png '} style={gamepadsConnected?{}:{filter: "invert(100%)"}} height='40vw' onClick={mostrarCondifuracion} />
+    return <Image src={config.ICONOS+(esVolante?'volante':'joystick')+'.png'} style={gamepadsConnected?{}:{filter: "invert(100%)"}} height='40vw' onClick={mostrarCondifuracion} />
 }

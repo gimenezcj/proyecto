@@ -28,34 +28,55 @@ export default function Comandos (){
             return {...comando,operacion: 'setearDerecha'}; 
           case 'setearIzquierda':
             return {...comando,operacion: 'setearIzquierda'};     
+          case 'setearDireccionAdelante':
+            return {...comando,operacion: 'setearDireccionAdelante'};    
+          case 'setearDireccionAtras':
+            return {...comando,operacion: 'setearDireccionAtras'};    
           case 'setearCambioDireccion':
             return {...comando,operacion: 'setearCambioDireccion'};                       
+          case 'setearMoverVolante':
+            return {...comando,operacion: 'setearMoverVolante'};                       
           case 'seteo':
-
             switch(accion.operacion) {
               case 'setearAcelerador':
                 return {...comando,operacion:null,teclas: {...comando.teclas,acelerar: accion.teclas}}
               case 'setearFreno':
                 return {...comando,operacion:null,teclas: {...comando.teclas,frenar:accion.teclas}}
               case 'setearDerecha':
-                return {...comando,operacion:null,teclas: {...comando.teclas,doblarDerecha:accion.teclas}}
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarDerecha:accion.teclas, moverVolante:null}}
               case 'setearIzquierda':
-                return {...comando,operacion:null,teclas: {...comando.teclas,doblarIzquierda:accion.teclas}}
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarIzquierda:accion.teclas, moverVolante:null}}
               case 'setearCambioDireccion':
                 return {...comando,operacion:null,teclas: {...comando.teclas,cambioDireccion:accion.teclas}}
+              case 'setearDireccionAdelante':
+                  return {...comando,operacion:null,teclas: {...comando.teclas,direccionAdelante:accion.teclas}}
+              case 'setearDireccionAtras':
+                    return {...comando,operacion:null,teclas: {...comando.teclas,direccionAtras:accion.teclas}}
+              case 'setearMoverVolante':
+                return {...comando,operacion:null,teclas: {...comando.teclas,moverVolante:accion.teclas,doblarDerecha:null,doblarIzquierda:null}}
+              case 'setearBlanquearMoverVolante':
+                return {...comando,operacion:null,teclas: {...comando.teclas,moverVolante:null}}
+              case 'setearBlanquearDerecha':
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarDerecha:null}}
+              case 'setearBlanquearIzquierda':
+                return {...comando,operacion:null,teclas: {...comando.teclas,doblarIzquierda:null}}
               default:
                 return comando
             }
-    
-            //setTeclas({ tipo: 'setear', operacion: accion.operacion, teclas: accion.teclas });
-            //return {...comando,operacion:null,teclas:teclas};
           case 'sinOperacion' :
             return {...comando,operacion:null};
-          case 'lectura': 
-            return {...comando,operacion:"lectura"};
-          case 'enviarComando':
-             setVehiculo(accion.valor);
-             return {...comando,vehiculo: {vehiculo:vehiculo, setVehiculo:setVehiculo},operacion:'lectura'};
+/*            case 'vehiculo-teclas':
+            console.log('setenado teclas')
+            setVehiculo({tipo:'vehiculo-teclas',valor: comando.teclas});
+            return {...comando};
+ */       case 'lectura': 
+              console.log('setenado teclas');  
+              setVehiculo({tipo:'vehiculo-teclas',valor: comando.teclas});
+              return {...comando,operacion:"lectura"};
+          case 'enviarComando':   //tiende a ser eliminado
+          case 'listaMoviemientos':
+            setVehiculo(accion.valor);
+            return {...comando,vehiculo: {vehiculo:vehiculo, setVehiculo:setVehiculo},operacion:'lectura'};
           default: 
             return comando;
         }

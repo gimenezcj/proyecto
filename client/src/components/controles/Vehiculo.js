@@ -1,7 +1,10 @@
-import {useReducer } from "react";
+import {useReducer, useState } from "react";
 import { useInterval } from 'usehooks-ts'
 
 export default function Vehiculo(){
+
+    const [teclas,setTeclas]=useState(1);
+
     const EXTREMOS= {
         acelerador: {
             MINIMO: 0,
@@ -41,11 +44,14 @@ export default function Vehiculo(){
         acelerador: 0,  //% del acelerador apretado 0-1
         freno: 0,       //% del freno apretado 0-1
         velocidad: 0,   //expresado en valor: 0 -> 120 si es hacia adelante y 0 -> -10 si es marcha atraz
-        velocidadActual:0,
+        velocidadActual: 0,
         velocidadEsperada:0,
         segundoActual:0,
         totalSegundos:1,
-        direccion: DIRECCION.ADELANTE
+        direccion: DIRECCION.ADELANTE,
+        milisegundos: new Date().getMilliseconds(),
+        fecha: new Date()
+
     }
 
     const acotar=(valor, extremos)=>{
@@ -65,12 +71,86 @@ export default function Vehiculo(){
     }
     const calcularVelocidadEnElSegundo=(velocidadActual,velocidadEsperada,segundo)=>{
         //=+$F29+($H29*segundo)
+        //console.log("Actual:"+ velocidadActual+" - Esperada:"+velocidadEsperada);
         return velocidadActual+ calcularAceleracionPorSegundo(velocidadActual,velocidadEsperada) * segundo
     }
 
+    const aceleradorSet=(anteriores,valor)=>{
+        //console.log("Aceletando->acelerador:"+valor+" - freno:"+anteriores.freno+" - ", anteriores);
+        return {...anteriores, acelerador: valor, velocidadEsperada: acotar((-Math.abs(anteriores.freno)+Math.abs(valor)),EXTREMOS.acelerador) * EXTREMOS.velocidad.MAXIMO}}
+
     const setear=(valoresAnteriores,accion)=>{ //console.log(accion, valoresAnteriores);
+        let resultado=valoresAnteriores;
         switch (accion.tipo){
-            case 'acelerar-valor': 
+            case 'variasAcciones':
+//                console.log("accion.valor: ", accion.valor) ;
+                if(accion.valor!==null)
+                 accion.valor.forEach(e => {
+                    switch(e.accion) {
+                        case 'acelerar-set': 
+                            resultado=aceleradorSet(resultado,e.valor);
+                            break;
+                        case 'acelerar-valor': {
+                            const nuevaDireccionAcelerado=(resultado.velocidadActual===0?DIRECCION.ADELANTE:resultado.direccion);
+                            if(nuevaDireccionAcelerado===DIRECCION.ADELANTE)
+                                resultado={...resultado, acelerador: acotar(resultado.acelerador+e.valor,EXTREMOS.acelerador), direccion: nuevaDireccionAcelerado}
+                            else
+                                resultado={...resultado, acelerador: acotar(resultado.acelerador-e.valor,EXTREMOS.acelerador),freno: acotar(resultado.freno-e.valor,EXTREMOS.freno), direccion: nuevaDireccionAcelerado}            
+                            break;}
+                        case 'acelerar-01': {
+                                if(valoresAnteriores.direccion===DIRECCION.ADELANTE)
+                                    resultado={...resultado, acelerador: e.valor*EXTREMOS.acelerador.MAXIMO}
+                                else
+                                resultado={...resultado, acelerador: Math.abs(e.valor)*EXTREMOS.acelerador.MINIMO} 
+                            break;}
+
+                        case 'frenar':
+                            resultado={...resultado, acelerador: 0};
+                            break;
+                        case 'frenar-set': //console.log("freno:"+e.valor+" - acelerador:"+resultado.acelerador, resultado,acotar((-Math.abs(e.valor)+Math.abs(resultado.acelerador)),EXTREMOS.acelerador));
+                            resultado={...resultado, freno: e.valor, velocidadEsperada: acotar((-Math.abs(e.valor)+Math.abs(resultado.acelerador)),EXTREMOS.acelerador) * EXTREMOS.velocidad.MAXIMO};
+                            break;
+                        case 'frenar-valor':{   console.log("afrenar",e.valor)                      
+                            const nuevaDireccionFrenado=(resultado.velocidadActual===0?DIRECCION.ATRAS:resultado.direccion);
+                                if(nuevaDireccionFrenado===DIRECCION.ADELANTE)
+                                    resultado={...resultado,  acelerador: acotar(resultado.acelerador+e.valor,EXTREMOS.acelerador), freno: acotar(resultado.freno+e.valor,EXTREMOS.freno), direccion: nuevaDireccionFrenado}
+                                else {  
+                                    resultado={...resultado, acelerador: acotar(resultado.acelerador-e.valor,EXTREMOS.acelerador), direccion: nuevaDireccionFrenado}
+                                }
+                            break;}
+                        case 'volante-valor':
+                            resultado={...resultado, volante: acotar(resultado.volante+ e.valor, EXTREMOS.volante)}
+                            break;
+                        case 'volante-set':{
+//                            console.log('seteo valor:',e.valor);
+                            resultado={...resultado, volante: acotar(e.valor, EXTREMOS.volante)}                            
+                            break;}
+                        case 'cambiarDireccion':
+                            if(valoresAnteriores.velocidadActual===0){
+                                if(valoresAnteriores.direccion===DIRECCION.ADELANTE)
+                                    return {...valoresAnteriores, direccion: DIRECCION.ATRAS} 
+                                else
+                                    return {...valoresAnteriores, direccion: DIRECCION.ADELANTE} 
+                            } else return {...valoresAnteriores}                            
+                        case 'direccionAdelante'://console.log('delante');
+                            if(resultado.velocidadActual===0){
+                                resultado={...resultado, direccion: DIRECCION.ADELANTE} 
+                            } 
+                            break;
+                        case 'direccionAtras': //console.log('atras');
+                            if(resultado.velocidadActual===0){
+                                resultado={...resultado, direccion: DIRECCION.ATRAS}
+                            } 
+                            break;
+                        default:
+                            break;
+                    }
+                }); 
+                //console.log(resultado);
+                return resultado;
+
+
+/*             case 'acelerar-valor': 
                 const nuevaDireccionAcelerado=(valoresAnteriores.velocidadActual===0?DIRECCION.ADELANTE:valoresAnteriores.direccion);
 
                 if(nuevaDireccionAcelerado===DIRECCION.ADELANTE)
@@ -112,15 +192,20 @@ export default function Vehiculo(){
                 return {...valoresAnteriores, volante: acotar(accion.valor, EXTREMOS.volante)}
             case 'cambioDireccion': 
                 if(valoresAnteriores.velocidadActual===0)
-                    return {...valoresAnteriores, direccion: DIRECCION.cambio(valoresAnteriores.direccion)}
+                    return {...valoresAnteriores, direccion: DIRECCION.cambio(valoresAnteriores.direccion)}*/
              case 'iterar-Evento': 
-                let nuevosValores=valoresAnteriores;
-
-                  if(Math.abs(valoresAnteriores.acelerador+valoresAnteriores.freno)!==0||valoresAnteriores.velocidadActual>0)
-                    nuevosValores= ajustarVelocidadPorActo2(valoresAnteriores);
-                nuevosValores= ajustarVelocidadPorOmision(nuevosValores);
-                return {...nuevosValores}                
-
+                resultado=valoresAnteriores;
+                const actual= new Date();
+                if(actual-valoresAnteriores.fecha>accion.tiempo) {
+                    if(Math.abs(valoresAnteriores.acelerador+valoresAnteriores.freno)!==0||valoresAnteriores.velocidadActual>0)
+                        resultado= ajustarVelocidadPorActo2(valoresAnteriores);
+                    resultado= ajustarVelocidadPorOmision(resultado);
+                    resultado.fecha=actual; 
+                }
+                return {...resultado}                 
+            case 'vehiculo-teclas':console.log('setenado teclas dentro del vehiculo')
+                setTeclas(accion.valor);
+                return {...valoresAnteriores}
             default:
                 return {...valoresAnteriores}
         }
@@ -128,29 +213,35 @@ export default function Vehiculo(){
     }
 
     const ajustarVelocidadPorActo2=(valoresAnteriores)=>{
-        const diferencia=valoresAnteriores.acelerador+valoresAnteriores.freno;
+        const diferencia=Math.abs(valoresAnteriores.acelerador)-Math.abs(valoresAnteriores.freno);
         let velocidadEsperada=0
         if(diferencia>0)        //Estoy acelerando
             velocidadEsperada=(valoresAnteriores.direccion===DIRECCION.ADELANTE?EXTREMOS.velocidadAdelante.MAXIMO:EXTREMOS.velocidadAtras.MAXIMO) * diferencia;
         else {                    //Estoy frenando
             if(diferencia<0) {
-                velocidadEsperada= acotar(valoresAnteriores.velocidadActual+ diferencia * EXTREMOS.velocidadAdelante.MAXIMO,EXTREMOS.velocidadAdelante);
-//                console.log('velocidad esperada:', velocidadEsperada);
+                velocidadEsperada= acotar(valoresAnteriores.velocidadActual+ diferencia * EXTREMOS.velocidadAdelante.MAXIMO,EXTREMOS.velocidadAdelante);                
+                return {...valoresAnteriores, velocidadActual: calcularVelocidadEnElSegundo(valoresAnteriores.velocidadActual, velocidadEsperada,0.1) }
             }
             else    
                 velocidadEsperada=0;
             }
         
-        return {...valoresAnteriores, velocidadActual: calcularVelocidadEnElSegundo(valoresAnteriores.velocidadActual, velocidadEsperada,0.3) }
+        return {...valoresAnteriores, velocidadActual: calcularVelocidadEnElSegundo(valoresAnteriores.velocidadActual, velocidadEsperada,0.2) }
 
     }
     const ajustarVelocidadPorOmision=(valoresAnteriores)=>{
         //buscamos la estabilidad del sistema acelerador y volante
         let nuevoValorVolante=valoresAnteriores.volante;
         if(valoresAnteriores.volante!==0&&valoresAnteriores.velocidadActual!==0) {
-            nuevoValorVolante=valoresAnteriores.volante- Math.sign(valoresAnteriores.volante)*0.05
-            if(nuevoValorVolante<0.05&&nuevoValorVolante>-0.05) nuevoValorVolante=0;
+            //debemos verificar si el volante esta siendo usado por varible o por boton
+            if(teclas.moverVolante===null) {
+                nuevoValorVolante=valoresAnteriores.volante- Math.sign(valoresAnteriores.volante)*0.05
+                if(nuevoValorVolante<0.05&&nuevoValorVolante>-0.05) nuevoValorVolante=0;
+            }
         }
+        if(teclas.acelerar!=null&&teclas.acelerar[0].tipo==='variable')
+            return {...valoresAnteriores, velocidadActual: calcularVelocidadEnElSegundo(valoresAnteriores.velocidadActual, valoresAnteriores.velocidadEsperada,0.4)};
+        else
         return {...valoresAnteriores, 
             acelerador: acotar(valoresAnteriores.acelerador-0.05,EXTREMOS.acelerador), 
             freno: acotar(valoresAnteriores.freno+0.05,EXTREMOS.freno),

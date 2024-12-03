@@ -38,8 +38,9 @@ export default function Escenario2(props){
 
   useEffect(()=>{
   //console.log({direccion:vehiculo.direccion, velocidadActual: vehiculo.velocidadActual, acelerador: vehiculo.acelerador, freno: vehiculo.freno});
-   // console.log({volante:vehiculo.volante});
-    velocidad.current=vehiculo.acelerador;
+    //console.log({acelerador:vehiculo.acelerador});
+    velocidad.current=vehiculo.velocidadActual/140; //acelerador; 
+    //console.log("actual:"+vehiculo.velocidadActual+" - esperada:"+ vehiculo.velocidadEsperada+" - acelerador:"+ vehiculo.acelerador );
     volante.current=vehiculo.volante*-80;
     direccion.current=vehiculo.direccion;
     //v2=vehiculo;

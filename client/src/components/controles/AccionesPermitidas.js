@@ -5,10 +5,13 @@ let accionesPermitidas={
     acelerar: null,
     frenar: null,
     frenoMano: null,
+    moverVolante:null,
     doblarDerecha:null,
     doblarIzquierda: null,
     mantenerVelocidad: null,    
     cambioDireccion: null,
+    direccionAdelante:null,
+    direccionAtras:null,
     operacion:null
 };
 
@@ -24,12 +27,16 @@ const nuevoSeteo=(acciones,accion)=>{
           case 'setearDerecha':
             return {...acciones,doblarDerecha:accion.teclas}
           case 'setearIzquierda':
-            return {...acciones,doblarIzquierda:accion.teclas}                
+            return {...acciones,doblarIzquierda:accion.teclas}      
+          case 'setearMoverVolante':
+            return {...acciones,moverVolante:accion.teclas}      
           case 'setearCambioDireccion':
             return {...acciones,cambioDireccion:accion.teclas}                
           default:
             return acciones;
         }
+        
+      case 'setearMoverVolante':
       case 'setearAcelerador':
       case 'setearFreno':
         return {...acciones, operacion: accion.tipo};

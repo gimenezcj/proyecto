@@ -129,9 +129,7 @@ export default function Joystick({comandos},{setComandos}) {
             iguales=iguales && iguales2;
 
         })
-
         return iguales;
-
     }
 
     const buscarTecla=(gamepad,teclas) => {

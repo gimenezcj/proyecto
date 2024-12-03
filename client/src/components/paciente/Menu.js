@@ -23,7 +23,7 @@ function Menu ({setToken, setConfiguracion, configuracion,comando}) {
 
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
-
+console.log(comando);
     return (
         <><Configuracion activo={show} setActivo={setShow} setConfiguracion={setConfiguracion} configuracion={configuracion}></Configuracion>
         <Row>

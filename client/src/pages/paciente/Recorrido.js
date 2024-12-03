@@ -135,6 +135,7 @@ export default function Recorrido ({comandos}){
       }).then((result) => {
         if (result.isConfirmed) {
           setElEstado({tipo:'reset', valor: true});
+       //   comandos.setComandos({tipo:'vehiculo-teclas'});
           comandos.setComandos({tipo:'lectura'});
         }
       });

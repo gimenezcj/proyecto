@@ -16,6 +16,7 @@
     "formik": "^2.2.9",
     "gsap": "^3.11.3",
     "install": "^0.13.0",
+    "lodash": "^4.17.21",
     "npm": "^10.5.2",
     "proyectogama": "file:..",
     "react": "^18.2.0",

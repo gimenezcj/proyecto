@@ -6,8 +6,8 @@ import Volante from "../controles/Volante";
 
 const Controles= {
     TECLADO:  {nombre: 'teclado', elemento:(comandos, setComandos)=>{return <Teclado comandos={comandos} setComandos={setComandos}/>}, 'valorInicial':null},
-    VOLANTE:  {nombre: "volante", elemento:(comandos, setComandos)=>{return <Volante comandos={comandos} setComandos={setComandos}/>}, 'valorInicial':null},
-    JOYSTICK: {nombre: "joystick", elemento: (comandos, setComandos)=> {return <Joystick comandos={comandos} setComandos={setComandos}/>}, 'valorInicial':null},
+    VOLANTE:  {nombre: "volante", elemento:(comandos, setComandos)=>{return <Joystick comandos={comandos} setComandos={setComandos} esVolante={true}/>}, 'valorInicial':null},
+    JOYSTICK: {nombre: "joystick", elemento: (comandos, setComandos)=> {return <Joystick comandos={comandos} setComandos={setComandos} esVolante={false}/>}, 'valorInicial':null},
     CELULAR:  {nombre: "celular", elemento:()=>{return <></>}, 'valorInicial':null},
     NINGUNO:  {nombre:'ninguno', elemento:()=>{return <></>}, 'valorInicial':null}
 }; 
