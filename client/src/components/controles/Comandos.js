@@ -20,7 +20,7 @@ export default function Comandos (){
             return comando;
           case 'nuevoDispositivo':
             return {...comando, control: accion.dispositivo};
-          case 'setearAcelerador':
+          case 'setearAcelerador':console.log('setearacelerar1')
             return {...comando,operacion: 'setearAcelerador'};
           case 'setearFreno':
               return {...comando,operacion: 'setearFreno'};     
@@ -38,7 +38,7 @@ export default function Comandos (){
             return {...comando,operacion: 'setearMoverVolante'};                       
           case 'seteo':
             switch(accion.operacion) {
-              case 'setearAcelerador':
+              case 'setearAcelerador': console.log('setearacelerar2')
                 return {...comando,operacion:null,teclas: {...comando.teclas,acelerar: accion.teclas}}
               case 'setearFreno':
                 return {...comando,operacion:null,teclas: {...comando.teclas,frenar:accion.teclas}}

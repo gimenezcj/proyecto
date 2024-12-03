@@ -111,9 +111,17 @@ export default function Joystick({comandos,setComandos,esVolante}) {
        // Animation using requestAnimationFrame     
        const playAnimation=()=> {
         //Analizar si hay cambios en los gamepads
-        g2.forEach(g=>{
-            setKyPress(timestampGuardados[g.index].igualG(g));            
-        }) 
+
+        let gamepads = navigator.getGamepads();
+        for(var i=0;i<gamepads.length;i++){
+            if(gamepads[i]!==null){
+            setKyPress(timestampGuardados[i].igualG(gamepads[i])); 
+        }
+        }
+
+/*        g2.forEach(g=>{
+            setKyPress(timestampGuardados[g.index].igualG(g)); console.log(g);           
+        }) */
                
         requestID = requestAnimationFrame(playAnimation);
       }
@@ -128,8 +136,16 @@ export default function Joystick({comandos,setComandos,esVolante}) {
 
     const actualizarGamepadActivos= () => {
         g2=[];
-        navigator.getGamepads().forEach((g)=>g2[g.index]=g);
-        g2.forEach((g)=>timestampGuardados[g.index]=new GamepadStatic(g));
+
+        let gamepads = navigator.getGamepads();
+        for(var i=0;i<gamepads.length;i++){
+            if(gamepads[i]!==null){
+            g2[i]=gamepads[i];
+            timestampGuardados[i]= new GamepadStatic(g2[i]);
+        }
+        }
+
+//        g2.forEach((g)=>timestampGuardados[g.index]=new GamepadStatic(g));
         setGamepadsConnected(g2.length>0);
         if(requestID===null&&g2.length>0)
             startAnimation(); 
@@ -248,7 +264,7 @@ export default function Joystick({comandos,setComandos,esVolante}) {
             case 'setearDireccionAtras':
             case 'setearAcelerador':
             case 'setearFreno':
-            case 'setearCambioDireccion':
+            case 'setearCambioDireccion': 
                 tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
                 if(keyPress.length!==0) 
                     comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
