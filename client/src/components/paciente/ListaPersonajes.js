@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 
 import Utils from "../../utils/Utils";
 import ItemPersonaje from "./ItemPersonaje";
+
+ListaPersonajes.propTypes = {
+  setMiPersonaje: PropTypes.func.isRequired,
+  miPersonaje: PropTypes.object.isRequired,
+  puntajeAcumulado: PropTypes.number.isRequired,
+};
 
 function ListaPersonajes ({setMiPersonaje, miPersonaje, puntajeAcumulado}) {
  
@@ -57,7 +64,7 @@ function ListaPersonajes ({setMiPersonaje, miPersonaje, puntajeAcumulado}) {
   }
 
   const listItems = imageUrl.map((item) =>  
-    <ItemPersonaje 
+    <ItemPersonaje key={item.id}
       personaje={item} 
       setMiPersonaje={setMiPersonaje}
       miPersonaje={miPersonaje}

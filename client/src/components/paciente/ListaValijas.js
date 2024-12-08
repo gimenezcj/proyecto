@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from 'react-bootstrap';
-
+import PropTypes from 'prop-types';
 
 import Utils from "../../utils/Utils";
 import ItemValija from "./ItemValija";
 
+ListaPersonajes.propTypes = {
+  setMiValija: PropTypes.func.isRequired,
+  miValija: PropTypes.object.isRequired,
+  puntajeAcumulado: PropTypes.number.isRequired,
+};
 function ListaPersonajes ({setMiValija, miValija, puntajeAcumulado}) {
  
   const [isLoading, setIsLoading] = useState(true);
@@ -64,7 +69,7 @@ function ListaPersonajes ({setMiValija, miValija, puntajeAcumulado}) {
   //console.log(imageUrl);
 
   const listItems = imageUrl.map((item) =>  
-    <ItemValija
+    <ItemValija key={item.id}
       personaje={item} 
       setMiValija={setMiValija}
       miValija={miValija}
