@@ -8,6 +8,7 @@ export default function Comandos (){
     const {vehiculo, setVehiculo}=Vehiculo();
 
     const comandosIniciales={
+        opcion: false,
         control: Controles.TECLADO,
         teclas: teclas,
         operacion: null,
@@ -15,12 +16,14 @@ export default function Comandos (){
       };
       const nuevoComando=(comando,accion)=>{ 
         switch (accion.tipo) {
+          case 'setearOpcion':           console.log({...comando, opcion:accion.opcion});
+            return {...comando, opcion:accion.opcion};
           case 'setearInicial':
             console.log(accion.tipo,comando);
             return comando;
           case 'nuevoDispositivo':
             return {...comando, control: accion.dispositivo};
-          case 'setearAcelerador':console.log('setearacelerar1')
+          case 'setearAcelerador'://console.log('setearacelerar1')
             return {...comando,operacion: 'setearAcelerador'};
           case 'setearFreno':
               return {...comando,operacion: 'setearFreno'};     
@@ -38,6 +41,8 @@ export default function Comandos (){
             return {...comando,operacion: 'setearMoverVolante'};                       
           case 'seteo':
             switch(accion.operacion) {
+              case 'setearOpcion':           console.log({...comando, opcion:accion.opcion});
+            return {...comando, opcion:accion.opcion};
               case 'setearAcelerador': console.log('setearacelerar2')
                 return {...comando,operacion:null,teclas: {...comando.teclas,acelerar: accion.teclas}}
               case 'setearFreno':

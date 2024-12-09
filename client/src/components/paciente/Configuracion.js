@@ -2,6 +2,7 @@ import React, {useEffect, useParams, useState} from "react";
 import {Row, Col,Image, Button} from 'react-bootstrap';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import Form from 'react-bootstrap/Form';
 
 import Modal from 'react-bootstrap/Modal';
 import config from '../../config/config.json';
@@ -29,10 +30,11 @@ function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
 
   const radios = [
     { name: 'teclado' , value: '1' },
-    { name: 'joystick', value: '2' },
+   /*  { name: 'joystick', value: '2' }, */
     { name: 'volante' , value: '3' },
   ];
   const [radioValue, setRadioValue] = useState('1');
+  const [opcion,setOpcion]=useState(false);
 
   useEffect(()=>{
     switch(radioValue){
@@ -43,6 +45,11 @@ function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
         break;
     }
   },[radioValue])
+
+  useEffect(()=>{
+    
+    setConfiguracion({tipo:'setearOpcion',opcion: opcion});
+  },[opcion])
 
   useEffect(()=>{
     //buscar el valor de referencia
@@ -87,7 +94,16 @@ const mostrarCombinacion=(tecla)=>tecla?' (id:'+tecla[0].index+' tipo:'+tecla[0]
 const solicitarTeclado=()=><>Condifurado por defecto<br/>flecha arriba- acelerar<br/>flecha abajo- frenar</>;
 const solicitarJoystick=()=>
         <Row>
-          <Col>Ejemplo</Col>
+          <Col>Ejemplo
+          <Row>      
+            <Form.Check 
+        type="switch"
+        id="custom-switch"
+        label="Invertir controles"
+        checked={opcion}
+        onChange={(e) => setOpcion(e.target.checked)}
+          /></Row>
+          </Col>
           <Col>
             <Row>Acciones</Row>
             <Row><Button variant={teclasLocales.acelerar?'success':'danger'} onClick={setearAcelerar}>{configuracion.operacion==='setearAcelerador'?'presione...':'Acelerar '+mostrarCombinacion(teclasLocales.acelerar)} </Button></Row>
@@ -157,7 +173,7 @@ return (
 
       <br/>Configurar acciones<br/>
       {radioValue==='1'&&solicitarTeclado()}
-      {radioValue==='2'&&solicitarJoystick()}
+{/*       {radioValue==='2'&&solicitarJoystick()} */}
       {radioValue==='3'&&solicitarJoystick()}
       {borrarTeclas()}
 
