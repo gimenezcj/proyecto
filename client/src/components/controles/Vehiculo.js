@@ -147,7 +147,8 @@ export default function Vehiculo(){
                     }
                 }); 
                 //console.log(resultado);
-                return resultado;
+                //return resultado;
+                break;
 
 
 /*             case 'acelerar-valor': 
@@ -195,20 +196,21 @@ export default function Vehiculo(){
                     return {...valoresAnteriores, direccion: DIRECCION.cambio(valoresAnteriores.direccion)}*/
              case 'iterar-Evento': 
                 resultado=valoresAnteriores;
-                const actual= new Date();
-                if(actual-valoresAnteriores.fecha>accion.tiempo) {
-                    if(Math.abs(valoresAnteriores.acelerador+valoresAnteriores.freno)!==0||valoresAnteriores.velocidadActual>0)
-                        resultado= ajustarVelocidadPorActo2(valoresAnteriores);
-                    resultado= ajustarVelocidadPorOmision(resultado);
-                    resultado.fecha=actual; 
-                }
-                return {...resultado}                 
+                break;
             case 'vehiculo-teclas':console.log('setenado teclas dentro del vehiculo')
                 setTeclas(accion.valor);
                 return {...valoresAnteriores}
             default:
                 return {...valoresAnteriores}
         }
+        const actual= new Date();
+        if(actual-valoresAnteriores.fecha>accion.tiempo) {
+            if(Math.abs(valoresAnteriores.acelerador+valoresAnteriores.freno)!==0||valoresAnteriores.velocidadActual>0)
+                resultado= ajustarVelocidadPorActo2(valoresAnteriores);
+            resultado= ajustarVelocidadPorOmision(resultado);
+            resultado.fecha=actual; 
+        }
+        return {...resultado}   
 
     }
 

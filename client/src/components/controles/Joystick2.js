@@ -293,7 +293,7 @@ export default function Joystick({comandos,setComandos,esVolante}) {
                 tipoPresicion=2;
                 const listaMovimientos=asignarMoviemientoSegunTecla();
                 if(listaMovimientos.length>0) 
-                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'variasAcciones', valor:listaMovimientos}})
+                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'variasAcciones', valor:listaMovimientos, tiempo:100}})
                 else
                     comandos.setComandos({tipo:'enviarComando', valor:{tipo:'iterar-Evento', tiempo: 100}}); //Es cada cuantos milisegundos se ejecuta.
                 break;
