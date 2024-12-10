@@ -77,8 +77,19 @@ export default function Joystick({comandos,setComandos,esVolante}) {
             for(let i=0;i<b.length;i++) {
                 const igual=this.buttons[i].igualG(b[i]);
                 if(!igual) {
-                     if(b[i].pressed)
-                        teclas.push({tipo:'boton',index:i, press: b[i].pressed})
+                     if(b[i].pressed||b[i].touched)
+                        if(b[i].value!=1||b[i].value!=0) {
+                            const pre=this.presicion(b[i].value);
+                            const igual=this.presicion(b[i].value)===this.buttons[i].value;
+                            if (!igual) { console.log(comandos);
+                                this.buttons[i].value=pre;//console.log((pre-0.5)*2);
+                                teclas.push({tipo:'variable',index:i,valor: (pre-0.5)*2});
+                            }
+                                        
+                        }
+                        else
+                            teclas.push({tipo:'boton',index:i, press: b[i].pressed})
+
                     this.buttons[i]= new GamePadButtonStatic(b);
                 }
             }
@@ -213,11 +224,11 @@ export default function Joystick({comandos,setComandos,esVolante}) {
         const teclas=comandos.comandos.teclas;
         let lista=[];
         let respuesta=null;
-        if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.acelerar))!==false) {
+        if((respuesta=estaLaCombinacionDeEn(keyPress,teclas.acelerar))!==false) {//console.log(respuesta.tipo);
             if(esVolante&&respuesta.tipo==='variable') //Si es volante debemos cambiar el rango de  -1 a 1 => 0 a 1
                 {                    
                     const nuevoValor=((1+respuesta.valor)/2).toFixed(2);
-                    lista.push({accion:'acelerar-set', valor: nuevoValor});
+                    lista.push({accion:'acelerar-set', valor: nuevoValor}); 
                 }
             else
                 // TODO: debemos veridicar si es analogico o solo boton  
@@ -293,7 +304,7 @@ export default function Joystick({comandos,setComandos,esVolante}) {
                 tipoPresicion=2;
                 const listaMovimientos=asignarMoviemientoSegunTecla();
                 if(listaMovimientos.length>0) 
-                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'variasAcciones', valor:listaMovimientos, tiempo:100}})
+                    comandos.setComandos({tipo:'enviarComando', valor:{tipo:'variasAcciones', valor:listaMovimientos, tiempo:100,tiempo:100}})
                 else
                     comandos.setComandos({tipo:'enviarComando', valor:{tipo:'iterar-Evento', tiempo: 100}}); //Es cada cuantos milisegundos se ejecuta.
                 break;

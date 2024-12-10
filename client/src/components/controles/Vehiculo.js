@@ -75,12 +75,12 @@ export default function Vehiculo(){
         return velocidadActual+ calcularAceleracionPorSegundo(velocidadActual,velocidadEsperada) * segundo
     }
 
-    const aceleradorSet=(anteriores,valor)=>{
+    const aceleradorSet=(anteriores,valor)=>{//console.log(valor, anteriores.freno,acotar((-Math.abs(anteriores.freno)+Math.abs(valor)),EXTREMOS.acelerador) * EXTREMOS.velocidad.MAXIMO);
         //console.log("Aceletando->acelerador:"+valor+" - freno:"+anteriores.freno+" - ", anteriores);
         return {...anteriores, acelerador: valor, velocidadEsperada: acotar((-Math.abs(anteriores.freno)+Math.abs(valor)),EXTREMOS.acelerador) * EXTREMOS.velocidad.MAXIMO}}
 
     const setear=(valoresAnteriores,accion)=>{ //console.log(accion, valoresAnteriores);
-        let resultado=valoresAnteriores;
+        let resultado=valoresAnteriores;console.log(accion.tipo);
         switch (accion.tipo){
             case 'variasAcciones':
 //                console.log("accion.valor: ", accion.valor) ;
