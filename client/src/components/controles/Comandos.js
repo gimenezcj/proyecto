@@ -1,4 +1,4 @@
-import React, {useReducer } from "react";
+import {useReducer } from "react";
 import Controles from "../../components/emuns/Controles";
 import AccionesPermitidas from "../../components/controles/AccionesPermitidas";
 import Vehiculo from "./Vehiculo";
@@ -16,10 +16,10 @@ export default function Comandos (){
       };
       const nuevoComando=(comando,accion)=>{ 
         switch (accion.tipo) {
-          case 'setearOpcion':           console.log({...comando, opcion:accion.opcion});
+          case 'setearOpcion':          // console.log({...comando, opcion:accion.opcion});
             return {...comando, opcion:accion.opcion};
           case 'setearInicial':
-            console.log(accion.tipo,comando);
+           // console.log(accion.tipo,comando);
             return comando;
           case 'nuevoDispositivo':
             return {...comando, control: accion.dispositivo};

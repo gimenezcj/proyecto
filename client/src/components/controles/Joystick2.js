@@ -5,38 +5,28 @@ import config from '../../config/config.json';
 
 export default function Joystick({comandos,setComandos,esVolante}) {
 
-//    const {esVolante}=Joystick;
-
-
-
     let tipoPresicion=1;
-    const [keyPress, setKyPress]=useState([]);
+    let setter=true;
+    const [keyPress, setKeyPress]=useState([]);
 
-    class GamePadButtonStatic {
-        constructor (button){
-            this.pressed=button.pressed;
-            this.touched=button.touched;
-            this.value=button.value;
+    class GamePadAxeStatic {
+        origen=null;
+        destino=null;
+        constructor (v){
+            this.value=this.presicion(v);
         }
-        igualG(b){
-            return (b.pressed===this.pressed&&b.touched===this.touched&&this.value===b.value);
+        igualG(v){
+            return (this.value===this.presicion(v));
         }
-        iniciales(){
-            return (this.pressed?"presionado":"")+(" valor:"+this.value);
+        isOrigen(){
+            return (this.origen!==null&&this.destino!==null)||setter;
         }
-    }
-
-    class GamepadStatic {
-        constructor (gamepad) {
-            this.id=gamepad.id;
-            this.index=gamepad.index;
-            this.timestamp=gamepad.timestamp;
-            this.axes=[];
-            this.buttons=[];
-            for(let i=0;i<gamepad.axes.length;i++) 
-                this.axes[i]=this.presicion(gamepad.axes[i]);            
-            for(let i=0;i<gamepad.buttons.length;i++)
-                this.buttons[i]=new GamePadButtonStatic(gamepad.buttons[i]);            
+        isBasic(){
+            return (this.value==1||this.value==0);
+        }
+        inciarOrigen(){
+            this.origen=null;
+            this.destino=null;
         }
         presicion(numero){
             if(tipoPresicion===1||tipoPresicion===2)
@@ -58,40 +48,88 @@ export default function Joystick({comandos,setComandos,esVolante}) {
             if(numero<0.85)
                 return 0.75;
             return 1
-        }        
+        }
+    }
+
+    class GamePadButtonStatic extends GamePadAxeStatic{
+        constructor (button){//console.log(typeof button.value);
+            super(button.value);
+            //value=button.value;
+            this.pressed=button.pressed;
+            this.touched=button.touched;
+            
+        }
+        igualG(b){
+            return (b.pressed===this.pressed&&b.touched===this.touched&&this.value===b.value); //super.igualG(b.value));
+        }
+        press(){
+            return this.pressed||this.touched
+        }
+        iniciales(){
+            return (this.pressed?"presionado":"")+(" valor:"+this.value);
+        }
+    }
+
+    class GamepadStatic {
+        constructor (gamepad) {
+            this.id=gamepad.id;
+            this.index=gamepad.index;
+            this.timestamp=gamepad.timestamp;
+            this.axes=[];
+            this.buttons=[];
+            for(let i=0;i<gamepad.axes.length;i++) 
+                this.axes[i]=new GamePadAxeStatic(gamepad.axes[i]) //super.presicion(gamepad.axes[i]);            
+            for(let i=0;i<gamepad.buttons.length;i++)
+                this.buttons[i]=new GamePadButtonStatic(gamepad.buttons[i]);            
+        }
         igualAxesG(a){
             let teclas=[];
 
             for(let i=0;i<a.length;i++) {
-                const pre=this.presicion(a[i]);
-                const igual=this.presicion(a[i])===this.axes[i];
-                if (!igual) {
-                    this.axes[i]=pre;
-                    teclas.push({tipo:'variable',index:i,valor: pre});
+                let tipo=null;                   
+                const naxe=new GamePadAxeStatic(a[i]);
+                if(!this.axes[i].igualG(a[i])) { 
+                    if(naxe.isBasic()&&!this.axes[i].isOrigen())
+                        tipo='boton';
+                    else {
+                        tipo='variable';
+                        if(!this.axes[i].isOrigen()) {
+                            const signo=Math.sign(naxe.value);
+                            const origen=(naxe.value<-0.5?-1:(naxe.value>0.5?1:0));
+                            const destino=(signo===-1?(origen===-1?1:-1):(signo===1?(origen===1?-1:1):0));
+                            naxe.origen=origen;   
+                            naxe.destino=destino;
+                        }                        
+                    }
+                    this.axes[i]=naxe;
+                    teclas.push({tipo:tipo,index:i,valor: naxe.value,origen: naxe.origen,destino:naxe.destino});                        
                 }
             }
             return teclas;
         }
         igualButtonsG(b){
             let teclas=[];
-            for(let i=0;i<b.length;i++) {
-                const igual=this.buttons[i].igualG(b[i]);
-                if(!igual) {
-                     if(b[i].pressed||b[i].touched)
-                        if(b[i].value!=1||b[i].value!=0) {
-                            const pre=this.presicion(b[i].value);
-                            const igual=this.presicion(b[i].value)===this.buttons[i].value;
-                            if (!igual) { console.log(comandos);
-                                this.buttons[i].value=pre;//console.log((pre-0.5)*2);
-                                teclas.push({tipo:'variable',index:i,valor: (pre-0.5)*2});
-                            }
-                                        
+            
+            for(let i=0;i<b.length;i++) {//console.log(b[i],this.buttons[i]);
+                const nbutton=new GamePadButtonStatic(b[i]);
+                let tipo=null;
+                if(!this.buttons[i].igualG(nbutton)) {
+                     if(nbutton.press())
+                        if(nbutton.isBasic()&&!this.buttons[i].isOrigen())
+                            tipo='boton';
+                        else {
+                            tipo='variable';
+                            if(!this.buttons[i].isOrigen()) {
+                                const signo=Math.sign(nbutton.value);
+                                const origen=(nbutton.value<-0.5?-1:(nbutton.value>0.5?1:0));
+                                const destino=(signo===-1?(origen===-1?1:-1):(signo===1?(origen===1?-1:1):0));
+                                nbutton.origen=origen;   
+                                nbutton.destino=destino;
+                            }                        
                         }
-                        else
-                            teclas.push({tipo:'boton',index:i, press: b[i].pressed})
-
-                    this.buttons[i]= new GamePadButtonStatic(b);
-                }
+                        this.buttons[i]=nbutton;
+                        teclas.push({tipo:tipo,index:i,valor: nbutton.value,origen: nbutton.origen,destino:nbutton.destino});                       
+                }            
             }
             return teclas;
         }
@@ -100,6 +138,9 @@ export default function Joystick({comandos,setComandos,esVolante}) {
             let teclas=[];           
             teclas=teclas.concat(this.igualAxesG(g.axes));
             teclas=teclas.concat(this.igualButtonsG(g.buttons));
+            if(teclas.length>0&&setter)
+                setter=false;
+
             return teclas;
         }   
         iniciales(){
@@ -122,18 +163,10 @@ export default function Joystick({comandos,setComandos,esVolante}) {
        // Animation using requestAnimationFrame     
        const playAnimation=()=> {
         //Analizar si hay cambios en los gamepads
-
         let gamepads = navigator.getGamepads();
-        for(var i=0;i<gamepads.length;i++){
-            if(gamepads[i]!==null){
-            setKyPress(timestampGuardados[i].igualG(gamepads[i])); 
-        }
-        }
-
-/*        g2.forEach(g=>{
-            setKyPress(timestampGuardados[g.index].igualG(g)); console.log(g);           
-        }) */
-               
+        for(let i=0;i<gamepads.length;i++)
+            if(gamepads[i]!==null)
+                setKeyPress(timestampGuardados[i].igualG(gamepads[i])); 
         requestID = requestAnimationFrame(playAnimation);
       }
         playAnimation();
@@ -149,22 +182,19 @@ export default function Joystick({comandos,setComandos,esVolante}) {
         g2=[];
 
         let gamepads = navigator.getGamepads();
-        for(var i=0;i<gamepads.length;i++){
-            if(gamepads[i]!==null){
-            g2[i]=gamepads[i];
-            timestampGuardados[i]= new GamepadStatic(g2[i]);
+       
+        for(let i=0;i<gamepads.length;i++){
+            if(gamepads[i]!==null){                
+                g2[i]=gamepads[i];
+                timestampGuardados[i]= new GamepadStatic(g2[i]);
+            }
         }
-        }
-
-//        g2.forEach((g)=>timestampGuardados[g.index]=new GamepadStatic(g));
         setGamepadsConnected(g2.length>0);
         if(requestID===null&&g2.length>0)
             startAnimation(); 
     }
     
     useEffect(()=>{
-//        tipoPresicion=0.5;
-
         const gamepadConnected=window.addEventListener("gamepadconnected", (event) => {  
             g2[event.gamepad.index]=event.gamepad;
             timestampGuardados[event.gamepad.index]=new GamepadStatic(event.gamepad);
@@ -275,13 +305,13 @@ export default function Joystick({comandos,setComandos,esVolante}) {
             case 'setearDireccionAtras':
             case 'setearAcelerador':
             case 'setearFreno':
-            case 'setearCambioDireccion': 
+            case 'setearCambioDireccion': setter=true;
                 tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
                 if(keyPress.length!==0) 
                     comandos.setComandos({tipo:'seteo', operacion: comandos.comandos.operacion, teclas: keyPress});
                 break;
             case 'setearDerecha':
-            case 'setearIzquierda':               
+            case 'setearIzquierda':  setter=true;             
                 tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
                 if(keyPress.length!==0)
                     //verificamos que sea un boton
@@ -290,7 +320,7 @@ export default function Joystick({comandos,setComandos,esVolante}) {
                     else
                         comandos.setComandos({tipo:'seteo', operacion: 'setearMoverVolante', teclas: keyPress});
                 break;
-            case 'setearMoverVolante':
+            case 'setearMoverVolante':setter=true;
                 tipoPresicion=0.5; //Bajamos la presicion para poder confirgurar en caso de movimientos variables.
                 if(keyPress.length!==0)
                     //verificamos que sea un variable

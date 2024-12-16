@@ -87,7 +87,7 @@ export default function Vehiculo(){
                 if(accion.valor!==null)
                  accion.valor.forEach(e => {
                     switch(e.accion) {
-                        case 'acelerar-set': 
+                        case 'acelerar-set': console.log(e.valor);
                             resultado=aceleradorSet(resultado,e.valor);
                             break;
                         case 'acelerar-valor': {

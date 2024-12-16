@@ -19,13 +19,28 @@ function Configuracion({activo, setActivo, setConfiguracion, configuracion}) {
   };
 
   const handleClose = () => {
-    setConfiguracion({tipo:'sinOperacion'});console.log('13');
+    setConfiguracion({tipo:'sinOperacion'});//console.log('13');
     //console.log(configuracion.teclas);
     setActivo(false);
   }
   const [cambio, setCambio]=useState({acelerar:false,frenar:false,derecha:false,izquierda:false,otro:false});
   const [dispositivoActual, setDispositivoActual]=useState(configuracion.control);
-  const teclasIniciales={acelerar:null, frenar: null, frenoMano:null, moverVolante:null, doblarDerecha:null, doblarIzquierda:null, mantenerVelocidad: null, cambioDireccion:null, operacion:null};
+  const teclasIniciales={
+    acelerar:null, 
+    frenar: null, 
+    frenoMano:null, 
+    moverVolante:null, 
+    doblarDerecha:null, 
+    doblarIzquierda:null, 
+    mantenerVelocidad: null, 
+    cambioDireccion:null, 
+    operacion:null,
+    
+  };
+
+  const iguales=(t1,t2)=> {
+    return t1!==null&&t2!==null&&(t1[0].tipo===t2[0].tipo&&t1[0].index===t2[0].index);}
+
   const [teclasLocales, setTeclasLocales]=useState(teclasIniciales);
 
   const radios = [
@@ -90,7 +105,7 @@ useEffect(()=>{
   setTeclasLocales(configuracion.teclas);
 },[configuracion.teclas])
   
-const mostrarCombinacion=(tecla)=>tecla?' (id:'+tecla[0].index+' tipo:'+tecla[0].tipo+')':'';
+const mostrarCombinacion=(tecla)=>tecla?' (id:'+tecla[0].index+' tipo:'+tecla[0].tipo+(tecla[0].origen!=null?' o:'+tecla[0].origen+' d:'+tecla[0].destino:'')+')':'';
 const solicitarTeclado=()=><>Condifurado por defecto<br/>flecha arriba- acelerar<br/>flecha abajo- frenar</>;
 const solicitarJoystick=()=>
         <Row>
@@ -107,7 +122,7 @@ const solicitarJoystick=()=>
           <Col>
             <Row>Acciones</Row>
             <Row><Button variant={teclasLocales.acelerar?'success':'danger'} onClick={setearAcelerar}>{configuracion.operacion==='setearAcelerador'?'presione...':'Acelerar '+mostrarCombinacion(teclasLocales.acelerar)} </Button></Row>
-            <Row><Button variant={teclasLocales.frenar!==null?'success':'danger'} onClick={setearFrenar}>{configuracion.operacion==='setearFreno'?'presione...':'Frenar '+mostrarCombinacion(teclasLocales.frenar)}</Button></Row>
+              <Row><Button variant={teclasLocales.frenar!==null?'success':'danger'} onClick={setearFrenar}>{configuracion.operacion==='setearFreno'?'presione...':'Frenar '+mostrarCombinacion(teclasLocales.frenar)}</Button></Row>
             {(teclasLocales.acelerar!=null&&teclasLocales.acelerar[0].tipo==='variable'&&teclasLocales.cambioDireccion===null) && <>
               <Row><Button variant={teclasLocales.direccionAdelante?'success':'danger'} onClick={setearDireccionAdelante}>{configuracion.operacion==='setearDireccionAdelante'?'presione...':'Hacia adelante '+mostrarCombinacion(teclasLocales.direccionAdelante)} </Button></Row>                
               <Row><Button variant={teclasLocales.direccionAtras?'success':'danger'} onClick={setearDireccionAtras}>{configuracion.operacion==='setearDireccionAtras'?'presione...':'Hacia Atras '+mostrarCombinacion(teclasLocales.direccionAtras)} </Button></Row>                
